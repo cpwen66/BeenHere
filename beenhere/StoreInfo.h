@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface StoreInfo : NSObject
 
@@ -17,6 +18,8 @@
 @property (strong, nonatomic)NSMutableArray * indexContent;
 
 @property (strong, nonatomic)NSMutableArray * ContentList;
+
+@property (strong, nonatomic)UIImage * imagee;
 
 +(StoreInfo *)shareInstance;
 

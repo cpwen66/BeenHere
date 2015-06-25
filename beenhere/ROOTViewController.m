@@ -623,7 +623,7 @@ friendTableViewController * frinedview;
 - (IBAction)tap:(id)sender {
     NSString *aboutString = @"更新大頭貼照";
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:aboutString
-                                                            delegate:nil
+                                                            delegate:self
                                                    cancelButtonTitle:@"取消"
                                               destructiveButtonTitle:nil
                                                    otherButtonTitles:@"拍照", nil];
