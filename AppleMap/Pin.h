@@ -10,7 +10,7 @@
 
 @interface Pin : MKPointAnnotation
 
-@property (weak, nonatomic)NSString *pinId;
-@property (weak, nonatomic)NSString *memberId;
+@property (strong, nonatomic)NSString *pinId;
+@property (strong, nonatomic)NSString *memberId;
 
 @end

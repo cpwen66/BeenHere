@@ -14,7 +14,7 @@ FMDatabase *sqlDB;
 @implementation PinDAO
 
 
-- (PinDAO *) init {
+- (PinDAO *)init {
     self = [super init];
     if (self) {
         DatabaseConnection *dbConnection = [DatabaseConnection sharedInstance];
@@ -31,7 +31,7 @@ FMDatabase *sqlDB;
 
 
 //查詢功能
-- (NSMutableArray *) getAllPin{
+- (NSMutableArray *)getAllPin{
     NSMutableArray *rows = [NSMutableArray new];
     
     //如果這行發生找不到table的error，表示沒有拿到sqlite檔案
@@ -64,35 +64,62 @@ FMDatabase *sqlDB;
 
 
  //新增功能
- - (void) insertRecordIntoSQLite: (Pin *)pin {
- 
-     //如果新增記錄錯誤，就秀錯誤訊息
-     if (![sqlDB executeUpdate:@"insert into pins (pin_title, pin_latitude, pin_longitude) values (?, ?, ?)", pin.title, pin.coordinate.latitude, pin.coordinate.longitude]) {
-         
-         //去executeUpdate看說明，裡面會提到lastErrorMessage
-         NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
-     };
- 
- }
+- (void)insertPinIntoSQLite: (Pin *)pin {
+    
+//    if (![FMDBdb executeUpdate:@"insert into pins (pin_title, pin_latitude, pin_longitude) values (?, ?, ?)", record[@"pin_title"], record[@"pin_latitude"], record[@"pin_longitude"]]) {
+//        //去executeUpdate看說明，裡面會提到lastErrorMessage
+//        NSLog(@"Could not insert record: %@", [FMDBdb lastErrorMessage]);
+//    };    //如果新增記錄錯誤，就秀錯誤訊息
+    
+    NSString *pinLatitude = [NSString stringWithFormat:@"%1.6f", pin.coordinate.latitude];
+    NSString *pinLongitude = [NSString stringWithFormat:@"%1.6f", pin.coordinate.longitude];
+
+    
+    if (![sqlDB executeUpdate:@"insert into pins (pin_title, pin_latitude, pin_longitude) values (?, ?, ?)", pin.title,  pinLatitude, pinLongitude]) {
+     
+     //去executeUpdate看說明，裡面會提到lastErrorMessage
+     NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
+    };
+
+}
  
 
 //刪除功能
- - (void) deleteRecordFromSQLite:(NSInteger *)pinId {
-     if (![sqlDB executeUpdate:@"delete from pins where pin_id=?", pinId]) {
+- (void)deleteRecordFromSQLite:(NSInteger *)pinId {
+    if (![sqlDB executeUpdate:@"delete from pins where pin_id=?", pinId]) {
      
-         NSLog(@"Could not delete record: %@", [sqlDB lastErrorMessage]);
-     }
- }
+        NSLog(@"Could not delete record: %@", [sqlDB lastErrorMessage]);
+    }
+}
  
 
  //修改功能
-- (void) updateRecordFromSQLite:(NSInteger *)pinId setTitle:(NSString *) title{
-     if(![sqlDB executeUpdate:@"update pins set pin_title=? where pin_id=?", title, pinId]) {
-     
-         NSLog(@"Could not update record: %@", [sqlDB lastErrorMessage]);
-     }
-     
- }
+- (void)updateRecordFromSQLite:(NSInteger *)pinId setTitle:(NSString *) title{
+    if(![sqlDB executeUpdate:@"update pins set pin_title=? where pin_id=?", title, pinId]) {
 
+     NSLog(@"Could not update record: %@", [sqlDB lastErrorMessage]);
+
+    }
+    
+}
+
+- (NSString *)getLastPinId {
+    
+    FMResultSet *resultSet;
+    //resultSet = [sqlDB executeQuery:@"select max(pin_id) from pins"];
+    
+    resultSet = [sqlDB executeQuery:@"select pin_id from pins ORDER BY pin_id DESC LIMIT 1"];
+
+    NSString *maxPinId;
+    
+    while ([resultSet next]) {
+
+        maxPinId = (NSString *)[resultSet.resultDictionary objectForKey:@"pin_id"];
+    }
+    if ([sqlDB hadError]) {
+        NSLog(@"DB Error %d: %@", [sqlDB lastErrorCode], [sqlDB lastErrorMessage]);
+    }
+    return maxPinId;
+}
 
 @end

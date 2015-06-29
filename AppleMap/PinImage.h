@@ -10,8 +10,8 @@
 
 @interface PinImage : UIImage
 
-@property (weak, nonatomic)NSString *imageId;
-@property (weak, nonatomic)NSString *pinId;
-@property (weak, nonatomic)NSData *imageData;
+@property (strong, nonatomic)NSString *imageId;
+@property (strong, nonatomic)NSString *pinId;
+@property (strong, nonatomic)NSData *imageData;
 
 @end

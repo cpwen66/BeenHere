@@ -11,10 +11,14 @@
 
 #import <Foundation/Foundation.h>
 #import "DatabaseConnection.h"
+#import "Pin.h"
 
 @interface PinDAO : NSObject
 
 - (PinDAO *) init;
 
 - (NSMutableArray *) getAllPin;
+- (void) insertPinIntoSQLite: (Pin *)pin;
+- (NSString *)getLastPinId;
+
 @end

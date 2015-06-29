@@ -10,6 +10,7 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "PinDAO.h"
+#import "PinEditViewController.h"
 
 @interface AppleMapViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
 {
@@ -55,11 +56,9 @@
     
     //下面這行是Kent沒有用的，
     //在其他程式中，如果沒有加這行，就不會出現代表使用者現在位置的藍點
+    // 也可以加屬性列加入設定
     self.appleMapView.ShowsUserLocation = YES;
     
-    PinDAO *pinDAO = [[PinDAO alloc] init];
-    NSMutableArray *rows = [pinDAO getAllPin];
-    NSLog(@"rows= %@", rows);
     
 }
 
@@ -68,13 +67,46 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)addPinButtonAction:(id)sender {
-    MKPointAnnotation *newAnnotation = [MKPointAnnotation new];
-    newAnnotation.coordinate = currentLocation.coordinate;
-    newAnnotation.title = @"I'm here";
-    newAnnotation.subtitle = @"change me";
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    [self.appleMapView addAnnotation:newAnnotation];
+    PinDAO *pinDAO = [[PinDAO alloc] init];
+    NSMutableArray *rows = [pinDAO getAllPin];
+    NSLog(@"rows= %@", rows);
+
+}
+
+- (IBAction)addPinButtonAction:(id)sender {
+    
+//    MKPointAnnotation *newAnnotation = [MKPointAnnotation new];
+//    newAnnotation.coordinate = currentLocation.coordinate;
+//    newAnnotation.title = @"I'm here";
+//    newAnnotation.subtitle = @"change me";
+//
+//    [self.appleMapView addAnnotation:newAnnotation];
+    
+    [self performSegueWithIdentifier:@"showPinEditSegue" sender:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"showPinEditSegue"]) {
+        PinEditViewController *pinEditVC = (PinEditViewController *)segue.destinationViewController;
+        
+        // 從下一頁拿上來的物件變數，也要初始化才可以用
+//        pinEditVC.currentPin = [[Pin alloc] init];
+//        pinEditVC.currentPin.coordinate = currentLocation.coordinate;
+
+        // 假資料
+        CLLocationCoordinate2D annotationCoordinat;
+        annotationCoordinat.latitude = 24.123456;
+        annotationCoordinat.longitude = 121.432798;
+        pinEditVC.currentPin = [[Pin alloc] init];
+        pinEditVC.currentPin.coordinate = annotationCoordinat;
+        NSLog(@"pinEditVC.currentPin.coordinate.latitude = %f", pinEditVC.currentPin.coordinate.latitude);
+    }
+}
+
+- (IBAction)listPinButtonAction:(id)sender {
     
     
 }

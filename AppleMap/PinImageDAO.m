@@ -27,7 +27,7 @@ FMDatabase *sqlDB;
     NSMutableArray *rows = [NSMutableArray new];
     
     FMResultSet *resultSet;
-    resultSet =[sqlDB executeQuery:@"select * from pin_picture"];
+    resultSet =[sqlDB executeQuery:@"select * from pin_picture where pin_id=?", pinId];
     if ([sqlDB hadError]) {
         NSLog(@"DB Error %d: %@", [sqlDB lastErrorCode], [sqlDB lastErrorMessage]);
     }
@@ -36,10 +36,29 @@ FMDatabase *sqlDB;
         PinImage *pinImage = [[PinImage alloc] init];
         pinImage.imageId = [resultSet.resultDictionary objectForKey:@"picture_id"];
         pinImage.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
-        pinImage.imageData = [resultSet.resultDictionary objectForKey:@"picture"];
+        
+        NSData *datas = [[NSData alloc] initWithBytes:(__bridge const void *)([resultSet.resultDictionary objectForKey:@"picture"]) length:[[resultSet.resultDictionary objectForKey:@"picture"] length]];
+        pinImage.imageData = datas;
+//        NSUInteger len = [[resultSet.resultDictionary objectForKey:@"picture"] length];
+//
+//        Byte byte[len];
+//        byte = [resultSet.resultDictionary objectForKey:@"picture"];
+//        NSData *data = [[NSData alloc] initWithBytes:byte length:len];
         [rows addObject:pinImage];
     }
     return rows;
+}
+
+//新增功能
+- (void) insertImageIntoSQLite: (PinImage *)pinImage {
+    
+    //如果新增記錄錯誤，就秀錯誤訊息
+    if (![sqlDB executeUpdate:@"insert into pin_picture (pin_id, picture) values (?, ?)", pinImage.pinId, pinImage.imageData]) {
+        
+        //去executeUpdate看說明，裡面會提到lastErrorMessage
+        NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
+    };
+    
 }
 
 

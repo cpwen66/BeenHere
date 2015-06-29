@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "DatabaseConnection.h"
+#import "PinImage.h"
 
 @interface PinImageDAO : NSObject
 
 - (PinImageDAO *) init;
 
 - (NSMutableArray *) getAllImageByPinId:(NSString *)pinId;
+
+- (void) insertImageIntoSQLite: (PinImage *)pinImag;
 
 @end

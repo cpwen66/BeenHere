@@ -9,5 +9,8 @@
 #import "PinImage.h"
 
 @implementation PinImage
-
+-(NSString *)description
+{
+    return [NSString stringWithFormat:@"data:%@",self.imageData];
+}
 @end
