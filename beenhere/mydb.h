@@ -47,7 +47,7 @@
 - (void)insertfriendname:(NSString *)memberId friendname:(NSString *)friendname andffriendID :(NSString *)friendID;
 -(NSDictionary*)SearchRequest:(NSString *)SearchfriendID;
 //新增內容
-- (void)insertMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no;
+- (void)insertMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no addimage:(NSData*)imagedata;
 //新增回覆內容
 - (void)insertreplyMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no;
 -(id)queryindexcontent:(NSString *)beeid;
@@ -60,4 +60,7 @@
 -(void)SearchIDcontent:(NSString *)beid;
 //mysql 查詢主頁內容
 -(void)querymysqlindexcontent:(NSString *)beeid;
+//把圖存進去
+- (void)insertimage:(NSData*)imagedata addcontent_no:(NSString*)content_no;
+-(void)insertcontentremotewithimage:(NSDictionary *)params;
 @end

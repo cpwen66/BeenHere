@@ -301,20 +301,33 @@ mydb *sharedInstance;
 
 #pragma mark - content text
 //新增內容
-- (void)insertMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no{
+- (void)insertMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no addimage:(NSData*)imagedata addimageid:(NSString*)imageid addtypetag:(NSString*)typetag addlike:(NSString*)like{
     
    
     
-    if (![db executeUpdate:@"insert into indexcontent (id,text,level,date) values (?,?,?,?)",memberId,Contenttext,level,date]) {
+    if (![db executeUpdate:@"insert into indexcontent (id,text,level,content_no,date,image,imageid,typetag,like) values (?,?,?,?,?,?,?,?,?)",memberId,Contenttext,level,content_no,date,imagedata,imageid,typetag,like]) {
         NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
     };
    // [self uploadUsers:BeEMAIL];
     
-   
+   [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
     
     
 }
-
+//新增內容
+- (void)insertimage:(NSData*)imagedata addcontent_no:(NSString*)content_no{
+    
+    
+    
+    if (![db executeUpdate:@"update indexcontent set image=?  where content_no=?",imagedata,content_no]) {
+        NSLog(@"Could not update data:\n%@",[db lastErrorMessage]);
+        message=@"已有此EMAIL或ID";
+    }else{ message=@"修改完成";
+        
+           };
+    
+    
+}
 
 //新增回覆內容
 - (void)insertreplyMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no {
@@ -340,7 +353,7 @@ mydb *sharedInstance;
     }
     
     
-    NSLog(@"rows:%@",rows);
+   
     return rows;
   
     
@@ -372,6 +385,7 @@ mydb *sharedInstance;
 }
 
 #pragma mark-查詢主頁內容
+//查詢主頁內容數量
 //查詢主頁內容
 -(void)querymysqlindexcontent:(NSString *)beeid{
     
@@ -470,8 +484,8 @@ mydb *sharedInstance;
             NSMutableArray *data = [apiResponse objectForKey:@"searchcontentno"];
             
             
-            NSLog(@"success");
-            NSLog(@"data reply:%@",data);
+           // NSLog(@"success");
+           // NSLog(@"data reply:%@",data);
       
             for (NSDictionary *dict in data) {
   
@@ -545,17 +559,24 @@ mydb *sharedInstance;
     while ([rs next]) {
         if ([rs intForColumnIndex:0]==0) {
             //可以新增
-            if (![db executeUpdate:@"insert into indexcontent (content_no,id,text,image,level,date,like) values (?,?,?,?,?,?,?)",
+            if (![db executeUpdate:@"insert into indexcontent (content_no,id,text,image,level,date,like,imageid,typetag) values (?,?,?,?,?,?,?,?,?)",
                   custDict[@"content_no"],
                   custDict[@"id"],
                   custDict[@"text"],
                   custDict[@"image"],
                   custDict[@"level"],
                   custDict[@"date"],
-                  custDict[@"like"]
+                  custDict[@"like"],
+                  custDict[@"imageid"],
+                  custDict[@"typetag"]
                   ]) {
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
                
+            }else{
+            
+            
+              [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
+            
             };
             
             
@@ -575,10 +596,9 @@ mydb *sharedInstance;
 
     //設定要POST的鍵值
     
-    NSLog(@"params:%@",params);
+    NSLog(@"params insert content:%@",params);
     
-    NSLog(@"telephone:%@",params[@"userID"]);
-    
+        
     //產生控制request的物件
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -617,6 +637,68 @@ mydb *sharedInstance;
     }];
     
 }
+
+
+//insertcontentwithimage remote
+-(void)insertcontentremotewithimage:(NSDictionary *)params{
+    
+    
+    
+    //設定要POST的鍵值
+    
+    NSLog(@"params insertwith image:%@",params);
+    
+    NSLog(@"id:%@",params[@"userID"]);
+    
+    //產生控制request的物件
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    
+    //    AFHTTPRequestOperation *op = [manager POST:@"rest.of.url" parameters:parameters
+    
+    NSData *imageData = params[@"image"];
+    
+    
+    //以POST的方式request並
+    [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        //do not put image inside parameters dictionary as I did, but append it!
+        [formData appendPartWithFileData:imageData name:@"image" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+        
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              //request成功之後要做的事情
+              
+              NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+              NSLog(@"apiResponse insertcontent:%@",apiResponse);
+              // 取的signIn的key值，並輸出
+              NSString *result = [apiResponse objectForKey:@"insertcontent"];
+              NSLog(@"result:%@",result);
+              
+              //   判斷signUp的key值是否等於success
+              if ([result isEqualToString:@"success"]) {
+                  
+                  //存入mysql後執行搜尋content_no
+                   [self SearchIDcontent:params[@"userID"] ];
+                  
+                  NSLog(@"success");
+              }else {
+                  
+                  NSLog(@"no suceess");
+                  
+              }
+          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              NSLog(@"request error:%@",error);
+              
+              
+              
+              
+              
+              
+          }];
+    
+}
+
 //新增子回覆內容
 -(void)insertcontentreplyremote:(NSDictionary *)params{
     
@@ -695,19 +777,21 @@ mydb *sharedInstance;
         NSString *result = [apiResponse objectForKey:@"searchcontentresult"];
         NSLog(@"upid result:%@",result);
     
+        
+         NSDictionary *reslutdata = [apiResponse objectForKey:@"searchcontent"];
+        
         //   判斷signUp的key值是否等於success
         if ([result isEqualToString:@"success"]) {
-              NSDictionary *data = [apiResponse objectForKey:@"searchcontent"];
-           
+             // NSDictionary *data = [apiResponse objectForKey:@"searchcontent"];
+            NSLog(@"reslutdata:%@",reslutdata);
             
             NSLog(@"success");
-//            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//            [dateFormatter setDateFormat:@"YYYY-MM-dd"];
-//            NSDate *date = [dateFormatter dateFromString:birthday];
+             NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:reslutdata[@"image"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+         
             
-          
+            
             //存到SQLITE
-            [self insertMemeberNo:data[@"id"] andcontenttext:data[@"text"] andlevel:@"0" anddate:data[@"date"]  andcontentno:data[@"content_no"]];
+            [self insertMemeberNo:reslutdata[@"id"] andcontenttext:reslutdata[@"text"] andlevel:@"0" anddate:reslutdata[@"date"]  andcontentno:reslutdata[@"content_no"] addimage:imagedata addimageid:reslutdata[@"imageid"]addtypetag:reslutdata[@"typetag"]addlike:reslutdata[@"like"] ];
             
         }else {
             

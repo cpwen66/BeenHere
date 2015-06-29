@@ -39,6 +39,11 @@
 }
 - (void)drawRect:(CGRect)rect
 {
+    
+    
+    self.emtionbutton.layer.borderWidth=1.0;
+    self.emtionbutton.layer.cornerRadius=10.0;
+    self.emtionbutton.layer.borderColor=[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor;
 //    CGRect cellFrame = self.contentlabel.frame;
 //    CGRect buttonFrame = self.cellButton.frame;
 //    int indentation = self.treeNode.nodeLevel * 25;
@@ -51,14 +56,21 @@
     CGRect detail=self.detaillabel.frame;
     CGRect userimage = self.userimage.frame;
     int indentation = self.treeNode.nodeLevel * 60;
+
     cellFrame.origin.x = buttonFrame.size.width + indentation + 70;
      detail.origin.x = buttonFrame.size.width + indentation + 70;
+    
+    int indent=self.treeNode.nodeLevel * 20;
+    
     userimage.origin.x = indentation +3;
+    userimage.size.width= userimage.size.width - indent;
+    userimage.size.height= userimage.size.height - indent;
   //  buttonFrame.origin.x = 2 + indentation;
     self.contentlabel.frame = cellFrame;
     self.cellButton.frame = buttonFrame;
     self.userimage.frame = userimage;
     self.detaillabel.frame=detail;
+    
 }
 
 - (void)setTheButtonBackgroundImage:(UIImage *)backgroundImage
