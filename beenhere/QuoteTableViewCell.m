@@ -55,12 +55,17 @@
     CGRect buttonFrame = self.cellButton.frame;
     CGRect detail=self.detaillabel.frame;
     CGRect userimage = self.userimage.frame;
-    int indentation = self.treeNode.nodeLevel * 60;
-
-    cellFrame.origin.x = buttonFrame.size.width + indentation + 70;
-     detail.origin.x = buttonFrame.size.width + indentation + 70;
+    CGRect cellview=self.cellbackground.frame;
+   
+    int iInt1 = (int)self.treeNode.nodeLevel;
+    int indentation = iInt1 * 30;
+    cellFrame.origin.x = buttonFrame.size.width + indentation ;
+    detail.origin.x = buttonFrame.size.width + indentation ;
     
-    int indent=self.treeNode.nodeLevel * 20;
+    cellview.origin.x=cellview.origin.x + indentation;
+    cellview.size.width=cellview.size.width - indentation;
+    
+    int indent=iInt1 * 20;
     
     userimage.origin.x = indentation +3;
     userimage.size.width= userimage.size.width - indent;
