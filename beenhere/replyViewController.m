@@ -64,6 +64,9 @@
     
     replytext=_replytextfield.text;
     [self insertreplycontentToSQLite];
+    
+
+     //[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 //將回覆內容存入mysql及sqllite
@@ -86,9 +89,9 @@ NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"
     [[mydb sharedInstance]insertcontentreplyremote:params ];
 
     
-    //存入sqlite
-    [[mydb sharedInstance]insertreplyMemeberNo:userID andcontenttext:replytext andlevel:@"1" anddate:[NSDate date] andcontentno:_node .content_no];
-
+//    //存入sqlite
+//    [[mydb sharedInstance]insertreplyMemeberNo:userID andcontenttext:replytext andlevel:@"1" anddate:[NSDate date] andcontentno:_node .content_no];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

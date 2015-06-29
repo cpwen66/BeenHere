@@ -15,6 +15,7 @@
 #import "StoreInfo.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CameraViewController.h"
+#import "talkviewcontroller.h"
 
 
 
@@ -117,7 +118,11 @@ friendTableViewController * frinedview;
 
 
 }
+-(void)viewDidAppear:(BOOL)animated{
 
+    [self contentview];
+
+}
 
 
 
@@ -141,7 +146,7 @@ friendTableViewController * frinedview;
         [stack removeFromSuperview];
     
     stack = [[UPStackMenu alloc] initWithContentView:contentView];
-    [stack setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 190)];
+    [stack setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 260)];
     [stack setDelegate:self];
     
     UPStackMenuItem *squareItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"square"] highlightedImage:nil title:@"Square"];
@@ -562,13 +567,23 @@ friendTableViewController * frinedview;
 - (void)stackMenu:(UPStackMenu *)menu didTouchItem:(UPStackMenuItem *)item atIndex:(NSUInteger)index
 {
 
-  
+    talkviewcontroller * talk = [self.storyboard instantiateViewControllerWithIdentifier:@"talk"];
+       UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraview"];
     switch (index) {
         case 0:
            _Textview.hidden=NO;
         [stack removeFromSuperview];
         [contentView removeFromSuperview];
             break;
+         case 1:
+    
+            [self.navigationController pushViewController:talk animated:YES];
+            [stack removeFromSuperview];
+            [contentView removeFromSuperview];
+            break;
+        case 2:
+         
+            [self presentViewController:cameraVC animated:YES completion:nil];
             
         default:
             break;
@@ -623,7 +638,7 @@ friendTableViewController * frinedview;
 - (IBAction)tap:(id)sender {
     NSString *aboutString = @"更新大頭貼照";
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:aboutString
-                                                            delegate:nil
+                                                            delegate:self
                                                    cancelButtonTitle:@"取消"
                                               destructiveButtonTitle:nil
                                                    otherButtonTitles:@"拍照", nil];

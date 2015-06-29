@@ -12,6 +12,7 @@
 @interface detailreplyTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *namelabel;
 
 @property (retain, strong) TreeViewNode *treeNode;
 

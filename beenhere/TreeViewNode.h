@@ -15,6 +15,10 @@
 @property (nonatomic, strong) id nodeObject;
 @property (nonatomic, strong) NSMutableArray *nodeChildren;
 @property (nonatomic, strong) NSString* beeid;
+@property (nonatomic, strong) NSString* name;
 @property (nonatomic, strong) NSDate * date;
 @property (nonatomic, strong) NSString * content_no;
+@property (nonatomic) NSNumber* imageid;
+@property (nonatomic) NSString* Typetag;
+@property (nonatomic, strong) NSData * imagedate;
 @end

@@ -13,6 +13,7 @@
 #import "replyViewController.h"
 #import "mydb.h"
 #import "MBProgressHUD.h"
+#import "AFNetworking.h"
 @interface IndexTableViewController ()
 {
 
@@ -45,9 +46,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-   
-  
-
 
      NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"welcome",@"text", nil];
     //展開收起
@@ -61,11 +59,7 @@
     
     
     
-//    self.tableView.rowHeight = UITableViewAutomaticDimension;
-//    self.tableView.estimatedRowHeight = 70.0;
-    
-     Content=[[NSMutableArray alloc]init ];
-     nodes=[[NSMutableArray alloc]init ];
+       
     [self fillNodesArray:params];
     [self fillDisplayArray];
   
@@ -81,7 +75,8 @@
     [hud setLabelText:@"connecting"];
     
  NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
-   [[mydb sharedInstance]querymysqlindexcontent:userID ];
+   
+    [[mydb sharedInstance]querymysqlindexcontent:userID ];
    
     
     
@@ -98,7 +93,9 @@
 -(void)loaddata{
 
     
-    
+    Content=[[NSMutableArray alloc]init ];
+    nodes=[[NSMutableArray alloc]init ];
+
     
     
      NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
@@ -109,10 +106,8 @@
     
    Content=[[mydb sharedInstance]queryindexcontent:userID ];
 
-    
    
-    NSLog(@"contemt:%@",Content);
-    
+   
     
     if (!Content.count==0) {
         
@@ -124,9 +119,19 @@
         firstLevelNode1.nodeObject = Content[a][@"text"];
         firstLevelNode1.isExpanded = YES;
         firstLevelNode1.beeid = Content[a][@"id"];
+           if (Content[a][@"imageid"] != [NSNull null]){
+        firstLevelNode1.imageid= Content[a][@"imageid"];
+           }else{
+           
+               firstLevelNode1.imageid=nil;
+           }
+        firstLevelNode1.name=Content[a][@"name"];
         firstLevelNode1.nodeChildren = [[self fillChildrenForNode:[NSString stringWithFormat:@"%@",Content[a][@"content_no"]]] mutableCopy];
         firstLevelNode1.content_no=[NSString stringWithFormat:@"%@",Content[a][@"content_no"]];
         
+        if (Content[a][@"image"] != [NSNull null]){
+        firstLevelNode1.imagedate=Content[a][@"image"];
+        }
         if (Content[a][@"date"] != [NSNull null]) {
             //原本取sqlite的日期的方法
 //      NSDate *date = [NSDate dateWithTimeIntervalSince1970:[Content[a][@"date"] integerValue]];
@@ -237,7 +242,7 @@
     
     dict = [NSDictionary dictionaryWithObject:message.object forKey:@"text"];
     
-    [self fillNodesArray:dict];
+   // [self fillNodesArray:dict];
     
     NSString * text=message.object;
     //輸入時間
@@ -260,7 +265,7 @@
 //    formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600];
     
     
-
+    NSDictionary *params=[[NSDictionary alloc]init ];
     
     //取出當前時間 及時區的轉換
     NSDate * new = [NSDate date];
@@ -268,14 +273,20 @@
     NSDate *localDate = [new dateByAddingTimeInterval:timeZoneOffset];
   
    
+       NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
     
+//    params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"1",@"imageid",@"1",@"typetag",nil];
+//    
+//    NSLog(@"insert params:%@",params);
+//    
+//    
+//    [[mydb sharedInstance]insertcontentremotewithimage:params ];
     
-    
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",nil];
+     params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",@"1",@"typetag",nil];
     
     [[mydb sharedInstance]insertcontentremote:params ];
     
-    [self.tableView reloadData];
+   // [self.tableView reloadData];
     
 }
 
@@ -302,16 +313,88 @@
     cell.treeNode = node;
     cell.contentlabel.text = node.nodeObject;
 
-    
-
-
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
 
      [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *currentTime = [dateFormatter stringFromDate:node.date];
-    
-    //cell.numberLabel.text = [NSString stringWithFormat:@"Quote %ld", (long)indexPath.row];
+   
     cell.detaillabel.text=currentTime;
+    
+    
+    NSLog(@"no:%@,cellimage:%@",cell.treeNode.content_no,cell.treeNode.imagedate);
+    
+   
+    int number = [cell.treeNode.imageid intValue];
+    
+    NSLog(@"number:%d",number);
+    
+    if (number == 1) {
+    //如果sqlite裏有圖就直接存取 沒有就從mysql查詢
+    if (cell.treeNode.imagedate!=NULL) {
+      
+        
+        UIImage * image=[UIImage imageWithData:cell.treeNode.imagedate];
+        
+        cell.cellimage.image=image;
+    }else{
+    
+     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloadimage",@"cmd",node.content_no , @"content_no", nil];
+   
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"connecting"];
+    
+    //產生控制request的物件
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+ 
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    //以POST的方式request並
+    [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //request成功之後要做的事情
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        
+       
+        NSString *result = [apiResponse objectForKey:@"downloadimageresult"];
+        
+        //   判斷signUp的key值是否等於success
+        if ([result isEqualToString:@"success"]) {
+            
+            
+              [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSDictionary * data=[apiResponse objectForKey:@"downloadimage"];
+
+                NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"image"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+           
+                UIImage * image=[UIImage imageWithData:imagedata];
+        
+            cell.cellimage.image=image;
+            
+            [[mydb sharedInstance]insertimage:imagedata addcontent_no:cell.treeNode.content_no ];
+            
+                  }else {
+                         NSLog(@"image download no suceess");
+            
+        }
+         [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+    }];
+    
+      }
+    }else{
+    
+        cell.cellimage.image=nil;
+    }
+    
+    
+    
+    
+    
+    
     
    }
 
@@ -357,35 +440,21 @@
     
     [self configureCell:cell forRowAtIndexPath:indexPath];
    
-//    if (Content[indexPath.row][@"text"]) {
-//      
-////       UILabel *label = (UILabel *)[self.tableView viewWithTag:101];
-//
-//        
-//        
-//        UIImage *uiimage = (UIImage *)[self.tableView viewWithTag:102];
-//       // testLabel.text = Content[indexPath.row][@"text"];
-//    }
-//    
-//   
-//    if (Content[indexPath.row][@"image"]) {
-//        
-//    }
+
      [cell setNeedsDisplay];
     
-    UIButton *addFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    addFriendButton.frame = CGRectMake(300.0f, 5.0f, 75.0f, 30.0f);
-    [addFriendButton setTitle:@"like" forState:UIControlStateNormal];
-    [cell addSubview:addFriendButton];
-    [addFriendButton addTarget:self
-                        action:@selector(agreefriend:)
-              forControlEvents:UIControlEventTouchUpInside];
-   
-  
+//    UIButton *addFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    addFriendButton.frame = CGRectMake(300.0f, 5.0f, 75.0f, 30.0f);
+//    [addFriendButton setTitle:@"like" forState:UIControlStateNormal];
+//    
+//    UIImage * img=[UIImage imageNamed:@"smood.png"];
+//    [addFriendButton setImage:img forState:UIControlStateNormal];
+//    [cell addSubview:addFriendButton];
+//    [addFriendButton addTarget:self
+//                        action:@selector(agreefriend:)
+//              forControlEvents:UIControlEventTouchUpInside];
     
   
-    
-    
     return cell;
     
     

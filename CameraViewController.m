@@ -8,6 +8,7 @@
 
 #import "CameraViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "StoreInfo.h"
 
 @interface CameraViewController () {
     ALAssetsLibrary *imageLibrary; //讀取照片
@@ -252,6 +253,8 @@
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     
     self.previewView.image = image;
+    
+  //  [StoreInfo shareInstance].imagee=image;
     
     // 存檔
     UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);

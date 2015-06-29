@@ -14,15 +14,18 @@
 @property (weak, nonatomic) IBOutlet UILabel *detaillabel;
 @property (retain, nonatomic) IBOutlet UIButton *cellButton;
 @property (weak, nonatomic) IBOutlet UIImageView *userimage;
-
-
+@property (weak, nonatomic) IBOutlet UIImageView *cellimage;
+@property (weak, nonatomic) IBOutlet UILabel *NAME;
 @property (nonatomic) BOOL isExpanded;
+@property (weak, nonatomic) IBOutlet UIButton *emtionbutton;
+@property (weak, nonatomic) IBOutlet UIButton *showemtion;
 
 @property (retain, strong) TreeViewNode *treeNode;
 
 - (IBAction)expand:(id)sender;
 - (void)setTheButtonBackgroundImage:(UIImage *)backgroundImage;
 
+@property (weak, nonatomic) IBOutlet UIView *cellbackground;
 
 
 @end
