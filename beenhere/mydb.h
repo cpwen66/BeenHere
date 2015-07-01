@@ -63,4 +63,7 @@
 //把圖存進去
 - (void)insertimage:(NSData*)imagedata addcontent_no:(NSString*)content_no;
 -(void)insertcontentremotewithimage:(NSDictionary *)params;
+
+//sqlite取頭像
+- (NSData *)getuserpicture:(NSString *)beid;
 @end

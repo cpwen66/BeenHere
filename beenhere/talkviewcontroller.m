@@ -54,7 +54,7 @@
 
       talkcontent=_textfield.text;
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontent" object:talkcontent];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentwith" object:talkcontent];
     
     
  [self.navigationController popViewControllerAnimated:YES];

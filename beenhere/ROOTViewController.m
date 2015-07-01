@@ -16,6 +16,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CameraViewController.h"
 #import "talkviewcontroller.h"
+#import "MBProgressHUD.h"
 
 
 
@@ -50,6 +51,9 @@ friendTableViewController * frinedview;
 @property (weak, nonatomic) IBOutlet UIButton *SendAction;
 @property (weak, nonatomic) IBOutlet UITextView *TextviewContent;
 
+@property (weak, nonatomic) IBOutlet UIImageView *userpicture;
+@property (weak, nonatomic) IBOutlet UIImageView *userbackground;
+@property (weak, nonatomic) IBOutlet UIView *Emtionview;
 
 @end
 
@@ -64,6 +68,7 @@ friendTableViewController * frinedview;
     
     //通知到indexTableviewController
     [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontent" object:TextContent];
+    
     
     
 }
@@ -81,15 +86,14 @@ friendTableViewController * frinedview;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     //測試
-    NSString *beemail = [[NSUserDefaults standardUserDefaults] stringForKey:@"bhereEmail"];
-    
-    NSString *bpassword = [[NSUserDefaults standardUserDefaults] stringForKey:@"bherePassword"];
-    
-     NSString *bname = [[NSUserDefaults standardUserDefaults] stringForKey:@"bherename"];
+ 
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
+    NSLog(@"beid:",BEID);
     
-    NSLog(@"%@ %@ %@ ",beemail ,bname,bpassword);
+    
+    [self userinfoinit];
+   
     
      _TextviewContent.delegate = self;
     
@@ -99,8 +103,26 @@ friendTableViewController * frinedview;
     
     [self inittextview];
     
+    //重新搜尋朋友請求
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(initfriendrequest) name:@"serachfriend" object:nil];
+    
     [self SearchRequest:BEID];
- 
+    self.userpicture.layer.borderWidth = 2.0f;
+    self.userpicture.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.userpicture.layer.cornerRadius = 25.0f;
+       _userpicture.clipsToBounds = YES;
+    
+    
+    
+    [[_Emtionview layer] setBorderWidth:3.0];
+    //邊框顏色
+    [[_Emtionview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
+    
+    [[_Emtionview layer] setCornerRadius:6.0];
+}
+-(void)initfriendrequest{
+   NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
+ [self SearchRequest:BEID];
     
 }
 -(void)inittextview{
@@ -115,6 +137,73 @@ friendTableViewController * frinedview;
     _TextviewContent.text = @"寫下您的心情";
     _TextviewContent.textColor = [UIColor lightGrayColor];
   
+
+
+}
+-(void)userinfoinit{
+  
+    
+    
+    
+    NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
+    
+    
+    NSData * picture=[[NSData alloc]init ];
+     picture= [[mydb sharedInstance]getuserpicture:BEID];
+    if (picture ==NULL) {
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",BEID , @"userID", nil];
+    
+    AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
+    managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    [managere POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        
+      
+        NSString *result = [apiResponse objectForKey:@"downloaduserimageresult"];
+        
+        
+        if ([result isEqualToString:@"success"]) {
+            
+            
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
+            NSLog(@"data%@",data);
+            NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            NSLog(@"imagedata:%@",imagedata);
+            if ([data[@"userpicture"]   isEqual:@""]) {
+                UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
+                    _userpicture.image=image;
+            }else{
+            UIImage * image=[UIImage imageWithData:imagedata];
+                   _userpicture.image=image;
+            }
+            
+           
+            
+            
+            
+        }else {
+            NSLog(@"image download no suceess");
+            
+        }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+    }];
+    }else{
+    
+        
+        
+        UIImage * image=[UIImage imageWithData:picture];
+        
+         _userpicture.image=image;
+    
+    }
+
 
 
 }
@@ -217,10 +306,7 @@ friendTableViewController * frinedview;
     
     UIAlertAction *cancelaction=[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
         
-       
-        
     
-      
     }];
     
     [alertcontroller addAction:cancelaction];
@@ -425,9 +511,16 @@ friendTableViewController * frinedview;
     [StoreInfo shareInstance].FriendRequestList=[receive[@"requestid"] mutableCopy];
 
     
+    int count=[[StoreInfo shareInstance].FriendRequestList count];
     
+    if (count !=0) {
+         NumRequest=[NSString stringWithFormat:@"%lu",(unsigned long)[[StoreInfo shareInstance].FriendRequestList count]];
+    }else{
     
-    NumRequest=[NSString stringWithFormat:@"%lu",(unsigned long)[[StoreInfo shareInstance].FriendRequestList count]];
+        NumRequest=nil;
+    }
+    
+   
     
     [self.FriendreRreustlist setTitle:NumRequest forState:UIControlStateNormal];
     
@@ -507,6 +600,10 @@ friendTableViewController * frinedview;
 
     NSLog(@"sadasd");
     
+    if (NumRequest!=0) {
+        
+    
+    
     NSString * numcount =[NSString stringWithFormat:@"有%@位使用者送出好友請求",NumRequest];
     
     UIAlertController *alertcontroller=[UIAlertController alertControllerWithTitle:numcount message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -517,10 +614,6 @@ friendTableViewController * frinedview;
         
         friendTableViewController * friend = [self.storyboard instantiateViewControllerWithIdentifier:@"friend"];
         
-        //friend.frindRequestList=ReturnInfo;
-        
-        
-        
         [self.navigationController pushViewController:friend animated:YES];
         
         
@@ -530,7 +623,13 @@ friendTableViewController * frinedview;
     
     [self presentViewController:alertcontroller animated:YES completion:nil ];
     
+    }else{
+        friendTableViewController * friend = [self.storyboard instantiateViewControllerWithIdentifier:@"friend"];
     
+        [self.navigationController pushViewController:friend animated:YES];
+    
+    
+    }
 
 
 }
@@ -569,6 +668,11 @@ friendTableViewController * frinedview;
 
     talkviewcontroller * talk = [self.storyboard instantiateViewControllerWithIdentifier:@"talk"];
        UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraview"];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"AppleMap" bundle:nil];
+//    
+    id targetViewController = [storyBoard instantiateViewControllerWithIdentifier:@"appnav"];
+    
+    
     switch (index) {
         case 0:
            _Textview.hidden=NO;
@@ -584,7 +688,10 @@ friendTableViewController * frinedview;
         case 2:
          
             [self presentViewController:cameraVC animated:YES completion:nil];
-            
+            break;
+         case 3:
+             [self presentViewController:targetViewController animated:true completion:nil];
+            break;
         default:
             break;
     }
@@ -599,9 +706,6 @@ friendTableViewController * frinedview;
     theSubView=[[UIView alloc]
                         initWithFrame:CGRectMake(20, 380, 340, 130)];
     UITextField* text = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 280, 100)];
-    
-    
-    
     
     
     text.backgroundColor=[UIColor whiteColor];
@@ -657,7 +761,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-
+    
 
 }
 @end

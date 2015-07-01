@@ -20,7 +20,7 @@
 @property (strong, nonatomic)NSMutableArray * ContentList;
 
 @property (strong, nonatomic)UIImage * imagee;
-
+@property (nonatomic, strong) NSString* Friendid;
 +(StoreInfo *)shareInstance;
 
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="jQ1-PU-aNI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="jQ1-PU-aNI">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Apple Map View Controller-->
         <scene sceneID="0hp-bI-xly">
             <objects>
-                <viewController id="wlv-CV-jgl" customClass="AppleMapViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="applemap" id="wlv-CV-jgl" customClass="AppleMapViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EAG-Ds-BMy"/>
                         <viewControllerLayoutGuide type="bottom" id="gvn-b1-UEM"/>
@@ -223,7 +223,7 @@
                                                         <constraint firstAttribute="width" constant="45" id="jq7-RQ-qDt"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHo-zp-z2m">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Owner" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHo-zp-z2m">
                                                     <rect key="frame" x="61" y="8" width="211" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="211" id="gc7-qm-gZe"/>
@@ -232,7 +232,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fL1-5N-Edx">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fL1-5N-Edx">
                                                     <rect key="frame" x="61" y="37" width="332" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="332" id="quk-HV-eQK"/>
@@ -547,7 +547,7 @@
         <!--Navigation Controller-->
         <scene sceneID="FFm-mU-rpl">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jQ1-PU-aNI" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="appnav" automaticallyAdjustsScrollViewInsets="NO" id="jQ1-PU-aNI" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="tFx-Nh-pAb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

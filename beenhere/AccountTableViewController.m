@@ -245,8 +245,7 @@ replacementString:(NSString *)string
     [dateFormatter setDateFormat:@"YYYY-MM-dd"];
     NSDate *date = [dateFormatter dateFromString:birthday];
     
-    NSLog(@"%@",birthday);
-    NSLog(@"%@",_dict[@"bhere_no"]);
+
    // NSInteger num;
     
     //將電話數字中的-去掉
