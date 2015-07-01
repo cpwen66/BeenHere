@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Pin.h"
 
 @interface PinInfoViewController : UIViewController
+
+@property (strong, nonatomic) Pin *infoPin;
 
 @end

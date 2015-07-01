@@ -11,6 +11,6 @@
 @implementation PinImage
 -(NSString *)description
 {
-    return [NSString stringWithFormat:@"data:%@",self.imageData];
+    return [NSString stringWithFormat:@"pinId:%@",self.pinId];
 }
 @end

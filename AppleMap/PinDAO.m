@@ -30,7 +30,7 @@ FMDatabase *sqlDB;
 //如果資料集合不只一筆，用next搭配while取出每一筆資料
 
 
-//查詢功能
+//查詢功能，查詢全部大頭針
 - (NSMutableArray *)getAllPin{
     NSMutableArray *rows = [NSMutableArray new];
     
@@ -47,8 +47,13 @@ FMDatabase *sqlDB;
         //NSLog(@"resultDictionary: %@", resultSet.resultDictionary);
         Pin *pin = [[Pin alloc] init];
         pin.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
+    
+        // 這裡有奇怪的地方，就是pin.pinId出來是__NSCFNumber格式，所以要轉NSString
+        // 這裡只是暫時用pinId來當subtitle，之後會用好友的名字
+        pin.subtitle = [NSString stringWithFormat:@"%@到此一遊", pin.pinId];
         pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
         pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
+        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
         CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
         CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
         CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
@@ -58,10 +63,27 @@ FMDatabase *sqlDB;
         
     }
     //NSLog(@"rows = %@", rows);
-    
     return rows;
 }
 
+- (Pin *) getPinById:(NSString *)pinId {
+    FMResultSet *resultSet;
+    resultSet = [sqlDB executeQuery:@"select * from pins where pin_id=?", pinId];
+    Pin *pin = [[Pin alloc] init];
+    while ([resultSet next]) {
+        pin.pinId = [resultSet stringForColumn:@"pin_id"];
+        pin.subtitle= [resultSet stringForColumn:@"pin_id"];
+        pin.title = [resultSet stringForColumn:@"pin_title"];
+        pin.memberId = [resultSet stringForColumn:@"member_id"];
+        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
+        CLLocationDegrees latitude = [resultSet doubleForColumn:@"pin_latitude"];
+        CLLocationDegrees longitude = [resultSet doubleForColumn:@"pin_longitude"];
+        CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        pin.coordinate = locationCoordinate;
+        
+    }
+    return pin;
+}
 
  //新增功能
 - (void)insertPinIntoSQLite: (Pin *)pin {
@@ -93,7 +115,7 @@ FMDatabase *sqlDB;
 }
  
 
- //修改功能
+ //修改功能，修改title
 - (void)updateRecordFromSQLite:(NSInteger *)pinId setTitle:(NSString *) title{
     if(![sqlDB executeUpdate:@"update pins set pin_title=? where pin_id=?", title, pinId]) {
 
@@ -102,6 +124,21 @@ FMDatabase *sqlDB;
     }
     
 }
+
+//修改功能，修改 到訪的日期時間
+- (void)updateVisitedDateFromSQLite:(NSString *)pinId setVisitedDate:(NSDate *) visitedDate {
+//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    //將UTC轉成本地時間
+//    [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+//    NSString = [NSString stringWithFormat:@"%@", [dateFormat stringFromDate:visitedDate]];
+    if(![sqlDB executeUpdate:@"update pins set pin_visited_date=? where pin_id=?", visitedDate, pinId]) {
+        
+        NSLog(@"Could not update record: %@", [sqlDB lastErrorMessage]);
+        
+    }
+    
+}
+
 
 - (NSString *)getLastPinId {
     

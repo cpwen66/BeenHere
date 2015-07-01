@@ -27,9 +27,12 @@
 		690D6C0F1B394EFA00DA83E6 /* PinDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0E1B394EFA00DA83E6 /* PinDAO.m */; };
 		690D6C141B3954FD00DA83E6 /* PinTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C131B3954FD00DA83E6 /* PinTableViewController.m */; };
 		690D6C1A1B396FCB00DA83E6 /* beenhere.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 690D6C191B396FCB00DA83E6 /* beenhere.sqlite */; };
+		693ED2FC1B43D4F4000341C1 /* trashcan.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FA1B43D4F4000341C1 /* trashcan.png */; };
+		693ED2FD1B43D4F4000341C1 /* userlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FB1B43D4F4000341C1 /* userlocation.png */; };
 		694683361B38061E00ADBAF8 /* AppleMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 694683351B38061E00ADBAF8 /* AppleMapViewController.m */; };
 		694683381B380BDE00ADBAF8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 694683371B380BDE00ADBAF8 /* MapKit.framework */; };
 		6946833A1B380BE800ADBAF8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 694683391B380BE800ADBAF8 /* CoreLocation.framework */; };
+		69505E031B417A53004809AD /* PinListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69505E021B417A53004809AD /* PinListViewController.m */; };
 		695686431B3BE9BC00867C83 /* PinImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 695686421B3BE9BB00867C83 /* PinImage.m */; };
 		695686461B3BEB7E00867C83 /* PinImageDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 695686451B3BEB7E00867C83 /* PinImageDAO.m */; };
 		6963FABB1B3B3509005BD414 /* Pin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6963FABA1B3B3509005BD414 /* Pin.m */; };
@@ -227,10 +230,14 @@
 		690D6C121B3954FD00DA83E6 /* PinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinTableViewController.h; path = AppleMap/PinTableViewController.h; sourceTree = "<group>"; };
 		690D6C131B3954FD00DA83E6 /* PinTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinTableViewController.m; path = AppleMap/PinTableViewController.m; sourceTree = "<group>"; };
 		690D6C191B396FCB00DA83E6 /* beenhere.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = beenhere.sqlite; sourceTree = "<group>"; };
+		693ED2FA1B43D4F4000341C1 /* trashcan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trashcan.png; sourceTree = "<group>"; };
+		693ED2FB1B43D4F4000341C1 /* userlocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userlocation.png; sourceTree = "<group>"; };
 		694683341B38061E00ADBAF8 /* AppleMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleMapViewController.h; sourceTree = "<group>"; };
 		694683351B38061E00ADBAF8 /* AppleMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppleMapViewController.m; sourceTree = "<group>"; };
 		694683371B380BDE00ADBAF8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		694683391B380BE800ADBAF8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		69505E011B417A53004809AD /* PinListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinListViewController.h; path = AppleMap/PinListViewController.h; sourceTree = "<group>"; };
+		69505E021B417A53004809AD /* PinListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinListViewController.m; path = AppleMap/PinListViewController.m; sourceTree = "<group>"; };
 		695686411B3BE9BB00867C83 /* PinImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinImage.h; path = AppleMap/PinImage.h; sourceTree = "<group>"; };
 		695686421B3BE9BB00867C83 /* PinImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinImage.m; path = AppleMap/PinImage.m; sourceTree = "<group>"; };
 		695686441B3BEB7E00867C83 /* PinImageDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinImageDAO.h; path = AppleMap/PinImageDAO.h; sourceTree = "<group>"; };
@@ -556,8 +563,12 @@
 				694683351B38061E00ADBAF8 /* AppleMapViewController.m */,
 				690D6C0A1B394EDD00DA83E6 /* DatabaseConnection.h */,
 				690D6C0B1B394EDD00DA83E6 /* DatabaseConnection.m */,
+				6963FAB91B3B3509005BD414 /* Pin.h */,
+				6963FABA1B3B3509005BD414 /* Pin.m */,
 				690D6C0D1B394EFA00DA83E6 /* PinDAO.h */,
 				690D6C0E1B394EFA00DA83E6 /* PinDAO.m */,
+				695686411B3BE9BB00867C83 /* PinImage.h */,
+				695686421B3BE9BB00867C83 /* PinImage.m */,
 				695686441B3BEB7E00867C83 /* PinImageDAO.h */,
 				695686451B3BEB7E00867C83 /* PinImageDAO.m */,
 				690D6C121B3954FD00DA83E6 /* PinTableViewController.h */,
@@ -566,10 +577,6 @@
 				696CC2011B3A3B9C005EFCD7 /* pin_V1_20150624.sqlite */,
 				696CC2091B3A6F00005EFCD7 /* PinEditViewController.h */,
 				696CC20A1B3A6F00005EFCD7 /* PinEditViewController.m */,
-				6963FAB91B3B3509005BD414 /* Pin.h */,
-				6963FABA1B3B3509005BD414 /* Pin.m */,
-				695686411B3BE9BB00867C83 /* PinImage.h */,
-				695686421B3BE9BB00867C83 /* PinImage.m */,
 				696481191B3BAB9C003476B6 /* PinInfoViewController.h */,
 				6964811A1B3BAB9C003476B6 /* PinInfoViewController.m */,
 				6963FABC1B3B3CE9005BD414 /* PinDetailViewController.h */,
@@ -581,6 +588,8 @@
 		6967636C1B3E88DB00B36B2A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				693ED2FA1B43D4F4000341C1 /* trashcan.png */,
+				693ED2FB1B43D4F4000341C1 /* userlocation.png */,
 				696763521B3E731500B36B2A /* cat1.jpg */,
 				696763531B3E731500B36B2A /* cat2.jpg */,
 				696763541B3E731500B36B2A /* cat3.jpg */,
@@ -799,6 +808,8 @@
 		95B417421B01EB6A00EA9177 = {
 			isa = PBXGroup;
 			children = (
+				69505E011B417A53004809AD /* PinListViewController.h */,
+				69505E021B417A53004809AD /* PinListViewController.m */,
 				95DA3D801B3DC83400F932C0 /* beenhere.sqlite */,
 				2BFA752A1B3A8CA100F70A9C /* Frameworks */,
 				69657B6E1B37F0EE0060FB67 /* AppleMap */,
@@ -1061,6 +1072,7 @@
 				95D607C41B40150100DB90C8 /* smood.png in Resources */,
 				95DC22451B420EC00063DC2F /* pencil.png in Resources */,
 				953FA0A51B42CADE00C67BF5 /* sad@0.5x.png in Resources */,
+				693ED2FD1B43D4F4000341C1 /* userlocation.png in Resources */,
 				959924421B39D6C600A70E50 /* system_users.png in Resources */,
 				953FA04D1B42C52500C67BF5 /* happy@3x.png in Resources */,
 				953FA0A81B42CADE00C67BF5 /* sad@3x.png in Resources */,
@@ -1085,6 +1097,7 @@
 				953FA09A1B42CADE00C67BF5 /* none.png in Resources */,
 				953FA0541B42C52500C67BF5 /* smile@1x.png in Resources */,
 				2BFA75451B3A948B00F70A9C /* changeCamerab.png in Resources */,
+				693ED2FC1B43D4F4000341C1 /* trashcan.png in Resources */,
 				6967635E1B3E731500B36B2A /* cat3.jpg in Resources */,
 				953FA09F1B42CADE00C67BF5 /* oho.png in Resources */,
 				2BFA753F1B3A946800F70A9C /* camerab.png in Resources */,
@@ -1196,6 +1209,7 @@
 				95656C841B3EEB9C002BA2C9 /* talkviewcontroller.m in Sources */,
 				952498061B342C7900513EE7 /* RATreeNodeItem+Private.m in Sources */,
 				95C6F53D1B21950B00D5DA05 /* friendTableViewController.m in Sources */,
+				69505E031B417A53004809AD /* PinListViewController.m in Sources */,
 				95A259C11B1F4BC7007641B0 /* AFHTTPRequestOperation.m in Sources */,
 				2BFA75391B3A8EDC00F70A9C /* CameraViewController.m in Sources */,
 				95B9A8C71B35C6D000307AEC /* replyViewController.m in Sources */,

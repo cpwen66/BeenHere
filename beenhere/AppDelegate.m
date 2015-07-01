@@ -80,13 +80,36 @@
     }
     
     
-    
-    
 }
+
+
+//- (void)recorderApplicationIconBadgeNumber {
+//    NSArray *restSheduledNotis = [[UIApplication sharedApplication] scheduledLocalNotifications];
+//    int notiIndex = 1;
+//    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+//    for (UILocalNotification *noti in restSheduledNotis) {
+//        noti.applicationIconBadgeNumber = notiIndex;
+//        [[UIApplication sharedApplication] scheduleLocalNotification:noti];
+//        notiIndex++;
+//    }
+//}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [self copyDBtoDocumentifNeeded];
+    
+    //讓使用者同意 接受提醒。讓使用者授權 允許通知
+    //檢查UIApplication的實體在runtime是否可執行registerUserNotificationSettings:
+    //registerUserNotificationSettings:是在delegate裡的方法
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+        //
+        [application registerUserNotificationSettings:
+         [UIUserNotificationSettings settingsForTypes:
+          UIUserNotificationTypeAlert|//在手機中設定要通知的類型(橫幅...)
+          UIUserNotificationTypeBadge|
+          UIUserNotificationTypeSound categories:nil]];
+    }
     
     return YES;
 }
@@ -99,10 +122,21 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    // 將Badge歸零
+    application.applicationIconBadgeNumber = 0;
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    // 將Badge歸零
+    application.applicationIconBadgeNumber = 0;
+    //[self reorderApplicationIconBadgeNumber];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UPDATE_PIN_VISITED_DATE" object:nil];
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
