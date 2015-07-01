@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic)NSString *pinId;
 @property (strong, nonatomic)NSString *memberId;
+@property (strong, nonatomic)NSDate *visitedDate;
 
 @end

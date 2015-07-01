@@ -30,6 +30,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     PinImageDAO *pinImageDAO;
     PinImage *pinImage;
     NSMutableArray *theSubViews;
+    UITextView *titleTextView;
     
 }
 
@@ -73,7 +74,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     // 下一行self.myScrollView改成self.view也可以
     [self.theScrollView addGestureRecognizer:tapGesture];
     
-    self.theScrollView.backgroundColor = [UIColor redColor];
+    //self.theScrollView.backgroundColor = [UIColor redColor];
     
 
     
@@ -93,8 +94,9 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     if (isFirstViewDidAppear) {
         // by code 產生textView
         CGRect textRect = CGRectMake(TEXT_MARGIN_IN_CELL, TEXT_MARGIN_IN_CELL, scrollViewWidth-2*TEXT_MARGIN_IN_CELL, 80);
-        UITextView *titleTextView = [[UITextView alloc] initWithFrame:textRect];
-        titleTextView.text = @"fadsfadsfasdfasdfasdfasd";
+        titleTextView = [[UITextView alloc] initWithFrame:textRect];
+        titleTextView.text = @"這行要移掉";
+        
         [titleTextView setFont:[UIFont systemFontOfSize:14]];
         [self.theScrollView addSubview:titleTextView];
         
@@ -149,7 +151,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
     // 先練習只存到SQLite, 之後要改先上傳到server，之後再下載pinId
     // 先存Pin到SQLite
-    self.currentPin.title =@"這裡是那裡？";
+    self.currentPin.title = titleTextView.text;
     NSLog(@"self.currentPin.coordinate.latitude = %f", self.currentPin.coordinate.latitude);
     NSLog(@"self.currentPin.coordinate.longitude = %f", self.currentPin.coordinate.longitude);
     pinDAO = [[PinDAO alloc] init];
@@ -177,6 +179,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     NSLog(@"self.theScrollView.subviews = %@", self.theScrollView.subviews);
     PinImage *newPinImage = [[PinImage alloc] init];
     
+    // 這裡只有先存一張圖，之後要加迴圈，存全部的圖
     newPinImage.imageData = UIImageJPEGRepresentation(ary[0], 1);
     newPinImage.pinId = [pinDAO getLastPinId];
     [pinImageDAO insertImageIntoSQLite:newPinImage];
@@ -285,7 +288,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     CGRect buttonRect = CGRectMake(contentWidth-20, 10, 20, 20);
     UIButton *deleteButton = [[UIButton alloc] initWithFrame:buttonRect];
     [deleteButton setTitle:@"X" forState:UIControlStateNormal];
-    [deleteButton setTitleColor:[UIColor brownColor] forState:UIControlStateNormal];
+    [deleteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [newView addSubview:deleteButton];
     [deleteButton addTarget:self action:@selector(deleteImage:) forControlEvents:UIControlEventTouchUpInside];
     //[deleteButton targetForAction:@selector(deleteImage:) withSender:@""];

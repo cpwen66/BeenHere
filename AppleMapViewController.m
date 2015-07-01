@@ -10,12 +10,22 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "PinDAO.h"
+#import "PinImage.h"
+#import "PinImageDAO.h"
 #import "PinEditViewController.h"
+#import "PinInfoViewController.h"
+#import "AppDelegate.h"
+//因為Pin繼承至MKPointAnnotation，所以不用再import
 
 @interface AppleMapViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
 {
     CLLocation *currentLocation;
     BOOL isFirstLocationReceived;
+    UIImage *leftCalloutImage;
+    PinImageDAO *pinImageDAO;
+    NSMutableArray *allPinRows;
+    NSInteger badgeNumber;
+    NSMutableArray *notifiedArray;
     
     //必須先#import <CoreLocation/CoreLocation.h>才能使用CLLocationManager類別
     CLLocationManager *locationManager;
@@ -23,6 +33,7 @@
 
 
 @property (weak, nonatomic) IBOutlet MKMapView *appleMapView;
+@property (weak, nonatomic) IBOutlet UILabel *theLabel;
 
 @end
 
@@ -32,7 +43,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    badgeNumber = 1;
+    
     self.appleMapView.delegate = self;
+    
+    notifiedArray = [[NSMutableArray alloc] init];
     
     locationManager = [CLLocationManager new];
     
@@ -59,6 +74,7 @@
     // 也可以加屬性列加入設定
     self.appleMapView.ShowsUserLocation = YES;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePinVisitedDate) name:@"UPDATE_PIN_VISITED_DATE" object:nil];
     
 }
 
@@ -69,48 +85,94 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+
+    self.navigationController.navigationBarHidden = YES;
+
+    pinImageDAO = [[PinImageDAO alloc] init];
+//    NSMutableArray *imageRows = [NSMutableArray new];
+//    imageRows = [pinImageDAO getAllImageByPinId:@"11"];
+    //NSLog(@"imageRows= %@", imageRows);
+
     
     PinDAO *pinDAO = [[PinDAO alloc] init];
-    NSMutableArray *rows = [pinDAO getAllPin];
-    NSLog(@"rows= %@", rows);
+    allPinRows = [pinDAO getAllPin];
+    //NSLog(@"rows= %@", rows);
+    
+
+    //先移除所有大頭針
+    [self.appleMapView removeAnnotations:[self.appleMapView annotations]];
+    
+    
+    Pin *pin = [[Pin alloc] init];;
+    
+    // 再從資料庫拿出資料，更新所有大頭針
+    for(pin in allPinRows) {
+        [self.appleMapView addAnnotation:pin];
+        NSLog(@"id = %@, latitude = %f, longitude = %f, title = %@", pin.pinId, pin.coordinate.latitude, pin.coordinate.longitude, pin.title);
+    }
 
 }
 
-- (IBAction)addPinButtonAction:(id)sender {
-    
-//    MKPointAnnotation *newAnnotation = [MKPointAnnotation new];
-//    newAnnotation.coordinate = currentLocation.coordinate;
-//    newAnnotation.title = @"I'm here";
-//    newAnnotation.subtitle = @"change me";
-//
-//    [self.appleMapView addAnnotation:newAnnotation];
-    
-    [self performSegueWithIdentifier:@"showPinEditSegue" sender:nil];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(Pin *)sender {
     if ([segue.identifier isEqualToString:@"showPinEditSegue"]) {
         PinEditViewController *pinEditVC = (PinEditViewController *)segue.destinationViewController;
         
         // 從下一頁拿上來的物件變數，也要初始化才可以用
-//        pinEditVC.currentPin = [[Pin alloc] init];
-//        pinEditVC.currentPin.coordinate = currentLocation.coordinate;
-
-        // 假資料
-        CLLocationCoordinate2D annotationCoordinat;
-        annotationCoordinat.latitude = 24.123456;
-        annotationCoordinat.longitude = 121.432798;
         pinEditVC.currentPin = [[Pin alloc] init];
-        pinEditVC.currentPin.coordinate = annotationCoordinat;
-        NSLog(@"pinEditVC.currentPin.coordinate.latitude = %f", pinEditVC.currentPin.coordinate.latitude);
+        pinEditVC.currentPin.coordinate = currentLocation.coordinate;
+
+        // 假資料，測試用
+//        CLLocationCoordinate2D annotationCoordinat;
+//        annotationCoordinat.latitude = 24.969856;
+//        annotationCoordinat.longitude = 121.189256;
+//        pinEditVC.currentPin = [[Pin alloc] init];
+//        pinEditVC.currentPin.coordinate = annotationCoordinat;
+//        NSLog(@"pinEditVC.currentPin.coordinate.latitude = %f", pinEditVC.currentPin.coordinate.latitude);
+        
+    } else if ([segue.identifier isEqualToString:@"showPinInfoSegue"]) {
+        
+        PinInfoViewController *pinInfoVC = (PinInfoViewController *)segue.destinationViewController;
+        pinInfoVC.infoPin = sender;
+        
     }
+    
+    
 }
+
+- (IBAction)addPinButtonAction:(id)sender {
+    
+    //    MKPointAnnotation *newAnnotation = [MKPointAnnotation new];
+    //    newAnnotation.coordinate = currentLocation.coordinate;
+    //    newAnnotation.title = @"I'm here";
+    //    newAnnotation.subtitle = @"change me";
+    //
+    //    [self.appleMapView addAnnotation:newAnnotation];
+    
+    [self performSegueWithIdentifier:@"showPinEditSegue" sender:nil];
+}
+
+- (IBAction)returnUserLocationBtnAction:(id)sender {
+    
+    [self returnUserLocation];
+}
+- (IBAction)showPinMessage:(id)sender {
+    Pin *pin = [[Pin alloc] init];
+    PinDAO *pinDAO = [[PinDAO alloc] init];
+    pin = [pinDAO getPinById:@"4"];
+    //self.theLabel = pin.visitedDate;
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+
+    self.theLabel.text = [NSString stringWithFormat:@"%@", [dateFormat stringFromDate:pin.visitedDate]];
+}
+
 
 - (IBAction)listPinButtonAction:(id)sender {
     
     
 }
 
+//參數的annotation是畫面上有出現的大頭針，因為要出現在畫面，所有需要view，就會來這個方法取得view
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
     
     NSLog(@"%@", mapView.userLocation);
@@ -132,28 +194,106 @@
     } else{
         // 如果AnnotationView不是nil，那就設定reuseAnnotationView的annotation是annotation
         // 這個方法是給annotation，然後回傳AnnotationView
+        
         reuseAnnotationView.annotation = annotation;
     }
+    NSLog(@"reuseAnnotationView.subviews = %@", reuseAnnotationView.subviews);
+
     
     reuseAnnotationView.draggable = false;
-    reuseAnnotationView.canShowCallout = true;
     reuseAnnotationView.image = [UIImage imageNamed:@"pointRed.png"];
+    reuseAnnotationView.canShowCallout = true;
     
-    // 在泡泡的左邊增加按鈕，預計秀相簿或完整訊息
     // 如果不自訂按鈕的型式，那只要寫底下這行就可以了
-    // UIButton *leftCalloutButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    CGRect buttonRect = CGRectMake(0, 0, 100, 100);
-    UIButton *leftCalloutButton = [[UIButton alloc] initWithFrame:buttonRect];
-    [leftCalloutButton setImage:[UIImage imageNamed:@"pointRed.png"] forState:UIControlStateNormal];
-    reuseAnnotationView.leftCalloutAccessoryView = leftCalloutButton;
-    [leftCalloutButton addTarget:self action:@selector(doSomething) forControlEvents:UIControlEventTouchUpInside];
+     //UIButton *rightCalloutButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+    CGRect rightButtonRect = CGRectMake(0, 0, 80, 100);
+    UIButton *rightCalloutButton = [[UIButton alloc] initWithFrame:rightButtonRect];
+    //UIImage *catImage = [UIImage imageNamed:@"cat1.jpg"];
+    rightCalloutButton.backgroundColor = [UIColor lightGrayColor];
+
+    //[rightCalloutButton setImage:catImage forState:UIControlStateNormal];
+
+    Pin *anno = (Pin *)annotation;
     
-    //在泡泡的右邊增加按鈕，預計放導航功能
-    //    UIImageView *rightCalloutImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pointRed.png"]];
-    //    rightCalloutImageView.userInteractionEnabled = true;
-    //    reuseAnnotationView.rightCalloutAccessoryView = rightCalloutImageView;
+    // 取得大頭針經緯度
+    CLLocation *annoLocation = [[CLLocation alloc] initWithLatitude:anno.coordinate.latitude longitude:anno.coordinate.longitude];
+    
+    // 增加右邊按鈕，顯示大頭針與使用者距離，按下可導航
+    rightCalloutButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    [rightCalloutButton setTitle:[NSString stringWithFormat:@"%1.1f\nkM", [currentLocation distanceFromLocation:annoLocation]/1000.0] forState:UIControlStateNormal];
+    reuseAnnotationView.rightCalloutAccessoryView = rightCalloutButton;
+    
+    //當右邊的calloutButton被按下會去執行self的那個方法
+    [rightCalloutButton addTarget:self action:@selector(showNavigationPath) forControlEvents:UIControlEventTouchUpInside];
+    NSLog(@"annotation = %@", annotation);
+
+    //    在泡泡的左邊增加圖片，按下圖片，會前往下一頁看詳細的圖片
+    CGRect leftRect = CGRectMake(0, 0, 80, 100);
+    
+    //取出某個Pin的圖
+    NSMutableArray *imageArray = [NSMutableArray new];
+    imageArray = [pinImageDAO getAllImageByPinId:anno.pinId];
+    
+    PinImage *pinImage = [[PinImage alloc] init];
+    
+    //只用第一張，如果沒有圖就用預設圖
+    if ([imageArray count]>0) {
+        pinImage = imageArray[0];
+    } else {
+        UIImage *img = [[UIImage alloc] init];
+        img = [UIImage imageNamed:@"cat2.jpg"];
+        pinImage.imageData = UIImageJPEGRepresentation(img, 0.5);
+        
+    }
+    
+    UIImage *image = [UIImage imageWithData:pinImage.imageData];
+    
+    // callout左邊放按鈕，這裡沒使用，是因為正平還不知道怎麼分辨使用者按了callout左邊還是右邊按鈕
+    //UIButton *leftCalloutButton = [[UIButton alloc] initWithFrame:leftRect];
+    //[leftCalloutButton setImage:image forState:UIControlStateNormal];
+    //reuseAnnotationView.leftCalloutAccessoryView = leftCalloutButton;
+    
+    // callout左邊放圖片，放圖片，程式比較複雜，要在圖片上增加手勢
+    UIImageView *leftCalloutImageView = [[UIImageView alloc] initWithFrame:leftRect];
+    leftCalloutImageView.image = image;
+    leftCalloutImageView.userInteractionEnabled = true;
+    UITapGestureRecognizer *imageTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPinInfo)];
+    [leftCalloutImageView addGestureRecognizer:imageTapGesture];
+
+    reuseAnnotationView.leftCalloutAccessoryView = leftCalloutImageView;
     
     return reuseAnnotationView;
+}
+
+// 當使用者按下泡泡會進到此方法，暫時先comment，沒有用到
+//- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+//    NSLog(@"control = %@", control);
+//    NSLog(@"MKAnnotationView.annotation = %@", view.annotation);
+//}
+
+
+// 當在地圖上按下一個大頭針，就會進到這方法
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+
+    //[self.appleMapView selectAnnotation:view.annotation animated:YES];
+    
+    NSLog(@"MKAnnotationView.annotation = %@", view.annotation);
+}
+
+// 自訂方法
+// 當使用者按下callout按鈕，會進到此方法，準備到下一頁
+- (void)showPinInfo {
+    
+    // 先得知按了那個一個annotation
+    // 因為是by code產生的按鈕，所以在storyboard沒有按鈕，segue要從黃點拉到下一個頁面
+    Pin *pin = [self.appleMapView selectedAnnotations][0];
+
+    [self performSegueWithIdentifier:@"showPinInfoSegue" sender:pin];
+
+}
+
+- (void)showNavigationPath {
+
 }
 
 // 要#import <CoreLocation/CoreLocation.h>及加上<CLLocationManagerDelegate>，才能用這個方法
@@ -166,19 +306,80 @@
     // 因為只要第一次更新位置時，執行一些動作，所以設定一個變數來控制
     if (isFirstLocationReceived == NO) {
         
-        // 將地圖的region設定一個變數，這樣後面用這個變數就好，比較簡短，
-        // 例如，不用寫self.myMapView.region.center = ...
-        // 必須 #import <MapKit/MapKit.h>，才能使用MKCoordinateRegion類別
-        MKCoordinateRegion region = self.appleMapView.region;
-        
-        //MapView在storyboard要拉好constraint，不然app一開始執行時，使用者的位置會跑掉，其實不是使用者跑掉，而是地圖偏掉了
-        region.center = currentLocation.coordinate;
-        region.span.latitudeDelta = 0.01;
-        region.span.longitudeDelta = 0.01;
-        isFirstLocationReceived = YES;
-        [self.appleMapView setRegion:region animated:YES];
+        // 讓使用者回到地圖中心
+        [self returnUserLocation];
     }
     
+    // 比對使用者和大頭針的距離，如果距離小於多少，就會送出localNotification
+    
+    // 取得大頭針與使用者距離
+    for (Pin *pin in allPinRows) {
+        CLLocation *annoLocation = [[CLLocation alloc] initWithLatitude:pin.coordinate.latitude longitude:pin.coordinate.longitude];
+        CGFloat distance = [currentLocation distanceFromLocation:annoLocation];
+        //NSLog(@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.visitedDate);
+        self.theLabel.text = [NSString stringWithFormat:@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.visitedDate];
+        // 需滿足三個條件才會要iOS送出通知，
+        // 使用者離大頭針距離120公尺內、沒有到訪過此大頭針、尚未發送過通知
+        if (distance < 120 && pin.visitedDate == nil && [notifiedArray containsObject:pin]==false) {
+            UILocalNotification *localNoti = [[UILocalNotification alloc] init];
+            localNoti.fireDate = nil;// nil表示馬上發出通知，不排程
+            localNoti.timeZone = [NSTimeZone defaultTimeZone];
+            localNoti.alertBody = pin.title;
+            localNoti.soundName = UILocalNotificationDefaultSoundName;
+            localNoti.applicationIconBadgeNumber = badgeNumber;
+            
+            [[UIApplication sharedApplication] scheduleLocalNotification:localNoti];
+            
+            //AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+            // 因為有加新的通知，所以要馬上更新編號
+            //[appDelegate reorderApplicationIconBadgeNumber];
+            
+            // 程式要自己控制badgeNumber的編號，所以這裡badgeNumber+1
+            badgeNumber++;
+            
+            // 將已經送出的notification先存在暫存的array
+            [notifiedArray addObject:pin];
+            self.theLabel.text = [NSString stringWithFormat:@"id=%@, D= %f", pin.pinId, distance];
+            
+        }
+    }
+}
+
+
+// 在AppDelegate放了一個postNotificationName:object:，當app進入前景，這個viewController會收到廣播後執執行這個方法
+- (void)updatePinVisitedDate {
+    
+    PinDAO *pinDAO = [[PinDAO alloc] init];
+    for (Pin *pin in notifiedArray) {
+        NSLog(@"date=%@", [NSDate date]);
+        // 更新每一個大頭針的到訪時間
+        [pinDAO updateVisitedDateFromSQLite:pin.pinId setVisitedDate:[NSDate date]];
+    }
+
+    // 因為更新的到訪時間，從資料庫更新陣列中的大頭針資料
+    allPinRows = [pinDAO getAllPin];
+
+    // 清掉已發出通知的pin
+    [notifiedArray removeAllObjects];
+    
+    // 重新編號通知，從1開始才會叮咚
+    badgeNumber = 1;
+}
+
+//自訂方法，讓使用者回到地圖中心
+- (void)returnUserLocation {
+    
+    // 將地圖的region設定一個變數，這樣後面用這個變數就好，比較簡短，
+    // 例如，不用寫self.myMapView.region.center = ...
+    // 必須 #import <MapKit/MapKit.h>，才能使用MKCoordinateRegion類別
+    MKCoordinateRegion region = self.appleMapView.region;
+    
+    //MapView在storyboard要拉好constraint，不然app一開始執行時，使用者的位置會跑掉，其實不是使用者跑掉，而是地圖偏掉了
+    region.center = currentLocation.coordinate;
+    region.span.latitudeDelta = 0.01;
+    region.span.longitudeDelta = 0.01;
+    isFirstLocationReceived = YES;
+    [self.appleMapView setRegion:region animated:YES];
 }
 
 /*

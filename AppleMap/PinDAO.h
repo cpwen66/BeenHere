@@ -18,7 +18,9 @@
 - (PinDAO *) init;
 
 - (NSMutableArray *) getAllPin;
+- (Pin *) getPinById:(NSString *)pinId;
 - (void) insertPinIntoSQLite: (Pin *)pin;
 - (NSString *)getLastPinId;
+- (void)updateVisitedDateFromSQLite:(NSString *)pinId setVisitedDate:(NSDate *) visitedDate;
 
 @end
