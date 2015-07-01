@@ -89,6 +89,9 @@ friendTableViewController * frinedview;
  
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
+    NSLog(@"beid:",BEID);
+    
+    
     [self userinfoinit];
    
     
@@ -140,10 +143,14 @@ friendTableViewController * frinedview;
 -(void)userinfoinit{
   
     
-   
+    
+    
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
     
+    NSData * picture=[[NSData alloc]init ];
+     picture= [[mydb sharedInstance]getuserpicture:BEID];
+    if (picture ==NULL) {
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",BEID , @"userID", nil];
     
     AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
@@ -153,7 +160,7 @@ friendTableViewController * frinedview;
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
         
-        NSLog(@"PICTURE:%@",apiResponse);
+      
         NSString *result = [apiResponse objectForKey:@"downloaduserimageresult"];
         
         
@@ -162,12 +169,18 @@ friendTableViewController * frinedview;
             
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
-            
+            NSLog(@"data%@",data);
             NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
-            
+            NSLog(@"imagedata:%@",imagedata);
+            if ([data[@"userpicture"]   isEqual:@""]) {
+                UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
+                    _userpicture.image=image;
+            }else{
             UIImage * image=[UIImage imageWithData:imagedata];
+                   _userpicture.image=image;
+            }
             
-            _userpicture.image=image;
+           
             
             
             
@@ -181,10 +194,15 @@ friendTableViewController * frinedview;
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
     }];
+    }else{
     
-
-
-
+        
+        
+        UIImage * image=[UIImage imageWithData:picture];
+        
+         _userpicture.image=image;
+    
+    }
 
 
 
@@ -650,6 +668,11 @@ friendTableViewController * frinedview;
 
     talkviewcontroller * talk = [self.storyboard instantiateViewControllerWithIdentifier:@"talk"];
        UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraview"];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"AppleMap" bundle:nil];
+//    
+    id targetViewController = [storyBoard instantiateViewControllerWithIdentifier:@"appnav"];
+    
+    
     switch (index) {
         case 0:
            _Textview.hidden=NO;
@@ -665,7 +688,10 @@ friendTableViewController * frinedview;
         case 2:
          
             [self presentViewController:cameraVC animated:YES completion:nil];
-            
+            break;
+         case 3:
+             [self presentViewController:targetViewController animated:true completion:nil];
+            break;
         default:
             break;
     }
@@ -735,7 +761,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-
+    
 
 }
 @end

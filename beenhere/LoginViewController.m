@@ -57,6 +57,7 @@
     //設定要POST的鍵值
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"signIn", @"cmd", userID, @"userID", password, @"password", nil];
     
+    NSLog(@"PAR:%@",params);
     //產生控制request的物件
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
@@ -67,7 +68,7 @@
         
         //將查詢資料存到NSDictionary
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
-        NSLog(@"apiResponse:%@",apiResponse);
+        NSLog(@"apiResponse login:%@",apiResponse);
         //取的signIn的key值，並輸出
         NSString *result = [apiResponse objectForKey:@"signIn"];
         NSLog(@"result:%@",result);
@@ -78,7 +79,7 @@
             NSLog(@"no suceess");
             [self logincheck:@"帳號錯誤"];
             
-            NSLog(@"success");
+     
         }else {
           
             [self logincheck:@"登入成功"];

@@ -112,6 +112,21 @@ mydb *sharedInstance;
     return rows;
 }
 
+//取圖
+- (NSData *)getuserpicture:(NSString *)beid
+{
+    NSData *cover = nil;
+    
+    FMResultSet *results = [db executeQueryWithFormat:@"SELECT  userpicture FROM memeber WHERE id = %@", beid];
+    
+    if([results next])
+    {
+        cover = [results dataForColumn:@"userpicture"];
+    }
+    
+    return cover;
+}
+
 //取得流水號
 - (NSString *)newCustNo {
     int maxno = 1;
@@ -221,6 +236,9 @@ mydb *sharedInstance;
      member_addr    cust_addr
      member_email   cust_email
      */
+    
+    
+       NSData * imagedata = [[NSData alloc]initWithBase64EncodedString: custDict[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
     FMResultSet *rs=[db executeQuery:@"select count(*) from memeber where bhere_no=?",custDict[@"bhere_no"]];
     
     while ([rs next]) {
@@ -238,7 +256,7 @@ mydb *sharedInstance;
                   custDict[@"password"],
                   custDict[@"sex"],
                   custDict[@"telephone"],
-                  custDict[@"userpicture"]
+                  imagedata
                   ]) {
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
             
@@ -404,6 +422,9 @@ mydb *sharedInstance;
     
     
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"queryindexcontent",@"cmd", beeid, @"userID", nil];
+    
+    
+    
     
     //產生hud物件，並設定其顯示文字
     

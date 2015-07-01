@@ -457,7 +457,6 @@
         <!--Table View Controller-->
         <scene sceneID="UCg-qd-1B0">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="huL-mS-Meu" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="jgQ-iO-Hap" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="K1f-U6-HBV">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -485,6 +484,7 @@
                         </connections>
                     </tableView>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="huL-mS-Meu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1626" y="960"/>
         </scene>

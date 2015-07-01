@@ -24,10 +24,14 @@
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>The App will get your location in the map.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>Allow the App to send notification, when user enter into a region.</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
-	<string>AppleMap</string>
+	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -44,10 +48,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>Allow the App to send notification, when user enter into a region.</string>
 	</array>
 </dict>
 </plist>
