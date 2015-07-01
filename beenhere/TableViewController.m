@@ -69,11 +69,60 @@
                     
                 default:
                     break;
-           }
+                           }
              
             
             
             break;
+            
+        case 2:
+            switch (indexPath.row) {
+                case 0:
+                    //                     [self presentViewController:account animated:true completion:nil];
+                    
+                    [self.navigationController pushViewController:account animated:YES];
+                    
+                    //傳陣列資料過去
+                    
+                    break;
+                case 1:
+                    
+                    
+                    break;
+                 case 2:
+                    
+                    [self removeuserdefult];
+                    break;
+                    
+                    
+                default:
+                    break;
+            }
+            
+            
+            
+            break;
+        case 0:
+            switch (indexPath.row) {
+                case 0:
+                    //                     [self presentViewController:account animated:true completion:nil];
+                    
+                    [self.navigationController pushViewController:account animated:YES];
+                    
+                    //傳陣列資料過去
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            
+            
+            break;
+
+            
+            
             
         default:
             break;
@@ -82,6 +131,46 @@
     
    
     }
+
+
+
+
+-(void)removeuserdefult{
+
+    UIAlertController *alertcontroller=[UIAlertController alertControllerWithTitle:@"確定登出？" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *ok=[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"bhereID"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"bherePassword"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"bhereEmail"];
+          [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"name"];
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        UIViewController *firstview = [self.storyboard instantiateViewControllerWithIdentifier:@"firstview"];
+        //        [self showViewController:cameraVC sender:self];
+        [self presentViewController:firstview animated:YES completion:nil];
+        
+        
+    }];
+    UIAlertAction *cancelaction=[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action){
+        
+        
+        
+    }];
+    [alertcontroller addAction:ok];
+    [alertcontroller addAction:cancelaction];
+    
+    [self presentViewController:alertcontroller animated:YES completion:nil ];
+
+
+    
+
+    
+
+
+}
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];

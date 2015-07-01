@@ -14,8 +14,9 @@
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *EmailTextfield;
 @property (weak, nonatomic) IBOutlet UITextField *PasswordTextfield;
-@property (weak, nonatomic) IBOutlet UITextField *Passwordagain;
 
+
+@property (weak, nonatomic) IBOutlet UIButton *loginbtn;
 
 
 
@@ -32,7 +33,8 @@
     // Do any additional setup after loading the view.
     EmailTextfield.text=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereEmail" ];
      PasswordTextfield.text=[[NSUserDefaults standardUserDefaults]stringForKey:@"bherePassword" ];
-    
+   // self.loginbtn.layer.borderWidth=1.0;
+    self.loginbtn.layer.cornerRadius=5.0;
 }
 
 - (void)didReceiveMemoryWarning {

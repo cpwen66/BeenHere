@@ -30,7 +30,7 @@
 
 @property (nonatomic, strong) QuoteTableViewCell *prototypeCell;
 @property (nonatomic, retain) NSMutableArray *displayArray;
-
+@property (nonatomic) int currentSelection;
 
 @end
 
@@ -47,6 +47,10 @@
     [super viewDidLoad];
     
 
+    self.currentSelection = -1;
+    
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
      NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"welcome",@"text", nil];
     //展開收起
       [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(expandCollapseNode:) name:@"ProjectTreeNodeButtonClicked" object:nil];
@@ -56,19 +60,22 @@
       [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loaddata) name:@"loaddata" object:nil];
     
     
+    //self.tableView.layer.borderWidth = 1.0;
     
+     [_prototypeCell setNeedsDisplay];
     
-    
-       
     [self fillNodesArray:params];
     [self fillDisplayArray];
   
-    
+     [self.tableView reloadData];
 
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddContent:) name:@"textcontent" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddContentwith:) name:@"textcontentwith" object:nil];
+    
     [self initdata];
 }
+
 -(void)initdata{
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -86,8 +93,6 @@
 -(void)viewWillAppear:(BOOL)animated{
 
 [self loaddata];
-
-
 }
 //從sqlite取內容資料
 -(void)loaddata{
@@ -116,15 +121,18 @@
        
     TreeViewNode *firstLevelNode1 = [[TreeViewNode alloc]init];
         firstLevelNode1.nodeLevel = 0;
+        firstLevelNode1.Typetag = Content[a][@"typetag"];
         firstLevelNode1.nodeObject = Content[a][@"text"];
         firstLevelNode1.isExpanded = YES;
         firstLevelNode1.beeid = Content[a][@"id"];
            if (Content[a][@"imageid"] != [NSNull null]){
         firstLevelNode1.imageid= Content[a][@"imageid"];
            }else{
-           
                firstLevelNode1.imageid=nil;
            }
+        
+        
+        NSLog(@"name:%@",Content[a][@"name"]);
         firstLevelNode1.name=Content[a][@"name"];
         firstLevelNode1.nodeChildren = [[self fillChildrenForNode:[NSString stringWithFormat:@"%@",Content[a][@"content_no"]]] mutableCopy];
         firstLevelNode1.content_no=[NSString stringWithFormat:@"%@",Content[a][@"content_no"]];
@@ -161,6 +169,8 @@
     [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
+- (IBAction)EmtionBtnaction:(id)sender {
+}
 
 //內容子陣列
 - (NSArray *)fillChildrenForNode:(NSString *)content_no
@@ -216,7 +226,6 @@
     
     
     
-    
     [self fillDisplayArray];
     [self.tableView reloadData];
 }
@@ -252,18 +261,7 @@
     
     //存到SQLite
     NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
-    
-//    [[mydb sharedInstance]insertMemeberNo:userID andcontenttext:dict[@"text"] andlevel:@"0" anddate:date andcontentno:];
-    
-    
-    
-//    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_TW"];
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    formatter.locale = enUSPOSIXLocale;
-//    formatter.dateFormat = @"YYYY-MM-dd hh:mm";
-//    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-//    formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600];
-    
+
     
     NSDictionary *params=[[NSDictionary alloc]init ];
     
@@ -289,7 +287,46 @@
    // [self.tableView reloadData];
     
 }
+-(void)AddContentwith:(NSNotification *)message{
+    
+    NSDictionary * dict=[[NSDictionary alloc]init];
+    
+    dict = [NSDictionary dictionaryWithObject:message.object forKey:@"text"];
+    
+    // [self fillNodesArray:dict];
+    
+    NSString * text=message.object;
+    //輸入時間
+    
+    
+    
+    
+    //存到SQLite
+    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+    
+    NSDictionary *params=[[NSDictionary alloc]init ];
+    
+    //取出當前時間 及時區的轉換
+    NSDate * new = [NSDate date];
+    NSTimeInterval timeZoneOffset = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:new];
+    NSDate *localDate = [new dateByAddingTimeInterval:timeZoneOffset];
+    
+    
+    NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
+    
+        params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"2",@"imageid",@"1",@"typetag",nil];
+    
+        NSLog(@"insert params:%@",params);
+    
+    
+        [[mydb sharedInstance]insertcontentremotewithimage:params ];
+    
 
+    
+    // [self.tableView reloadData];
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -307,11 +344,20 @@
 #pragma mark - Configure
 - (void)configureCell:(QuoteTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   // NSString *quote = Content[indexPath.row][@"text"];
+  
+    
+    
+    
     
     TreeViewNode *node = [self.displayArray objectAtIndex:indexPath.row];
     cell.treeNode = node;
     cell.contentlabel.text = node.nodeObject;
+    
+    NSLog(@"tree=%lu",(unsigned long)cell.treeNode.nodeLevel);
+    
+    if (cell.treeNode.nodeLevel==1) {
+        cell.iconimage.image=nil;
+    };
 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
 
@@ -320,8 +366,6 @@
    
     cell.detaillabel.text=currentTime;
     
-    
-    NSLog(@"no:%@,cellimage:%@",cell.treeNode.content_no,cell.treeNode.imagedate);
     
    
     int number = [cell.treeNode.imageid intValue];
@@ -344,7 +388,6 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [hud setLabelText:@"connecting"];
     
-    //產生控制request的物件
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
  
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
@@ -389,11 +432,28 @@
     
         cell.cellimage.image=nil;
     }
+
+    //userpicture
+    NSLog(@"tree:%@",cell.treeNode.Typetag);
+     int type = [cell.treeNode.Typetag intValue];
+    if (type==1) {
+        UIImage *image =[UIImage imageNamed:@"camera16x.png"];
+        cell.iconimage.image=image;
+    }else if(type==2){
+        UIImage *image =[UIImage imageNamed:@"pencil.png"];
+        cell.iconimage.image=image;
     
     
+    }
     
-    
-    
+    //
+    if ([indexPath row] == self.currentSelection) {
+        
+        CGRect cellview=cell.cellbackground.frame;
+        cellview.size.height=cellview.size.height+100;
+        cell.cellbackground.frame=cellview;
+    }
+   
     
     
    }
@@ -407,7 +467,11 @@
         return UITableViewAutomaticDimension;
     }
     
-    //self.prototypeCell.bounds = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.prototypeCell.bounds));
+    
+    self.prototypeCell.bounds = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.prototypeCell.bounds));
+   
+
+    
     
     [self configureCell:self.prototypeCell forRowAtIndexPath:indexPath];
     
@@ -443,17 +507,13 @@
 
      [cell setNeedsDisplay];
     
-//    UIButton *addFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    addFriendButton.frame = CGRectMake(300.0f, 5.0f, 75.0f, 30.0f);
-//    [addFriendButton setTitle:@"like" forState:UIControlStateNormal];
+
+//    UIView *myView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+//    myView.backgroundColor=[UIColor greenColor];
+//    myView.tag=1001;
+//    [myView setHidden:YES];
 //    
-//    UIImage * img=[UIImage imageNamed:@"smood.png"];
-//    [addFriendButton setImage:img forState:UIControlStateNormal];
-//    [cell addSubview:addFriendButton];
-//    [addFriendButton addTarget:self
-//                        action:@selector(agreefriend:)
-//              forControlEvents:UIControlEventTouchUpInside];
-    
+//    [cell.contentView addSubview:myView];
   
     return cell;
     
@@ -463,6 +523,24 @@
     
     
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // do things with your cell here
+    
+    // set selection
+    self.currentSelection = indexPath.row;
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [[cell viewWithTag:1001] setHidden:NO];
+    
+    // animate
+    [tableView beginUpdates];
+    [tableView endUpdates];
+}
+
+
+
 #pragma mark-
 - (void)expandCollapseNode:(NSNotification *)notification
 {

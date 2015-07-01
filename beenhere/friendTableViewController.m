@@ -11,6 +11,8 @@
 #import "SERVERCLASS.h"
 #import "AFNetworking.h"
 #import "StoreInfo.h"
+#import "friendrootTableViewController.h"
+#import "friendrootViewController.h"
 
 @interface friendTableViewController ()<serDelegate,UISearchBarDelegate>
 {
@@ -45,13 +47,29 @@
      self.searchBar.delegate = self;
 }
 
+
+-(void)viewDidAppear:(BOOL)animated{
+
+    [self showFriendList];
+    
+    
+    [self initlist];
+
+
+}
+
+
+
 -(void)initlist{
 
+    
+    
+    
     frindRequestList=[StoreInfo shareInstance].FriendRequestList;
 
     MyfriendList=[StoreInfo shareInstance].MyFriendtList;
     
-    NSLog(@"friend: %@",MyfriendList);
+    
     
     
     [self.tableView reloadData];
@@ -63,10 +81,7 @@
    
 }
 
--(void)viewDidAppear:(BOOL)animated{
- NSLog(@"friendlist:%@   %lu",frindRequestList[0],(unsigned long)[frindRequestList count]);
 
-}
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -77,15 +92,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    // Return the number of rows in the section.
+    
     switch (section) {
         case 0:
+       
             return [frindRequestList count];
-            break;
+          
+                break;
           
         case 1:
+           
+                
+            
             return [MyfriendList count];
-            break;
+          
+                break;
             
         default: 
             break;
@@ -115,6 +136,10 @@
             return string;
             
             }
+            else
+            {
+                return nil;
+            }
             break;
         case 1:
             string = @"好友列表";
@@ -131,9 +156,6 @@
     
     
     UIFont *myFont = [UIFont fontWithName:@"Helvetica" size:8];
-    
-    
-    
     NSMutableAttributedString * sectionTilte = [[NSMutableAttributedString alloc] initWithString:string];
         [sectionTilte addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0,0)];
         [sectionTilte addAttribute:NSFontAttributeName value:myFont range:NSMakeRange(0,0)];
@@ -154,11 +176,13 @@
 {
     // return appropriate cell(s) based on section
      UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+
+        
     if(indexPath.section == 0)
     {
-        cell.textLabel.text =[NSString stringWithFormat:@"%@ ",frindRequestList[indexPath.row][@"name"]];
+        cell.textLabel.text =[NSString stringWithFormat:@"name:%@",frindRequestList[indexPath.row][@"name"]];
         
-        
+        NSLog(@"name:%@",frindRequestList[indexPath.row][@"name"]);
         UIButton *addFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         addFriendButton.frame = CGRectMake(300.0f, 5.0f, 75.0f, 30.0f);
         [addFriendButton setTitle:@"Add" forState:UIControlStateNormal];
@@ -169,10 +193,6 @@
         
         addFriendButton.tag=indexPath.row;
         
-        
- 
-        
-       
         
         UIButton *chcanelFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         chcanelFriendButton.frame = CGRectMake(250.0f, 5.0f, 75.0f, 30.0f);
@@ -185,7 +205,7 @@
         chcanelFriendButton.tag=indexPath.row;
         
     }
-   
+
     
     
     if(indexPath.section == 1)
@@ -196,8 +216,39 @@
     }
     
     
-    
     return cell;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    
+    NSIndexPath *indexpath=self.tableView.indexPathForSelectedRow;
+//    TreeViewNode *node = [self.displayArray objectAtIndex:indexpath.row];
+    friendrootViewController *tvc=segue.destinationViewController;
+
+    tvc.friendid=MyfriendList[indexpath.row][@"friendID"];
+    [StoreInfo shareInstance].Friendid=MyfriendList[indexpath.row][@"friendID"];
+    
+    NSLog(@"s:%@", [StoreInfo shareInstance].Friendid);
+}
+
+
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+      NSIndexPath *indexpath=self.tableView.indexPathForSelectedRow;
+    
+    
+    
+    friendrootViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"custAddEditAc"];
+    
+    vc.friendid=MyfriendList[indexpath.row][@"frienid"];;
+   
+    
+    
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    
 }
 
 
@@ -239,10 +290,12 @@
            NSLog(@"find%@",frindRequestList);
            
            
+             [[NSNotificationCenter defaultCenter]postNotificationName:@"serachfriend" object:nil];
+           
            //同時存進sqlite
            [[mydb sharedInstance]insertfriendname:Myid friendname:RequestFriendName andffriendID:requestid ];
            
-          
+           
        }
     } failure:^(NSError *error) {
         
@@ -681,7 +734,6 @@
     }
     
     [self.tableView reloadData];
-
     
 }
 

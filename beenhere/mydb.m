@@ -137,12 +137,24 @@ mydb *sharedInstance;
 }
 
 
+//新增使用者圖片
+-(void)insertuserpicture:(NSDate*)picture addbeeid:(NSString*)beeid{
+
+    if (![db executeUpdate:@"insert into member (id,userpicture) values (?,?)",beeid,picture]) {
+        NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
+    };
+    
+}
+
+
+
 - (void)insertfriendname:(NSString *)memberId friendname:(NSString *)friendname andffriendID :(NSString *)friendID  {
     
     if (![db executeUpdate:@"insert into bh_firendlist (id,friendID,friendname) values (?,?,?)",memberId,friendID,friendname]) {
         NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
     };
     NSLog(@"BEEMAIL:%@",memberId);
+    
     
     // [self uploadUsers:BeEMAIL];
     

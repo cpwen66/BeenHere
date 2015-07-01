@@ -22,6 +22,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *replytextfield;
 
+@property (weak, nonatomic) IBOutlet UIButton *SendBtn;
 
 @end
 
@@ -45,12 +46,13 @@
      NSLog(@"contentno:%@",_node.content_no);
     [self fillNodeWithChildrenArray:_node.nodeChildren];
  
-    
-    
-
+ 
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    
+     self.SendBtn.layer.cornerRadius=5.0;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,10 +65,14 @@
 - (IBAction)replyAction:(id)sender {
     
     replytext=_replytextfield.text;
-    [self insertreplycontentToSQLite];
+    if (replytext!=NULL) {
+         [self insertreplycontentToSQLite];
+    }
+    
+   
     
 
-     //[self dismissViewControllerAnimated:YES completion:nil];
+     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 //將回覆內容存入mysql及sqllite
@@ -127,6 +133,7 @@ NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"
     TreeViewNode * node=replylist[indexPath.row];
     cell.contentLabel.text =node.nodeObject;
     cell.timeLabel.text = currentTime;
+    cell.namelabel.text=node.name;
 }
 
 

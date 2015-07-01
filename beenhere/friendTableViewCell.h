@@ -1,15 +1,16 @@
 //
-//  QuoteTableViewCell.h
+//  friendTableViewCell.h
 //  beenhere
 //
-//  Created by ChiangMengTao on 2015/6/19.
-//  Copyright (c) 2015年 MobileIT. All rights reserved.
+//  Created by ChiangMengTao on 2015/6/30.
+//  Copyright (c) 2015年 beenhere. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "TreeViewNode.h"
 
-@interface QuoteTableViewCell : UITableViewCell
+@interface friendTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *contentlabel;
 @property (weak, nonatomic) IBOutlet UILabel *detaillabel;
 @property (retain, nonatomic) IBOutlet UIButton *cellButton;
@@ -26,7 +27,5 @@
 - (void)setTheButtonBackgroundImage:(UIImage *)backgroundImage;
 
 @property (weak, nonatomic) IBOutlet UIView *cellbackground;
-
-@property (weak, nonatomic) IBOutlet UIImageView *iconimage;
 
 @end
