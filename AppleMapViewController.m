@@ -240,6 +240,8 @@
     if ([imageArray count]>0) {
         pinImage = imageArray[0];
     } else {
+        
+        //
         UIImage *img = [[UIImage alloc] init];
         img = [UIImage imageNamed:@"cat2.jpg"];
         pinImage.imageData = UIImageJPEGRepresentation(img, 0.5);

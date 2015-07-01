@@ -37,12 +37,11 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 @property (weak, nonatomic) IBOutlet UIScrollView *theScrollView;
 //@property (weak, nonatomic) IBOutlet UIView *toolContainerView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolViewBottomLayoutConstraint;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *doneBarBtnItem;
 
 @end
 
 @implementation PinEditViewController
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -51,10 +50,12 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
     imageIndex = 0;
     isFirstViewDidAppear = YES;
+    self.doneBarBtnItem.enabled = NO;
+    
+    //titleTextView.delegate = self;
     
     Pin *pin = [[Pin alloc] init];
-    pin.memberId = @"3";
-    
+    //pin.memberId = @"3";
     
     pinDAO = [[PinDAO alloc] init];
     NSMutableArray *rows = [pinDAO getAllPin];
@@ -64,19 +65,19 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     pinImageDAO = [[PinImageDAO alloc] init];
     
 
+    
+
     // 監聽keyboard的動作
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextDidChange:) name:UITextViewTextDidChangeNotification object:nil];
     
     // 替scrollView加上手勢
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     
     // 下一行self.myScrollView改成self.view也可以
     [self.theScrollView addGestureRecognizer:tapGesture];
-    
-    //self.theScrollView.backgroundColor = [UIColor redColor];
-    
-
     
 }
 
@@ -95,7 +96,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         // by code 產生textView
         CGRect textRect = CGRectMake(TEXT_MARGIN_IN_CELL, TEXT_MARGIN_IN_CELL, scrollViewWidth-2*TEXT_MARGIN_IN_CELL, 80);
         titleTextView = [[UITextView alloc] initWithFrame:textRect];
-        titleTextView.text = @"這行要移掉";
+        titleTextView.text = @"";
         
         [titleTextView setFont:[UIFont systemFontOfSize:14]];
         [self.theScrollView addSubview:titleTextView];
@@ -131,7 +132,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
     CGFloat screenHeight = [[UIScreen mainScreen] bounds].size.height;
     NSLog(@"screen width= %f, height= %f", screenWidth, screenHeight);
-    
     
 }
 
@@ -203,18 +203,23 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
 }
 
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
-    NSLog(@"shouldEnd");
-    return true;
+// 因為by code 產生的textView，無法使用UITextViewDelegate裡的方法，
+// 所以只能用NSnotificationCenter，也能達到一樣的目的
+- (void)textViewTextDidChange: (NSNotification *) aNotification {
+    
+    // 有3段程式要判斷右上角的Done要不要Enabled，判定是依據使用者是否輸入文字或是加圖片，這是第1段
+    if ([titleTextView.text isEqualToString:@""] && imageIndex == 0) {
+        self.doneBarBtnItem.enabled = NO;
+    } else {
+        self.doneBarBtnItem.enabled = YES;
+    }
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    NSLog(@"didEnd");
-}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSLog(@"touched");
 }
+
 
 // 要加<UIScrollViewDelegate>，才有此方法
 // 如果scrollView被滑動，就會進入此方法
@@ -266,7 +271,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     NSLog(@"imageView height =%f, width = %f", imageView.frame.size.height, imageView.frame.size.width);
 
     
-    
     // 建立空白的UIView
     imagePosition = TEXT_MARGIN_IN_CELL + titleTextViewHeight + 20 + (20 + newViewHeight) * imageIndex;
     CGRect newViewRect = CGRectMake(20, imagePosition, contentWidth, newViewHeight);
@@ -297,10 +301,16 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
     [self.theScrollView addSubview:newView];
     
+    NSLog(@"[self.theScrollView.subviews count] = %d", [self.theScrollView.subviews count]);
 
-    
     imageIndex++;
     
+    // 有3段程式要判斷右上角的Done要不要Enabled，判定是依據使用者是否輸入文字或是加圖片，這是第2段
+    if (imageIndex >= 1) {
+        self.doneBarBtnItem.enabled = YES;
+    }
+    NSLog(@"imageIndex = %d", imageIndex);
+
     //NSLog(@"info: %@", info);
     //NSLog(@"editedImage: %@", editedImage);
     //NSLog(@"originalImage: %@", originalImage);
@@ -379,6 +389,12 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         
         // 位置的邏輯還要重新思考，這裡只是暫時用補償的，式子後面的-1
         imageIndex--;
+        
+        // 有3段程式要判斷右上角的Done要不要Enabled，判定是依據使用者是否輸入文字或是加圖片，這是第3段
+        if (imageIndex == 0 && [titleTextView.text isEqualToString:@""]) {
+            self.doneBarBtnItem.enabled = NO;
+        }
+
         imagePosition = TEXT_MARGIN_IN_CELL + titleTextViewHeight + 20 + (20 + tempImageHeight) * (imageIndex-1);
         [self viewDidLayoutSubviews];
 

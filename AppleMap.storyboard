@@ -381,6 +381,7 @@
         <!--Navigation Controller-->
         <scene sceneID="FCx-s6-bbm">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P8u-8a-VJV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="Iby-MN-X4B" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="wur-Ji-UNy">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -390,7 +391,6 @@
                         <segue destination="0P8-S4-FJn" kind="relationship" relationship="rootViewController" id="hlV-kM-Qyn"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="P8u-8a-VJV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="898" y="-400"/>
         </scene>
@@ -431,13 +431,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uLw-7q-aeQ">
                                 <rect key="frame" x="0.0" y="552" width="600" height="48"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ex-Z8-0xX">
-                                        <rect key="frame" x="8" y="9" width="46" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ex-Z8-0xX">
+                                        <rect key="frame" x="8" y="6" width="50" height="36"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="46" id="LsY-LA-l0i"/>
+                                            <constraint firstAttribute="width" constant="50" id="LRc-Wp-iH2"/>
                                         </constraints>
-                                        <state key="normal" title="Button">
+                                        <state key="normal" image="camera.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -448,9 +448,9 @@
                                 <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="4iY-Yl-c4o"/>
-                                    <constraint firstItem="3Ex-Z8-0xX" firstAttribute="leading" secondItem="uLw-7q-aeQ" secondAttribute="leading" constant="8" id="OEq-p6-XOD"/>
-                                    <constraint firstItem="3Ex-Z8-0xX" firstAttribute="top" secondItem="uLw-7q-aeQ" secondAttribute="top" constant="9" id="hZI-KE-58U"/>
-                                    <constraint firstAttribute="bottom" secondItem="3Ex-Z8-0xX" secondAttribute="bottom" constant="9" id="yzY-1v-0Pa"/>
+                                    <constraint firstItem="3Ex-Z8-0xX" firstAttribute="top" secondItem="uLw-7q-aeQ" secondAttribute="top" constant="6" id="KtI-T9-kzV"/>
+                                    <constraint firstItem="3Ex-Z8-0xX" firstAttribute="leading" secondItem="uLw-7q-aeQ" secondAttribute="leading" constant="8" id="LXg-uG-hh4"/>
+                                    <constraint firstAttribute="bottom" secondItem="3Ex-Z8-0xX" secondAttribute="bottom" constant="6" id="sJw-j6-d78"/>
                                 </constraints>
                             </view>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1R9-sC-5FS">
@@ -519,6 +519,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="doneBarBtnItem" destination="CVG-pq-BJq" id="mrc-Qf-iPi"/>
                         <outlet property="theScrollView" destination="mlv-5s-35N" id="6o3-q9-Ygy"/>
                         <outlet property="toolViewBottomLayoutConstraint" destination="E6I-NQ-33i" id="M24-De-g3g"/>
                     </connections>
@@ -564,6 +565,7 @@
     </scenes>
     <resources>
         <image name="BtnAdd" width="32" height="32"/>
+        <image name="camera.png" width="36" height="36"/>
         <image name="trashcan.png" width="85" height="105"/>
         <image name="userlocation.png" width="103" height="103"/>
     </resources>
