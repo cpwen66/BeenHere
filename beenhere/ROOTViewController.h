@@ -12,7 +12,7 @@
 @interface ROOTViewController : UIViewController<UPStackMenuDelegate>
 {
     NSMutableArray * ReturnInfo;
-
+    NSString * test;
 }
 - (IBAction)friendrequestcount:(id)sender;
 
