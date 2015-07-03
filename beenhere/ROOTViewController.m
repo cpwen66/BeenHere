@@ -507,7 +507,7 @@ friendTableViewController * frinedview;
 
   
     //將sql return 資料存成陣列
-    
+    NSLog(@"rec:%@",receive[@"requestid"]);
     [StoreInfo shareInstance].FriendRequestList=[receive[@"requestid"] mutableCopy];
 
     
@@ -564,6 +564,7 @@ friendTableViewController * frinedview;
         NSString * friend = [apiResponse objectForKey:@"requestid"];
         
         NSLog(@"result:%@ ",friend);
+        
         
         
         //   判斷signUp的key值是否等於success

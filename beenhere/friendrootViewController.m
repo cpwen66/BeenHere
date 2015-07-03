@@ -31,13 +31,13 @@
     _friendid=[StoreInfo shareInstance].Friendid;
     NSLog(@"r:%@",_friendid);
     
-     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
+
     
     
 }
 -(void)userinfoinit{
     
-    NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
+
     
     
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",_friendid , @"userID", nil];

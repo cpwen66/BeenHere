@@ -27,7 +27,7 @@
     
     self.contentView.frame = self.bounds;
     self.cellbackground.frame=self.bounds;
-}
+    }
 
 - (void)layoutSubviews
 {
@@ -38,6 +38,8 @@
     
     [self.cellbackground updateConstraintsIfNeeded];
     [self.cellbackground layoutIfNeeded];
+    
+
     
    self.contentlabel.preferredMaxLayoutWidth = CGRectGetWidth(self.contentlabel.frame);
 }

@@ -67,6 +67,9 @@
     
     frindRequestList=[StoreInfo shareInstance].FriendRequestList;
 
+    
+    NSLog(@"fr:%@",frindRequestList);
+    
     MyfriendList=[StoreInfo shareInstance].MyFriendtList;
     
     
@@ -583,11 +586,6 @@
 //找尋使用者
 -(NSString*)SearchFirend:(NSString *)SearchfriendID{
     
-    
-    
-    //設定根目錄
-    
-    //設定要POST的鍵值
     
     //設定要POST的鍵值
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"findaccount",@"cmd", SearchfriendID, @"userID", nil];

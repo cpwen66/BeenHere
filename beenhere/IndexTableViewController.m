@@ -105,7 +105,7 @@
     
      NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
     
-    
+     NSString *userNAME = [[NSUserDefaults standardUserDefaults]stringForKey:@"bherename"];
  
     
     
@@ -132,7 +132,7 @@
            }
         
         
-        NSLog(@"name:%@",Content[a][@"name"]);
+       
         firstLevelNode1.name=Content[a][@"name"];
         firstLevelNode1.nodeChildren = [[self fillChildrenForNode:[NSString stringWithFormat:@"%@",Content[a][@"content_no"]]] mutableCopy];
         firstLevelNode1.content_no=[NSString stringWithFormat:@"%@",Content[a][@"content_no"]];
@@ -144,7 +144,8 @@
             //原本取sqlite的日期的方法
 //      NSDate *date = [NSDate dateWithTimeIntervalSince1970:[Content[a][@"date"] integerValue]];
         
-           
+
+            
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
    
              [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss" ];
@@ -160,8 +161,21 @@
     }
     }
     
-  
     
+    
+
+    NSString  * wellcome=[NSString stringWithFormat:@"welcome %@",userNAME];
+    
+    TreeViewNode *firstLevelNode1 = [[TreeViewNode alloc]init];
+    firstLevelNode1.nodeLevel = 3;
+    firstLevelNode1.Typetag = @"4";
+    firstLevelNode1.nodeObject = wellcome;
+    firstLevelNode1.isExpanded = YES;
+
+    
+        //firstLevelNode1.imageid= 4;
+    firstLevelNode1.name=userNAME;
+    [nodes addObject:firstLevelNode1];
     
     [self fillDisplayArray];
     [self.tableView reloadData];
@@ -271,7 +285,7 @@
     NSDate *localDate = [new dateByAddingTimeInterval:timeZoneOffset];
   
    
-       NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
+//       NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
     
 //    params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"1",@"imageid",@"1",@"typetag",nil];
 //    
@@ -446,14 +460,13 @@
     
     }
     
-    //
-    if ([indexPath row] == self.currentSelection) {
-        
-        CGRect cellview=cell.cellbackground.frame;
-        cellview.size.height=cellview.size.height+100;
-        cell.cellbackground.frame=cellview;
-    }
+
    
+    
+    
+
+    
+    
     
     
    }
@@ -507,14 +520,16 @@
 
      [cell setNeedsDisplay];
     
-
-//    UIView *myView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-//    myView.backgroundColor=[UIColor greenColor];
-//    myView.tag=1001;
-//    [myView setHidden:YES];
-//    
-//    [cell.contentView addSubview:myView];
-  
+    
+    
+   
+    
+    
+    cell.emtionbutton.tag=indexPath.row;
+    cell.closeBtn.tag=indexPath.row;
+    
+    
+    
     return cell;
     
     
@@ -537,7 +552,51 @@
     // animate
     [tableView beginUpdates];
     [tableView endUpdates];
+    
+    
+    
+    
+    
 }
+
+- (IBAction)SmileBTN:(id)sender {
+    
+    
+    UIButton *senderButton = (UIButton *)sender;
+    //NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    cell.simleView.hidden=NO;
+    
+    [cell.contentView addSubview:cell.simleView];
+}
+
+- (IBAction)closeSimleview:(id)sender {
+    
+    UIButton *senderButton = (UIButton *)sender;
+    //NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    cell.simleView.hidden=YES;
+    
+    
+    
+}
+
+
+- (IBAction)simle:(id)sender {
+    
+    UIButton *senderButton = sender;
+    NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    
+    NSLog(@"path%@",path);
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    [cell.emtionbutton setTitle:@"1" forState:UIControlStateNormal];
+    
+    [senderButton setTitle:@"1" forState:UIControlStateNormal];
+}
+
 
 
 
