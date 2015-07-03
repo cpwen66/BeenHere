@@ -16,7 +16,7 @@
 @interface DatabaseConnection : NSObject
 
 
-//建立iVar以讓所有所有的DAO(Data Access Object)可以存取
+//建立@property以讓所有的DAO(Data Access Object)可以存取
 @property (strong, nonatomic) FMDatabase *sqliteDatabase;
 + (DatabaseConnection *) sharedInstance;
 

@@ -254,8 +254,6 @@
 //}
 
 
-
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     if ([pinWithImageArray[indexPath.row] isMemberOfClass:Pin.class]) {

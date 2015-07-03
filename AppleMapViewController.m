@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 MobileIT. All rights reserved.
 //
 
+#import "PinTableViewController.h"
 #import "AppleMapViewController.h"
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
@@ -15,6 +16,7 @@
 #import "PinEditViewController.h"
 #import "PinInfoViewController.h"
 #import "AppDelegate.h"
+#import "SWRevealViewController.h"
 //因為Pin繼承至MKPointAnnotation，所以不用再import
 
 @interface AppleMapViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
@@ -26,6 +28,9 @@
     NSMutableArray *allPinRows;
     NSInteger badgeNumber;
     NSMutableArray *notifiedArray;
+    NSInteger counting;
+    NSMutableDictionary *distanceDict;
+    UIButton *rightCalloutButton;
     
     //必須先#import <CoreLocation/CoreLocation.h>才能使用CLLocationManager類別
     CLLocationManager *locationManager;
@@ -34,6 +39,8 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *appleMapView;
 @property (weak, nonatomic) IBOutlet UILabel *theLabel;
+@property (weak, nonatomic) IBOutlet UIButton *showSlideMenuButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *showSlideMenuBarBtnItem;
 
 @end
 
@@ -42,7 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     badgeNumber = 1;
     
     self.appleMapView.delegate = self;
@@ -67,42 +74,62 @@
     
     //讓本身(ViewController)用protocol來接收回報的位置
     locationManager.delegate = self;
+    //[locationManager startMonitoringSignificantLocationChanges];
+
     [locationManager startUpdatingLocation];//開始更新位置
+    
+    // 先以 非自動 的方式指定座標給currentLocation，不然從別的view回來，會沒有座標，這樣距離算不出來。
+    // 但目前的問題是callout的距離不會改變
+    currentLocation = [locationManager location];
     
     //下面這行是Kent沒有用的，
     //在其他程式中，如果沒有加這行，就不會出現代表使用者現在位置的藍點
     // 也可以加屬性列加入設定
     self.appleMapView.ShowsUserLocation = YES;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePinVisitedDate) name:@"UPDATE_PIN_VISITED_DATE" object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePinVisitedDate) name:@"UPDATE_PIN_VISITED_DATE" object:nil];
     
+    SWRevealViewController *revealViewController = self.revealViewController;
+    
+    if (revealViewController) {
+        [self.showSlideMenuBarBtnItem setTarget:self.revealViewController];
+        [self.showSlideMenuBarBtnItem setAction: @selector( revealToggle: )];
+
+        //[self.showSlideMenuButton targetForAction:@selector(revealToggle:) withSender:self.revealViewController];
+        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    [locationManager stopUpdatingLocation];
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    // navigationBar和按鈕都隱藏
+    //self.navigationController.navigationBarHidden = YES;
+    
+    // 讓navigationBar透明，但按鈕還在
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    [self.navigationController.navigationBar setTranslucent:YES];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    self.navigationController.navigationBarHidden = YES;
-
     pinImageDAO = [[PinImageDAO alloc] init];
-//    NSMutableArray *imageRows = [NSMutableArray new];
-//    imageRows = [pinImageDAO getAllImageByPinId:@"11"];
-    //NSLog(@"imageRows= %@", imageRows);
-
-    
     PinDAO *pinDAO = [[PinDAO alloc] init];
     allPinRows = [pinDAO getAllPin];
-    //NSLog(@"rows= %@", rows);
-    
 
     //先移除所有大頭針
     [self.appleMapView removeAnnotations:[self.appleMapView annotations]];
     
-    
+
     Pin *pin = [[Pin alloc] init];;
     
     // 再從資料庫拿出資料，更新所有大頭針
@@ -135,6 +162,10 @@
         pinInfoVC.infoPin = sender;
         
     }
+//    else if ([segue.identifier isEqualToString:@"showPinListSegue"]) {
+//        PinTableViewController *pinTableVC = (PinTableViewController *)segue.destinationViewController;
+//        pinTableVC.distanceDict = distanceDict;
+//    }
     
     
 }
@@ -148,13 +179,15 @@
     //
     //    [self.appleMapView addAnnotation:newAnnotation];
     
-    [self performSegueWithIdentifier:@"showPinEditSegue" sender:nil];
+    // 如果已經在storyboard，就不要再寫底下這一行，不然會翻2次頁
+    //[self performSegueWithIdentifier:@"showPinEditSegue" sender:nil];
 }
 
 - (IBAction)returnUserLocationBtnAction:(id)sender {
     
     [self returnUserLocation];
 }
+
 - (IBAction)showPinMessage:(id)sender {
     Pin *pin = [[Pin alloc] init];
     PinDAO *pinDAO = [[PinDAO alloc] init];
@@ -168,6 +201,12 @@
 
 
 - (IBAction)listPinButtonAction:(id)sender {
+//    PinTableViewController *pinTableVC = [[PinTableViewController alloc] init];
+//    [self.navigationController pushViewController:pinTableVC animated:YES];
+    
+    // 如果已經在storyboard，就不要再寫底下這一行，不然會翻2次頁
+    //[self performSegueWithIdentifier:@"showPinListSegue" sender:nil];
+    
     
     
 }
@@ -207,7 +246,7 @@
     // 如果不自訂按鈕的型式，那只要寫底下這行就可以了
      //UIButton *rightCalloutButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
     CGRect rightButtonRect = CGRectMake(0, 0, 80, 100);
-    UIButton *rightCalloutButton = [[UIButton alloc] initWithFrame:rightButtonRect];
+    rightCalloutButton = [[UIButton alloc] initWithFrame:rightButtonRect];
     //UIImage *catImage = [UIImage imageNamed:@"cat1.jpg"];
     rightCalloutButton.backgroundColor = [UIColor lightGrayColor];
 
@@ -220,6 +259,7 @@
     
     // 增加右邊按鈕，顯示大頭針與使用者距離，按下可導航
     rightCalloutButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    NSLog(@"[currentLocation distanceFromLocation:annoLocation]/1000.0] = %f", [currentLocation distanceFromLocation:annoLocation]/1000.0);
     [rightCalloutButton setTitle:[NSString stringWithFormat:@"%1.1f\nkM", [currentLocation distanceFromLocation:annoLocation]/1000.0] forState:UIControlStateNormal];
     reuseAnnotationView.rightCalloutAccessoryView = rightCalloutButton;
     
@@ -269,7 +309,6 @@
 
 // 當使用者按下泡泡會進到此方法，暫時先comment，沒有用到
 //- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
-//    NSLog(@"control = %@", control);
 //    NSLog(@"MKAnnotationView.annotation = %@", view.annotation);
 //}
 
@@ -278,8 +317,16 @@
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
     //[self.appleMapView selectAnnotation:view.annotation animated:YES];
-    
     NSLog(@"MKAnnotationView.annotation = %@", view.annotation);
+
+    Pin *pin = [[Pin alloc] init];
+    
+    [self.appleMapView removeAnnotation:pin];
+    [self.appleMapView addAnnotation:pin];
+//    CLLocationCoordinate2D center = self.appleMapView.centerCoordinate;
+//    self.appleMapView.centerCoordinate = center;
+    //[view setNeedsLayout];
+
 }
 
 // 自訂方法
@@ -298,10 +345,20 @@
 
 }
 
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    NSLog(@"userLocation %f", userLocation.coordinate.latitude);
+    
+    
+}
+
+
 // 要#import <CoreLocation/CoreLocation.h>及加上<CLLocationManagerDelegate>，才能用這個方法
 // 當iOS更新使用者位置，會進到這個方法
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    counting++;
     
+    distanceDict = [NSMutableDictionary new];
+    NSLog(@"counting = %d", counting);
     // 因為iOS的延遲，可能會丟出多個座標
     currentLocation = [locations lastObject];
     
@@ -310,16 +367,21 @@
         
         // 讓使用者回到地圖中心
         [self returnUserLocation];
+        isFirstLocationReceived = YES;
+
     }
     
-    // 比對使用者和大頭針的距離，如果距離小於多少，就會送出localNotification
-    
+    // 比對使用者和大頭針的距離，如果距離小於多少，就會送出localNotification到iOS
     // 取得大頭針與使用者距離
     for (Pin *pin in allPinRows) {
         CLLocation *annoLocation = [[CLLocation alloc] initWithLatitude:pin.coordinate.latitude longitude:pin.coordinate.longitude];
         CGFloat distance = [currentLocation distanceFromLocation:annoLocation];
         //NSLog(@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.visitedDate);
         self.theLabel.text = [NSString stringWithFormat:@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.visitedDate];
+        
+        // 把距離存在字典裡，準備廣播出去
+        [distanceDict setValue:[NSString stringWithFormat:@"%1.1f", distance/1000.0] forKey:pin.pinId];
+        
         // 需滿足三個條件才會要iOS送出通知，
         // 使用者離大頭針距離120公尺內、沒有到訪過此大頭針、尚未發送過通知
         if (distance < 120 && pin.visitedDate == nil && [notifiedArray containsObject:pin]==false) {
@@ -342,10 +404,19 @@
             // 將已經送出的notification先存在暫存的array
             [notifiedArray addObject:pin];
             self.theLabel.text = [NSString stringWithFormat:@"id=%@, D= %f", pin.pinId, distance];
-            
         }
     }
+    
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"DISTANCE_CHANGED" object:distanceDict];
+    
 }
+
+
+//  自訂delegate的方法，讓呼叫的人可以利用distanceDict實作
+//- (void) updatePinDistance {
+//    [self.delegate dealPinDistance:distanceDict];
+//}
+
 
 
 // 在AppDelegate放了一個postNotificationName:object:，當app進入前景，這個viewController會收到廣播後執執行這個方法
@@ -380,17 +451,17 @@
     region.center = currentLocation.coordinate;
     region.span.latitudeDelta = 0.01;
     region.span.longitudeDelta = 0.01;
-    isFirstLocationReceived = YES;
     [self.appleMapView setRegion:region animated:YES];
 }
 
-/*
-#pragma mark - Navigation
 
+#pragma mark - Navigation
+/*
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
 }
 */
 

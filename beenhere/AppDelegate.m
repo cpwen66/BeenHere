@@ -43,9 +43,7 @@
     //發佈安裝時,再套件 bundle的原始db(只可讀取)
     NSString *defaultDBPath =[self GetBundleFilePath:@"beenhere.sqlite" ];
     NSString *defaultPinDBPath =[self GetBundleFilePath:@"pin_V1_20150624.sqlite" ];
-    
-    
-    NSLog(@"\ndb:%@\ndefaltDB:%@",dbPath,defaultDBPath);
+    //NSLog(@"\ndb:%@\ndefaltDB:%@",dbPath,defaultDBPath);
     
     NSFileManager *fileManager =[NSFileManager defaultManager];
     BOOL success, isPinDBPathOK;
@@ -54,12 +52,11 @@
     success=[fileManager fileExistsAtPath:dbPath ];
     isPinDBPathOK=[fileManager fileExistsAtPath:pinDBPath ];
 
-    
     if (!success) {
         //copy
         success=[fileManager copyItemAtPath:defaultDBPath toPath:dbPath error:&error];
         if (!success) {
-            NSLog(@"error:%@",[error localizedDescription]);
+            //NSLog(@"error:%@",[error localizedDescription]);
         }
         
     }else{
@@ -71,7 +68,7 @@
         //copy
         isPinDBPathOK=[fileManager copyItemAtPath:defaultPinDBPath toPath:pinDBPath error:&pinDBPathError];
         if (!isPinDBPathOK) {
-            NSLog(@"pinDBPathError:%@",[pinDBPathError localizedDescription]);
+            //NSLog(@"pinDBPathError:%@",[pinDBPathError localizedDescription]);
         }
         
     }else{
@@ -103,7 +100,7 @@
     //檢查UIApplication的實體在runtime是否可執行registerUserNotificationSettings:
     //registerUserNotificationSettings:是在delegate裡的方法
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-        //
+        
         [application registerUserNotificationSettings:
          [UIUserNotificationSettings settingsForTypes:
           UIUserNotificationTypeAlert|//在手機中設定要通知的類型(橫幅...)
