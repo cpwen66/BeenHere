@@ -29,8 +29,6 @@
     
     // 後置鏡頭
     AVCaptureDeviceInput *backFacingCameraDevice;
-    
-    
 }
 
 // 相機畫面
@@ -40,10 +38,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *previewView;
 
 - (IBAction)cancelButton:(id)sender;
-
 - (IBAction)filterTest:(id)sender;
-
-
-
 
 @end

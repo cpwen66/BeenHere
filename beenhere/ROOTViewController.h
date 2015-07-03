@@ -8,14 +8,24 @@
 
 #import <UIKit/UIKit.h>
 #import "UPStackMenu.h"
+#import "CameraViewController.h"
 
-@interface ROOTViewController : UIViewController<UPStackMenuDelegate>
+@interface ROOTViewController : UIViewController<UPStackMenuDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
-    NSMutableArray * ReturnInfo;
-    NSString * test;
+    NSMutableArray *ReturnInfo;
+    NSString *test;
 }
+
+@property (weak, nonatomic) IBOutlet UIImageView *userpicture;
+@property (weak, nonatomic) IBOutlet UIImageView *userbackground;
+
 - (IBAction)friendrequestcount:(id)sender;
 
+// 點擊大頭照手勢
 - (IBAction)tap:(id)sender;
+
+@property BOOL isThumbnailPicked;
+@property BOOL isCoverPhotoPicked;
+@property BOOL isLocationPicked;
 
 @end
