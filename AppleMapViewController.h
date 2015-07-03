@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+//@protocol updatePinDistanceDelegate <NSObject>
+//
+//@optional
+//-(void) dealPinDistance:(NSMutableDictionary *)pinDistanceDict;
+//@end
+
 @interface AppleMapViewController : UIViewController
+
+//@property (weak, nonatomic) id<updatePinDistanceDelegate> delegate;
+//- (void) updatePinDistance;
 
 @end
