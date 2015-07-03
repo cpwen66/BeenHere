@@ -46,8 +46,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-
-    self.currentSelection = -1;
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
@@ -527,7 +525,7 @@
     
     cell.emtionbutton.tag=indexPath.row;
     cell.closeBtn.tag=indexPath.row;
-    
+    cell.simleBTN.tag=indexPath.row;
     
     
     return cell;
@@ -558,7 +556,7 @@
     
     
 }
-
+#pragma mark - emtionBtn
 - (IBAction)SmileBTN:(id)sender {
     
     

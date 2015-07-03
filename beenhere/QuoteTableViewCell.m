@@ -45,6 +45,14 @@
 }
 - (void)drawRect:(CGRect)rect
 {
+    [[self.simleView layer] setBorderWidth:1.0];
+    //邊框顏色
+    [[self.simleView layer] setBorderColor:[UIColor colorWithRed:35.0 green:196.0 blue:246.0 alpha:0.9].CGColor];
+    //    [[self.cellbackground layer] setBorderColor:[UIColor colorWithRed:246.0 green:241.0 blue:236.0 alpha:0.9].CGColor];
+    self.simleView.layer.cornerRadius = 1.0;
+    [[self.simleView layer] setCornerRadius:5.0];
+    
+    
     [[self.cellbackground layer] setBorderWidth:1.0];
     //邊框顏色
      [[self.cellbackground layer] setBorderColor:[UIColor colorWithRed:35.0 green:196.0 blue:246.0 alpha:0.9].CGColor];

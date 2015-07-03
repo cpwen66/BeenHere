@@ -144,7 +144,6 @@ friendTableViewController * frinedview;
   
     
     
-    
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
     
@@ -507,7 +506,7 @@ friendTableViewController * frinedview;
 
   
     //將sql return 資料存成陣列
-    NSLog(@"rec:%@",receive[@"requestid"]);
+   
     [StoreInfo shareInstance].FriendRequestList=[receive[@"requestid"] mutableCopy];
 
     
