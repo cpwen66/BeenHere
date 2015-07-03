@@ -9,6 +9,8 @@
 #import "CameraViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "StoreInfo.h"
+#import "PhotoSingleton.h"
+#import "ROOTViewController.h"
 
 @interface CameraViewController () {
     ALAssetsLibrary *imageLibrary; //讀取照片
@@ -29,12 +31,19 @@
     
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         UIAlertView *myAlertView =
-        [[UIAlertView alloc] initWithTitle:@"Error!"
+        [[UIAlertView alloc] initWithTitle:@"Error !"
                                    message:@"Device has no camera."
                                   delegate:nil
                          cancelButtonTitle:@"OK"
                          otherButtonTitles: nil];
         [myAlertView show];
+    }
+    
+    ROOTViewController *root = [[ROOTViewController alloc] init];
+    if ((root.isThumbnailPicked= YES)) {
+        root.isCoverPhotoPicked = NO;
+    } else if ((root.isThumbnailPicked = NO)){
+        root.isCoverPhotoPicked = YES;
     }
     
     // 前後鏡頭設定，初始化協調器session
@@ -172,29 +181,50 @@
         
         // 圖片存檔
         UIImageWriteToSavedPhotosAlbum(self.previewView.image, nil, nil, nil);
+        
+        ROOTViewController *root = [[ROOTViewController alloc] init];
+        
+        NSUserDefaults *defaultsPhoto = [NSUserDefaults standardUserDefaults];
+        BOOL isPhoto = [defaultsPhoto boolForKey:@"isPhoto"];
+        
+        NSUserDefaults *defaultsImage = [NSUserDefaults standardUserDefaults];
+        BOOL isImage = [defaultsImage boolForKey:@"isImage"];
+        
+        if (isPhoto == YES) {
+            [PhotoSingleton shareInstance].thumbnailPhoto = self.previewView.image;
+            [self dismissViewControllerAnimated:YES completion:^{
+                root.userpicture.image = [PhotoSingleton shareInstance].thumbnailPhoto;
+            }];
+        }
+        else if (isImage == YES) {
+            [PhotoSingleton shareInstance].frontPhoto = self.previewView.image;
+            [self dismissViewControllerAnimated:YES completion:^{
+                root.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
+            }];
+        }
     }];
 }
     
-    // 實作前後鏡頭平滑完成轉換的method，避免切換過程中形成資料斷斷續續的狀況
-    -(void)cameraPositionChanged {
-        static BOOL isPositionFront;
-        
-        // 修改前先呼叫beginConfiguration
-        [session beginConfiguration];
-        
-        // 將現有的input刪除
-        [session removeInput:session.inputs[0]];
-        
-        if (isPositionFront) {
-            [session addInput:backFacingCameraDevice];
-        } else {
-            [session addInput:frontFacingCameraDevice];
-        }
-        
-        // 確認以上所有修改
-        [session commitConfiguration];
-        isPositionFront = !isPositionFront;
+// 實作前後鏡頭平滑完成轉換的method，避免切換過程中形成資料斷斷續續的狀況
+-(void)cameraPositionChanged {
+    static BOOL isPositionFront;
+    
+    // 修改前先呼叫beginConfiguration
+    [session beginConfiguration];
+    
+    // 將現有的input刪除
+    [session removeInput:session.inputs[0]];
+    
+    if (isPositionFront) {
+        [session addInput:backFacingCameraDevice];
+    } else {
+        [session addInput:frontFacingCameraDevice];
     }
+    
+    // 確認以上所有修改
+    [session commitConfiguration];
+    isPositionFront = !isPositionFront;
+}
     
 - (IBAction)cameraChangeButton:(id)sender {
     [self cameraPositionChanged];
@@ -327,7 +357,8 @@
         [sender setSelected:YES];
     }
 }
-    
+
+/*
 -(UIImage *)filterWithImage:(UIImage *)image index:(NSInteger)index
 {
     // 創建基於 GPU 的 CIContext 對象
@@ -411,5 +442,6 @@
     
     return newImage;
 }
+*/
     
 @end
