@@ -592,7 +592,7 @@ mydb *sharedInstance;
     while ([rs next]) {
         if ([rs intForColumnIndex:0]==0) {
             //可以新增
-            if (![db executeUpdate:@"insert into indexcontent (content_no,id,text,image,level,date,like,imageid,typetag) values (?,?,?,?,?,?,?,?,?)",
+            if (![db executeUpdate:@"insert into indexcontent (content_no,id,text,image,level,date,like,imageid,typetag,sad,happy,cool,oho,impish) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                   custDict[@"content_no"],
                   custDict[@"id"],
                   custDict[@"text"],
@@ -602,6 +602,16 @@ mydb *sharedInstance;
                   custDict[@"like"],
                   custDict[@"imageid"],
                   custDict[@"typetag"]
+                  ,
+                  custDict[@"sad"]
+                  ,
+                  custDict[@"happy"]
+                  ,
+                  custDict[@"cool"]
+                  ,
+                  custDict[@"oho"]
+                  ,
+                  custDict[@"impish"]
                   ]) {
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
                
