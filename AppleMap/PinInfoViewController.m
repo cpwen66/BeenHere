@@ -21,6 +21,7 @@
     NSMutableArray *pinImageArray;
     NSMutableArray *pinWithImageArray;
     UILabel *titleLabel;
+    NSMutableArray *cellViewArray;
 }
 @property (weak, nonatomic) IBOutlet UITableView *infoTableView;
 
@@ -35,22 +36,89 @@
     self.navigationController.navigationBarHidden = NO;
     self.infoTableView.delegate = self;
     self.infoTableView.allowsSelection = NO;// 讓使用者對tableView的點擊無效
-    [self.infoTableView reloadData];
     
-    PinDAO *pinDAO = [[PinDAO alloc] init];
-    Pin *pin = [[Pin alloc] init];
-//    pinArray = [pinDAO getAllPin];
-//    
-//    for (pin in pinArray) {
-//        NSLog(@"pin latitude: %f", pin.coordinate.latitude);
-//    }
+    //[self.infoTableView reloadData];
+    
+    cellViewArray = [NSMutableArray new];
+    titleLabel = [UILabel new];
+    
+    PinImageDAO *pinImageDAO = [[PinImageDAO alloc] init];
+    PinImage *pinImage = [[PinImage alloc] init];
+
+    titleLabel.text = self.infoPin.title;
+    
+    // 上面要先拿到label的文字，下面是要算label的高度
+    
+    CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    CGFloat screenHeight = [[UIScreen mainScreen] bounds].size.height;
+    NSLog(@"screen width= %f, height= %f", screenWidth, screenHeight);
+    
+    CGFloat tableViewWidth = self.infoTableView.frame.size.width;
+    CGFloat tableViewHeight = self.infoTableView.frame.size.height;
+
+    CGSize maxSize = CGSizeMake(screenWidth-80, 999);
+    NSString *contentString = titleLabel.text;
+    UIFont *contentFont = titleLabel.font;
+    CGRect contentFrame;
+    NSDictionary *contentDic = [NSDictionary dictionaryWithObjectsAndKeys:contentFont, NSFontAttributeName, nil];
+    CGSize contentSize = [contentString boundingRectWithSize:maxSize
+                                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                                  attributes:contentDic
+                                                     context:nil].size;
+    contentFrame = CGRectMake(40, 20, screenWidth-80, contentSize.height);
+    titleLabel.frame = contentFrame;
+    
+    titleLabel.backgroundColor = [UIColor whiteColor];
+    titleLabel.numberOfLines = 0;
+    
+    //下面為倒圓角要用的二行程式，也要#import <QuartzCore/QuartzCore.h>
+    titleLabel.layer.cornerRadius = 7;
+    titleLabel.layer.masksToBounds = YES;
+
+    UIView *cellView = [[UIView alloc] initWithFrame:titleLabel.frame];
+    //cellView.frame = titleLabel.frame;
+    [cellView addSubview:titleLabel];
+    [cellView bringSubviewToFront:titleLabel];
+    [cellViewArray addObject:cellView];
+    
+    
+    // 用大頭針的id取出圖片
+    
+    pinImageArray = [pinImageDAO getAllImageByPinId:self.infoPin.pinId];
+
+ 
+    // 如果資料庫裡有圖片，就拿出來用，如果沒有，就用預設的圖片
+    if ([pinImageArray count] > 0) {
+        for (PinImage *pinImg in pinImageArray) {
+            UIImage *img = [[UIImage alloc] initWithData:pinImg.imageData];
+            CGRect imgRect = CGRectMake(0, 0, ceilf(screenWidth-80)/1, ceilf((img.size.height/img.size.width*(screenWidth-80)))/1);
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:imgRect];
+            imgView.image = img;
+
+            UIView *view = [[UIView alloc] initWithFrame:imgView.frame];
+//            NSLog(@"view.height = %f", view.frame.size.height);
+//            NSLog(@"view.width = %f", view.frame.size.width);
+
+            [view addSubview:imgView];
+            [cellViewArray addObject:view];
+        }
+    } else {
+        UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cat2.jpg"]];
+        //NSLog(@"imageWidth= %f", testImage.frame.size.width);
+        UIView *view = [[UIView alloc] initWithFrame:imgView.frame];
+        [view addSubview:imgView];
+        [cellViewArray addObject:view];
+    }
+
+    NSLog(@"cellViewArray = %@", cellViewArray);
+    NSLog(@"cellViewArray = %@", cellViewArray);
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
+ /*
     pinWithImageArray = [NSMutableArray new];
     
     //從SQLite中取出大頭針的資料
@@ -61,6 +129,8 @@
     // index 0先放大頭針的資料
     [pinWithImageArray addObject:self.infoPin];
     
+    
+    // 用大頭針的id取出圖片
     pinImageArray = [pinImageDAO getAllImageByPinId:self.infoPin.pinId];
     //NSLog(@"pinImageArray: %@", pinImageArray);
 
@@ -76,7 +146,7 @@
         [pinWithImageArray addObject:pinImage];
     }
 
-
+*/
     //[pinWithImageArray arrayByAddingObjectsFromArray:pinImageArray];
     //NSLog(@"pinWithImageArray: %@, count=%d", pinWithImageArray, [pinWithImageArray count]);
 
@@ -136,24 +206,36 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     // Return the number of rows in the section.
-    return [pinWithImageArray count];
+    NSLog(@"cellViewArray count =%d", [cellViewArray count]);
+    return [cellViewArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
+    //[cell.contentView addSubview:cellViewArray[indexPath.row]];
     // Configure the cell...
+    //[cell addSubview:cellViewArray[indexPath.row]];
+    UIView *view = (UIView *)[cell viewWithTag:100];
+    view = cellViewArray[indexPath.row];
+    NSLog(@"cellViewArray count =%d", [cellViewArray count]);
+
+ /*
+    UIImageView *imageView = (UIImageView *)[cell viewWithTag:200];
+    //NSLog(@"pinWithImageArray = %@", pinWithImageArray);
     
-    // 如果陣列中的元素是Pin就進入...
+    NSLog(@"indexPath = %ld", (long)indexPath.item);// 如果陣列中的元素是Pin就進入...
+    NSLog(@"indexPath.description = %@", indexPath.description);// 如果陣列中的元素是Pin就進入...
+
+    //if (indexPath.item == 0) {
     if ([pinWithImageArray[indexPath.row] isMemberOfClass:Pin.class]) {
-        
-        //[cell layoutIfNeeded];
+  
         
         CGFloat tableViewWidth = self.infoTableView.frame.size.width;
 
         titleLabel = [[UILabel alloc]init];
         Pin *pin = pinWithImageArray[indexPath.row];
-        titleLabel.text = [NSString stringWithFormat:@"%@:%@",pin.pinId, pin.title];
+        titleLabel.text = [NSString stringWithFormat:@"%@: %@",pin.pinId, pin.title];
 
         // 上面要先拿到label的文字，下面是要算label的高度
         CGSize maxSize = CGSizeMake(tableViewWidth-80, 999);
@@ -172,21 +254,18 @@
         titleLabel.numberOfLines = 0;
 
         //下面為倒圓角要用的二行程式，也要#import <QuartzCore/QuartzCore.h>
-        titleLabel.layer.cornerRadius = 10;
+        titleLabel.layer.cornerRadius = 7;
         titleLabel.layer.masksToBounds = YES;
        
         [cell addSubview:titleLabel];
 
-    }
-    
-    UIImageView *imageView = (UIImageView *)[cell viewWithTag:200];
-    
-    if ([pinWithImageArray[indexPath.row] isMemberOfClass:PinImage.class]) {
+    } else if ([pinWithImageArray[indexPath.row] isMemberOfClass:PinImage.class]) {
+//    } else {
         PinImage *pinImage = pinWithImageArray[indexPath.row];
         
         imageView.image = [[UIImage alloc] initWithData:pinImage.imageData];
     }
-    
+ */
      return cell;
     
 //    imageSize = imageView.frame.size;
@@ -255,7 +334,12 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    UIView *view = [UIView new];
+    view = cellViewArray[indexPath.row];
+    
+    //return 340;
+    return view.frame.size.height;
+/*
     if ([pinWithImageArray[indexPath.row] isMemberOfClass:Pin.class]) {
         
         return titleLabel.frame.size.height + 40;
@@ -270,12 +354,12 @@
         CGFloat imageWidth = image.size.width;
         CGFloat imageHeight = image.size.height;
         
-        return (tableViewWidth/imageWidth*imageHeight);
+        return (tableViewWidth/imageWidth*imageHeight + 20);
 
     } else {
         return self.infoTableView.frame.size.height + 20;
     }
-    
+  */
 }
 
 

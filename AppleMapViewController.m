@@ -17,6 +17,7 @@
 #import "PinInfoViewController.h"
 #import "AppDelegate.h"
 #import "SWRevealViewController.h"
+#import "PinInfoTableViewController.h"
 //因為Pin繼承至MKPointAnnotation，所以不用再import
 
 @interface AppleMapViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
@@ -113,9 +114,12 @@
     //self.navigationController.navigationBarHidden = YES;
     
     // 讓navigationBar透明，但按鈕還在
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics: UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     [self.navigationController.navigationBar setTranslucent:YES];
+    //[self.navigationController.navigationBar setBackgroundColor:[UIColor grayColor]];
+    
 
 }
 
@@ -158,7 +162,11 @@
         
     } else if ([segue.identifier isEqualToString:@"showPinInfoSegue"]) {
         
-        PinInfoViewController *pinInfoVC = (PinInfoViewController *)segue.destinationViewController;
+        PinInfoTableViewController *pinInfoVC = (PinInfoTableViewController *)segue.destinationViewController;
+        
+        // 如果下一個畫面之前有先接navigationController，就要用這一行，不能用上一行，不然會當掉
+        // PinInfoViewController *pinInfoVC = (PinInfoViewController *)[[segue destinationViewController] topViewController];
+        
         pinInfoVC.infoPin = sender;
         
     }
@@ -236,7 +244,7 @@
         
         reuseAnnotationView.annotation = annotation;
     }
-    NSLog(@"reuseAnnotationView.subviews = %@", reuseAnnotationView.subviews);
+    //NSLog(@"reuseAnnotationView.subviews = %@", reuseAnnotationView.subviews);
 
     
     reuseAnnotationView.draggable = false;
@@ -317,7 +325,7 @@
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
     //[self.appleMapView selectAnnotation:view.annotation animated:YES];
-    NSLog(@"MKAnnotationView.annotation = %@", view.annotation);
+    //NSLog(@"MKAnnotationView.annotation = %@", view.annotation);
 
     Pin *pin = [[Pin alloc] init];
     
@@ -338,6 +346,9 @@
     Pin *pin = [self.appleMapView selectedAnnotations][0];
 
     [self performSegueWithIdentifier:@"showPinInfoSegue" sender:pin];
+//    PinInfoTableViewController *pinInfoVC = [[PinInfoTableViewController alloc] init];
+//    pinInfoVC.infoPin = pin;
+//    [self.navigationController pushViewController:pinInfoVC animated:YES];
 
 }
 
@@ -346,7 +357,7 @@
 }
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    NSLog(@"userLocation %f", userLocation.coordinate.latitude);
+    //NSLog(@"userLocation %f", userLocation.coordinate.latitude);
     
     
 }
@@ -358,7 +369,8 @@
     counting++;
     
     distanceDict = [NSMutableDictionary new];
-    NSLog(@"counting = %d", counting);
+    //NSLog(@"counting = %d", counting);
+    
     // 因為iOS的延遲，可能會丟出多個座標
     currentLocation = [locations lastObject];
     
