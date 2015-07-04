@@ -80,11 +80,9 @@ friendTableViewController * frinedview;
  
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
-    NSLog(@"beid:",BEID);
+   
 
-    //
-    self.userpicture.image = [PhotoSingleton shareInstance].thumbnailPhoto;
-    self.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
+
     [self userinfoinit];
     
      _TextviewContent.delegate = self;
@@ -186,19 +184,7 @@ friendTableViewController * frinedview;
 -(void)viewDidAppear:(BOOL)animated{
     [self contentview];
     
-    CameraViewController *photoView = [[CameraViewController alloc] init];
-    if ([PhotoSingleton shareInstance].thumbnailPhoto == nil ) {
-        self.userpicture.image = [UIImage imageNamed:@"headphoto.jpg"];
-    } else {
-        self.userpicture.image = [PhotoSingleton shareInstance].thumbnailPhoto;
-    }
-    
-    CameraViewController *backgroundView = [[CameraViewController alloc] init];
-    if ([PhotoSingleton shareInstance].frontPhoto == nil) {
-        self.userbackground.image = [UIImage imageNamed:@"background.jpg"];
-    } else {
-        self.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
-    }
+
 }
 
 
@@ -612,7 +598,8 @@ friendTableViewController * frinedview;
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"AppleMap" bundle:nil];
 //    
     id targetViewController = [storyBoard instantiateViewControllerWithIdentifier:@"appnav"];
-    
+    NSUserDefaults *defaultsPhoto = [NSUserDefaults standardUserDefaults];
+   
     
     switch (index) {
         case 0:
@@ -629,9 +616,13 @@ friendTableViewController * frinedview;
         case 2:
          
             [self presentViewController:cameraVC animated:YES completion:nil];
+            [defaultsPhoto setBool:YES forKey:@"isContent"];
+            [defaultsPhoto synchronize];
+            
             break;
          case 3:
              [self presentViewController:targetViewController animated:true completion:nil];
+            
             break;
         default:
             break;

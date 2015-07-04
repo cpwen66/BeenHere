@@ -43,7 +43,7 @@
     //發佈安裝時,再套件 bundle的原始db(只可讀取)
     NSString *defaultDBPath =[self GetBundleFilePath:@"beenhere.sqlite" ];
     NSString *defaultPinDBPath =[self GetBundleFilePath:@"pin_V1_20150624.sqlite" ];
-    //NSLog(@"\ndb:%@\ndefaltDB:%@",dbPath,defaultDBPath);
+    NSLog(@"\ndb:%@\ndefaltDB:%@",dbPath,defaultDBPath);
     
     NSFileManager *fileManager =[NSFileManager defaultManager];
     BOOL success, isPinDBPathOK;

@@ -231,8 +231,8 @@
 //    TreeViewNode *node = [self.displayArray objectAtIndex:indexpath.row];
     friendrootViewController *tvc=segue.destinationViewController;
 
-    tvc.friendid=MyfriendList[indexpath.row][@"friendID"];
-    [StoreInfo shareInstance].Friendid=MyfriendList[indexpath.row][@"friendID"];
+    tvc.friendid=MyfriendList[indexpath.row][@"id"];
+    [StoreInfo shareInstance].Friendid=MyfriendList[indexpath.row][@"id"];
     
     NSLog(@"s:%@", [StoreInfo shareInstance].Friendid);
 }
@@ -245,7 +245,7 @@
     
     friendrootViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"custAddEditAc"];
     
-    vc.friendid=MyfriendList[indexpath.row][@"frienid"];;
+    vc.friendid=MyfriendList[indexpath.row][@"id"];;
    
     
     

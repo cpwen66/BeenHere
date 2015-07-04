@@ -120,6 +120,7 @@
 		953FA0A71B42CADE00C67BF5 /* sad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 953FA0941B42CADE00C67BF5 /* sad@2x.png */; };
 		953FA0A81B42CADE00C67BF5 /* sad@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 953FA0951B42CADE00C67BF5 /* sad@3x.png */; };
 		95446F941B4146D60014CCB5 /* IndexTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95C6182D1B2EAFFF00B75940 /* IndexTableViewController.m */; };
+		954E806B1B47E8C3000AD15D /* beenhere.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 954E806A1B47E8C3000AD15D /* beenhere.sqlite */; };
 		955B4C6C1B3475C8007AB049 /* TreeViewNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 955B4C6B1B3475C8007AB049 /* TreeViewNode.m */; };
 		95606DC01B332A0A00A59D2B /* QuoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95606DBF1B332A0A00A59D2B /* QuoteTableViewCell.m */; };
 		95656C841B3EEB9C002BA2C9 /* talkviewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 95656C831B3EEB9C002BA2C9 /* talkviewcontroller.m */; };
@@ -187,7 +188,6 @@
 		95D607CA1B402B8900DB90C8 /* favorite-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 95D607C91B402B8900DB90C8 /* favorite-3.png */; };
 		95D607CC1B402DEF00DB90C8 /* circel.png in Resources */ = {isa = PBXBuildFile; fileRef = 95D607CB1B402DEF00DB90C8 /* circel.png */; };
 		95D607CE1B4035CC00DB90C8 /* cell.png in Resources */ = {isa = PBXBuildFile; fileRef = 95D607CD1B4035CC00DB90C8 /* cell.png */; };
-		95DA3D811B3DC83400F932C0 /* beenhere.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 95DA3D801B3DC83400F932C0 /* beenhere.sqlite */; };
 		95DC22371B41A55B0063DC2F /* friendrootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DC22361B41A55B0063DC2F /* friendrootViewController.m */; };
 		95DC223A1B41A7320063DC2F /* friendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DC22391B41A7320063DC2F /* friendTableViewCell.m */; };
 		95DC223D1B41A7DC0063DC2F /* friendrootTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95DC223C1B41A7DC0063DC2F /* friendrootTableViewController.m */; };
@@ -360,6 +360,7 @@
 		953FA0931B42CADE00C67BF5 /* sad@1.5x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sad@1.5x.png"; sourceTree = "<group>"; };
 		953FA0941B42CADE00C67BF5 /* sad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sad@2x.png"; sourceTree = "<group>"; };
 		953FA0951B42CADE00C67BF5 /* sad@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sad@3x.png"; sourceTree = "<group>"; };
+		954E806A1B47E8C3000AD15D /* beenhere.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = beenhere.sqlite; sourceTree = "<group>"; };
 		955B4C6A1B3475C8007AB049 /* TreeViewNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeViewNode.h; sourceTree = "<group>"; };
 		955B4C6B1B3475C8007AB049 /* TreeViewNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreeViewNode.m; sourceTree = "<group>"; };
 		95606DBE1B332A0A00A59D2B /* QuoteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteTableViewCell.h; sourceTree = "<group>"; };
@@ -477,7 +478,6 @@
 		95D607C91B402B8900DB90C8 /* favorite-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favorite-3.png"; sourceTree = "<group>"; };
 		95D607CB1B402DEF00DB90C8 /* circel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circel.png; sourceTree = "<group>"; };
 		95D607CD1B4035CC00DB90C8 /* cell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell.png; sourceTree = "<group>"; };
-		95DA3D801B3DC83400F932C0 /* beenhere.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = beenhere.sqlite; sourceTree = "<group>"; };
 		95DC22351B41A55B0063DC2F /* friendrootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = friendrootViewController.h; sourceTree = "<group>"; };
 		95DC22361B41A55B0063DC2F /* friendrootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = friendrootViewController.m; sourceTree = "<group>"; };
 		95DC22381B41A7320063DC2F /* friendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = friendTableViewCell.h; sourceTree = "<group>"; };
@@ -839,8 +839,8 @@
 		95B417421B01EB6A00EA9177 = {
 			isa = PBXGroup;
 			children = (
+				954E806A1B47E8C3000AD15D /* beenhere.sqlite */,
 				6968AC991B44C1A300E14B09 /* tempReadMe */,
-				95DA3D801B3DC83400F932C0 /* beenhere.sqlite */,
 				2BFA752A1B3A8CA100F70A9C /* Frameworks */,
 				69657B6E1B37F0EE0060FB67 /* AppleMap */,
 				952497E31B342C7900513EE7 /* RATreeView */,
@@ -1099,6 +1099,7 @@
 				95D607C21B400B1A00DB90C8 /* background.jpg in Resources */,
 				95B4175F1B01EB6A00EA9177 /* LaunchScreen.xib in Resources */,
 				953FA0481B42C52500C67BF5 /* cool@2x.png in Resources */,
+				954E806B1B47E8C3000AD15D /* beenhere.sqlite in Resources */,
 				953FA0A01B42CADE00C67BF5 /* oho@0.5x.png in Resources */,
 				953FA0531B42C52500C67BF5 /* smile@0.5x.png in Resources */,
 				95D607C41B40150100DB90C8 /* smood.png in Resources */,
@@ -1121,7 +1122,6 @@
 				95B5F6FB1B13090900D7A342 /* beenhbg.png in Resources */,
 				953FA0A11B42CADE00C67BF5 /* oho@1.5x.png in Resources */,
 				95701EEC1B10DF2700A7CB93 /* camera1.png in Resources */,
-				95DA3D811B3DC83400F932C0 /* beenhere.sqlite in Resources */,
 				2BFA75491B3A96D600F70A9C /* changeCamerabarbutton.png in Resources */,
 				6967635D1B3E731500B36B2A /* cat2.jpg in Resources */,
 				95B5F6F11B12FA5200D7A342 /* Oval 1.png in Resources */,

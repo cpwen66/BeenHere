@@ -21,11 +21,13 @@
 // 打卡照片
 @property (strong, nonatomic) UIImage *locationPostPhoto;
 
+@property (strong, nonatomic) UIImage *contentPhoto;
+
 + (PhotoSingleton *)shareInstance;
 
 @property (nonatomic, assign) NSInteger *isPhoto;
 @property (nonatomic, assign) NSInteger *isImage;
 @property (nonatomic, assign) NSInteger *isLocation;
-
+@property (nonatomic, assign) NSInteger *isContent;
 
 @end

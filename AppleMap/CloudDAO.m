@@ -18,9 +18,9 @@ AFHTTPRequestOperationManager *manager;
 
 - (void)uploadManager {
     manager = [AFHTTPRequestOperationManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+   // manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+   // manager.requestSerializer = [AFJSONRequestSerializer serializer];
 }
 
 - (NSString *)uploadNewPin:(Pin *)pin {
@@ -36,16 +36,25 @@ AFHTTPRequestOperationManager *manager;
               @"member_id": memberId,
               @"pin_title":pin.title,
               @"pin_latitude":[NSString stringWithFormat:@"%f", pin.coordinate.latitude],
-              @"pin_longitude":[NSString stringWithFormat:@"%f", pin.coordinate.longitude],
+              @"pin_longitude":[NSString stringWithFormat:@"%f", pin.coordinate.longitude]
               };
+    
+    
     
     //把JSON轉成NSData(包裝成二進位格式)
     NSData *data = [NSJSONSerialization dataWithJSONObject:params options:kNilOptions error:nil];
+    
+    NSData *myData = [NSKeyedArchiver archivedDataWithRootObject:params];
+    
+    NSLog(@"data:%@",data);
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:data];
     
-    [request setValue:@"application/json; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+    NSLog(@"idi:%@",myData);
     
+    [request setValue:@"application/json; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
+
+       // [request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
     //server回傳的NSData
     NSData *returndata = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];//這行會傳資料到雲端，需要一些時間
     
@@ -56,6 +65,7 @@ AFHTTPRequestOperationManager *manager;
     pinIdDict = [NSJSONSerialization JSONObjectWithData:returndata options:kNilOptions error:nil];
     
     NSLog(@"pinIdDict = %@", pinIdDict);
+    
     
 
     return pinIdDict[@"pin_id"];

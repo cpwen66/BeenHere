@@ -190,6 +190,10 @@
         NSUserDefaults *defaultsImage = [NSUserDefaults standardUserDefaults];
         BOOL isImage = [defaultsImage boolForKey:@"isImage"];
         
+        NSUserDefaults *defaultsImageC = [NSUserDefaults standardUserDefaults];
+        BOOL isContent = [defaultsImageC boolForKey:@"isContent"];
+
+        //存取圖片
         if (isPhoto == YES) {
             [PhotoSingleton shareInstance].thumbnailPhoto = self.previewView.image;
             [self dismissViewControllerAnimated:YES completion:^{
@@ -201,7 +205,14 @@
             [self dismissViewControllerAnimated:YES completion:^{
                 root.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
             }];
+        }  else if (isContent == YES) {
+            [PhotoSingleton shareInstance].frontPhoto = self.previewView.image;
+            [self dismissViewControllerAnimated:YES completion:^{
+                root.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
+            }];
         }
+        
+        
     }];
 }
     

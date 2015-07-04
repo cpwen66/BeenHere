@@ -300,18 +300,20 @@ NSUInteger indentation;
 //userpicture////////////
     
     
-     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",node.beeid , @"id", nil];
+     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",node.beeid , @"userID", nil];
     
-         AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
+     AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
     managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     [managere POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
       
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
-        
+        NSLog(@"result:%@",apiResponse);
         
         NSString *result = [apiResponse objectForKey:@"downloaduserimageresult"];
         
+        
+        NSLog(@"result:%@",apiResponse);
       
         if ([result isEqualToString:@"success"]) {
             
@@ -319,11 +321,19 @@ NSUInteger indentation;
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
             
-            NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"image"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
-            
-            UIImage * image=[UIImage imageWithData:imagedata];
-            
-            cell.userimage.image=image;
+            if (![data[@"userpicture"] isEqual:@""]) {
+                NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                
+                UIImage * image=[UIImage imageWithData:imagedata];
+                
+                cell.userimage.image=image;
+            }else{
+                UIImage * image=[UIImage imageNamed:@"system_users.png"];
+                
+                cell.userimage.image=image;
+
+            }
+           
             
 
             

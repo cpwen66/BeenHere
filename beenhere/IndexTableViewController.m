@@ -14,6 +14,7 @@
 #import "mydb.h"
 #import "MBProgressHUD.h"
 #import "AFNetworking.h"
+#import "SERVERCLASS.h"
 @interface IndexTableViewController ()
 {
 
@@ -22,6 +23,12 @@
     
     NSUInteger indentation;
     NSMutableArray *nodes;
+    NSString*simle;
+    NSString*sad;
+    NSString*happy;
+    NSString*impish;
+    NSString*ohoe;
+    NSString*cool;
     
 }
 #define SYSTEM_VERSION                              ([[UIDevice currentDevice] systemVersion])
@@ -60,7 +67,7 @@
     
     //self.tableView.layer.borderWidth = 1.0;
     
-     [_prototypeCell setNeedsDisplay];
+    // [_prototypeCell setNeedsDisplay];
     
     [self fillNodesArray:params];
     [self fillDisplayArray];
@@ -109,7 +116,7 @@
     
    Content=[[mydb sharedInstance]queryindexcontent:userID ];
 
-   
+    NSLog(@"con%@",Content);
    
     
     if (!Content.count==0) {
@@ -132,6 +139,13 @@
         
        
         firstLevelNode1.name=Content[a][@"name"];
+        firstLevelNode1.sad=Content[a][@"sad"];
+        firstLevelNode1.impish=Content[a][@"impish"];
+        firstLevelNode1.happy=Content[a][@"happy"];
+        firstLevelNode1.cool=Content[a][@"cool"];
+        firstLevelNode1.oho=Content[a][@"oho"];
+        firstLevelNode1.like=Content[a][@"simle"];
+        
         firstLevelNode1.nodeChildren = [[self fillChildrenForNode:[NSString stringWithFormat:@"%@",Content[a][@"content_no"]]] mutableCopy];
         firstLevelNode1.content_no=[NSString stringWithFormat:@"%@",Content[a][@"content_no"]];
         
@@ -282,15 +296,6 @@
     NSTimeInterval timeZoneOffset = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:new];
     NSDate *localDate = [new dateByAddingTimeInterval:timeZoneOffset];
   
-   
-//       NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
-    
-//    params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"1",@"imageid",@"1",@"typetag",nil];
-//    
-//    NSLog(@"insert params:%@",params);
-//    
-//    
-//    [[mydb sharedInstance]insertcontentremotewithimage:params ];
     
      params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",@"1",@"typetag",nil];
     
@@ -365,7 +370,7 @@
     cell.treeNode = node;
     cell.contentlabel.text = node.nodeObject;
     
-    NSLog(@"tree=%lu",(unsigned long)cell.treeNode.nodeLevel);
+   
     
     if (cell.treeNode.nodeLevel==1) {
         cell.iconimage.image=nil;
@@ -380,9 +385,30 @@
     
     
    
+//    int number = [cell.treeNode.imageid intValue];
+//    int sad=[cell.treeNode.sad intValue];
+//    int happy=[cell.treeNode.happy intValue];
+//    int simle=[cell.treeNode.like intValue];
+//    int oho=[cell.treeNode.oho intValue];
+//    int cool=[cell.treeNode.cool intValue];
+//    int impish=[cell.treeNode.impish intValue];
+    
     int number = [cell.treeNode.imageid intValue];
     
-    NSLog(@"number:%d",number);
+    
+     sad=[cell.treeNode.sad stringValue];
+     happy=[cell.treeNode.happy stringValue];
+     simle=[cell.treeNode.like stringValue];
+     ohoe=[cell.treeNode.oho stringValue];
+   cool=[cell.treeNode.cool stringValue];
+    impish=[cell.treeNode.impish stringValue];
+       [cell.simleBTN setTitle:simle forState:UIControlStateNormal];
+     [cell.CoolBtn setTitle:cool forState:UIControlStateNormal];
+     [cell.ImpishBtn setTitle:impish forState:UIControlStateNormal];
+     [cell.OhoBtn setTitle:ohoe forState:UIControlStateNormal];
+     [cell.HappyBtn setTitle:happy forState:UIControlStateNormal];
+     [cell.SadBtn setTitle:sad forState:UIControlStateNormal];
+    
     
     if (number == 1) {
     //如果sqlite裏有圖就直接存取 沒有就從mysql查詢
@@ -419,7 +445,8 @@
             
               [MBProgressHUD hideHUDForView:self.view animated:YES];
                 NSDictionary * data=[apiResponse objectForKey:@"downloadimage"];
-
+            
+        
                 NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"image"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
            
                 UIImage * image=[UIImage imageWithData:imagedata];
@@ -508,7 +535,7 @@
 
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (QuoteTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"contentcell" forIndexPath:indexPath];
     
     QuoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([QuoteTableViewCell class])];
@@ -542,17 +569,6 @@
     // do things with your cell here
     
     // set selection
-    self.currentSelection = indexPath.row;
-    
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [[cell viewWithTag:1001] setHidden:NO];
-    
-    // animate
-    [tableView beginUpdates];
-    [tableView endUpdates];
-    
-    
-    
     
     
 }
@@ -565,6 +581,7 @@
     NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
     QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
     cell.simleView.hidden=NO;
+    
     
     [cell.contentView addSubview:cell.simleView];
 }
@@ -580,7 +597,145 @@
     
     
 }
+- (IBAction)cool:(id)sender {
+    UIButton *senderButton = sender;
+    NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    
+    
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    
+    int count = [cool intValue];
+    
+    int total=0;
+    total=count+1;
+    NSString *strFromInt = [NSString stringWithFormat:@"%d",total];
+    
+    
+    
+    [cell.simleBTN setTitle:simle forState:UIControlStateNormal];
+    [cell.HappyBtn setTitle:happy forState:UIControlStateNormal];
+    [cell.SadBtn setTitle:sad forState:UIControlStateNormal];
+    [cell.OhoBtn setTitle:ohoe forState:UIControlStateNormal];
+    [cell.ImpishBtn setTitle:impish forState:UIControlStateNormal];
+    [cell.CoolBtn setTitle:strFromInt forState:UIControlStateNormal];
+    
+    UIImage * impishimage=[UIImage imageNamed:@"cool.png"];
+    [cell.emtionbutton setImage:impishimage forState:UIControlStateNormal];
+    
+    
 
+}
+- (IBAction)sad:(id)sender {
+    
+    UIButton *senderButton = sender;
+    NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    
+    
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    
+    int count = [sad intValue];
+    
+    int total=0;
+    total=count+1;
+    NSString *strFromInt = [NSString stringWithFormat:@"%d",total];
+    
+    
+    
+    [cell.simleBTN setTitle:simle forState:UIControlStateNormal];
+    [cell.HappyBtn setTitle:happy forState:UIControlStateNormal];
+    [cell.SadBtn setTitle:strFromInt forState:UIControlStateNormal];
+    [cell.OhoBtn setTitle:ohoe forState:UIControlStateNormal];
+    [cell.ImpishBtn setTitle:impish forState:UIControlStateNormal];
+    
+    [cell.CoolBtn setTitle:cool forState:UIControlStateNormal];
+    UIImage * impishimage=[UIImage imageNamed:@"sad.png"];
+    [cell.emtionbutton setImage:impishimage forState:UIControlStateNormal];
+
+}
+
+- (IBAction)happy:(id)sender {
+    UIButton *senderButton = sender;
+    NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    
+    
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    
+    int count = [happy intValue];
+    
+    int total=0;
+    total=count+1;
+    NSString *strFromInt = [NSString stringWithFormat:@"%d",total];
+ 
+    [cell.simleBTN setTitle:simle forState:UIControlStateNormal];
+    [cell.HappyBtn setTitle:strFromInt forState:UIControlStateNormal];
+    [cell.SadBtn setTitle:sad forState:UIControlStateNormal];
+    [cell.OhoBtn setTitle:ohoe forState:UIControlStateNormal];
+    [cell.ImpishBtn setTitle:impish forState:UIControlStateNormal];
+    [cell.CoolBtn setTitle:cool forState:UIControlStateNormal];
+    UIImage * impishimage=[UIImage imageNamed:@"happy.png"];
+    [cell.emtionbutton setImage:impishimage forState:UIControlStateNormal];
+    
+    
+
+}
+- (IBAction)impish:(id)sender {
+    UIButton *senderButton = sender;
+    NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    
+    
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    
+    int count = [impish intValue];
+    
+    int total=0;
+    total=count+1;
+    NSString *strFromInt = [NSString stringWithFormat:@"%d",total];
+    
+    
+    
+    [cell.simleBTN setTitle:simle forState:UIControlStateNormal];
+    [cell.HappyBtn setTitle:happy forState:UIControlStateNormal];
+    [cell.SadBtn setTitle:sad forState:UIControlStateNormal];
+    [cell.OhoBtn setTitle:ohoe forState:UIControlStateNormal];
+    [cell.ImpishBtn setTitle:strFromInt forState:UIControlStateNormal];
+    [cell.CoolBtn setTitle:cool forState:UIControlStateNormal];
+    UIImage * impishimage=[UIImage imageNamed:@"impish.png"];
+    [cell.emtionbutton setImage:impishimage forState:UIControlStateNormal];
+
+}
+
+- (IBAction)ohoaction:(id)sender {
+    UIButton *senderButton = sender;
+   // NSLog(@"current Row=%ld",(long)senderButton.tag);
+    NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
+    
+    
+    QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+    
+
+    int count = [ohoe intValue];
+    
+    int total=0;
+    total=count+1;
+    NSString *strFromInt = [NSString stringWithFormat:@"%d",total];
+    NSLog(@"STR:%@",strFromInt);
+    
+    
+    [cell.simleBTN setTitle:simle forState:UIControlStateNormal];
+    [cell.HappyBtn setTitle:happy forState:UIControlStateNormal];
+    [cell.SadBtn setTitle:sad forState:UIControlStateNormal];
+    [cell.OhoBtn setTitle:strFromInt forState:UIControlStateNormal];
+    [cell.ImpishBtn setTitle:impish forState:UIControlStateNormal];
+    [cell.CoolBtn setTitle:cool forState:UIControlStateNormal];
+    
+    UIImage * ohoimage=[UIImage imageNamed:@"oho.png"];
+    [cell.emtionbutton setImage:ohoimage forState:UIControlStateNormal];
+
+}
 
 - (IBAction)simle:(id)sender {
     
@@ -588,14 +743,60 @@
     NSLog(@"current Row=%ld",(long)senderButton.tag);
     NSIndexPath *path = [NSIndexPath indexPathForRow:senderButton.tag inSection:0];
     
-    NSLog(@"path%@",path);
+   
     QuoteTableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
-    [cell.emtionbutton setTitle:@"1" forState:UIControlStateNormal];
     
-    [senderButton setTitle:@"1" forState:UIControlStateNormal];
+//    [cell.emtionbutton setTitle:@"1" forState:UIControlStateNormal];
+//    
+    
+    
+    //NSString * count= senderButton.titleLabel.text;
+    int count = [simle intValue];
+    
+    int total=0;
+           total=count+1;
+    NSString *strFromInt = [NSString stringWithFormat:@"%d",total];
+    NSLog(@"STR:%@",strFromInt);
+    
+    
+    [cell.simleBTN setTitle:strFromInt forState:UIControlStateNormal];
+    [cell.HappyBtn setTitle:happy forState:UIControlStateNormal];
+    [cell.SadBtn setTitle:sad forState:UIControlStateNormal];
+    [cell.OhoBtn setTitle:ohoe forState:UIControlStateNormal];
+    [cell.ImpishBtn setTitle:impish forState:UIControlStateNormal];
+    [cell.CoolBtn setTitle:cool forState:UIControlStateNormal];
+    
+    UIImage * simleimage=[UIImage imageNamed:@"simle.png"];
+    [cell.emtionbutton setImage:simleimage forState:UIControlStateNormal];
+       NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+    
+    
+   
+    
+    
+    //[[SERVERCLASS alloc]emtiontotal:paramse];
+//    [self emtioncount:1 addsad:0 addhappy:0 addimpish:0 addcool:0 addoho:0 addcontent:cell.treeNode.content_no];
+    
+    
 }
 
+-(void)emtioncount:(int)numsimle addsad:(int)numsad addhappy:(int)numhappy addimpish:(int)numimpish addcool:(int)numcool addoho:(int)numoho addcontent:(NSString *)contentno{
 
+    
+    
+    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+     NSDictionary *paramse = [NSDictionary dictionaryWithObjectsAndKeys:@"emtiontotal",@"cmd", @"123", @"userID", numsimle, @"simle", numsad, @"sad",numhappy, @"happy",numimpish, @"impish",numoho, @"oho",numcool, @"cool",contentno, @"content_no",nil];
+    
+    
+          
+    NSLog(@"ssss%@",paramse);
+    
+ 
+         [[SERVERCLASS alloc]emtiontotal:paramse];
+
+}
 
 
 #pragma mark-
