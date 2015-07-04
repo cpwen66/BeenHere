@@ -68,11 +68,10 @@
         
         //將查詢資料存到NSDictionary
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
-        NSLog(@"apiResponse login:%@",apiResponse);
+      
         //取的signIn的key值，並輸出
         NSString *result = [apiResponse objectForKey:@"signIn"];
-        NSLog(@"result:%@",result);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+               [MBProgressHUD hideHUDForView:self.view animated:YES];
         //判斷signUp的key值是否等於success
         if ([result isEqualToString:@"fail"]) {
             

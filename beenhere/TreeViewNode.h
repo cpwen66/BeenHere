@@ -19,6 +19,12 @@
 @property (nonatomic, strong) NSDate * date;
 @property (nonatomic, strong) NSString * content_no;
 @property (nonatomic) NSNumber* imageid;
+@property (nonatomic) NSNumber* like;
+@property (nonatomic) NSNumber* happy;
+@property (nonatomic) NSNumber* sad;
+@property (nonatomic) NSNumber* cool;
+@property (nonatomic) NSNumber* impish;
+@property (nonatomic) NSNumber* oho;
 @property (nonatomic) NSString* Typetag;
 @property (nonatomic, strong) NSData * imagedate;
 @end

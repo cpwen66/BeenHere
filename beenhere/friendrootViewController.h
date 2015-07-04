@@ -18,5 +18,5 @@
 @property (weak, nonatomic) IBOutlet UIImageView *userbackground;
 
 @property (nonatomic, strong) NSString* friendid;
-- (IBAction)tap:(id)sender;
+
 @end

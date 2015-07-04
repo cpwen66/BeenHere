@@ -67,6 +67,9 @@
     
     frindRequestList=[StoreInfo shareInstance].FriendRequestList;
 
+    
+    NSLog(@"fr:%@",frindRequestList);
+    
     MyfriendList=[StoreInfo shareInstance].MyFriendtList;
     
     
@@ -228,8 +231,8 @@
 //    TreeViewNode *node = [self.displayArray objectAtIndex:indexpath.row];
     friendrootViewController *tvc=segue.destinationViewController;
 
-    tvc.friendid=MyfriendList[indexpath.row][@"friendID"];
-    [StoreInfo shareInstance].Friendid=MyfriendList[indexpath.row][@"friendID"];
+    tvc.friendid=MyfriendList[indexpath.row][@"id"];
+    [StoreInfo shareInstance].Friendid=MyfriendList[indexpath.row][@"id"];
     
     NSLog(@"s:%@", [StoreInfo shareInstance].Friendid);
 }
@@ -242,7 +245,7 @@
     
     friendrootViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"custAddEditAc"];
     
-    vc.friendid=MyfriendList[indexpath.row][@"frienid"];;
+    vc.friendid=MyfriendList[indexpath.row][@"id"];;
    
     
     
@@ -583,11 +586,6 @@
 //找尋使用者
 -(NSString*)SearchFirend:(NSString *)SearchfriendID{
     
-    
-    
-    //設定根目錄
-    
-    //設定要POST的鍵值
     
     //設定要POST的鍵值
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"findaccount",@"cmd", SearchfriendID, @"userID", nil];

@@ -19,14 +19,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    //    navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewController];
-    //
-    //    // 設定導覽列的顏色為半透明黑
-    //    //navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-    //
-    //    self.window.rootViewController = navigationController;
-    //    [self.window makeKeyAndVisible];
-    
     return YES;
 }
 

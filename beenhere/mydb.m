@@ -331,13 +331,14 @@ mydb *sharedInstance;
 
 #pragma mark - content text
 //新增內容
-- (void)insertMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no addimage:(NSData*)imagedata addimageid:(NSString*)imageid addtypetag:(NSString*)typetag addlike:(NSString*)like{
+- (void)insertMemeberNo:(NSString *)memberId andcontenttext:(NSString *)Contenttext andlevel:(NSString *)level anddate:(NSDate *)date andcontentno:(NSString *)content_no addimage:(NSData*)imagedata addimageid:(NSString*)imageid addtypetag:(NSString*)typetag addlike:(NSString*)like addsad:(NSString*)sad addhappy:(NSString*)happy addimpish:(NSString*)impish addcool:(NSString*)cool addoho:(NSString*)oho{
     
    
     
-    if (![db executeUpdate:@"insert into indexcontent (id,text,level,content_no,date,image,imageid,typetag,like) values (?,?,?,?,?,?,?,?,?)",memberId,Contenttext,level,content_no,date,imagedata,imageid,typetag,like]) {
+    if (![db executeUpdate:@"insert into indexcontent (id,text,level,content_no,date,image,imageid,typetag,simle,sad,happy,impish,cool,oho) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",memberId,Contenttext,level,content_no,date,imagedata,imageid,typetag,like,sad,happy,impish,cool,oho]) {
         NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
     };
+    
    // [self uploadUsers:BeEMAIL];
     
    [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
@@ -430,9 +431,7 @@ mydb *sharedInstance;
     
     
     
-    NSLog(@"params:%@",params);
-    
-    NSLog(@"id=========:%@",params[@"userID"]);
+   
     
     //產生控制request的物件
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -447,7 +446,9 @@ mydb *sharedInstance;
       
         NSString *result = [apiResponse objectForKey:@"queryindexcontentresult"];
    
-
+        
+        
+        
         //   判斷signUp的key值是否等於success
         if ([result isEqualToString:@"success"]) {
             
@@ -518,7 +519,7 @@ mydb *sharedInstance;
             
             
            // NSLog(@"success");
-           // NSLog(@"data reply:%@",data);
+            NSLog(@"data reply:%@",data);
       
             for (NSDictionary *dict in data) {
   
@@ -556,7 +557,7 @@ mydb *sharedInstance;
     while ([rs next]) {
         if ([rs intForColumnIndex:0]==0) {
             //可以新增
-            if (![db executeUpdate:@"insert into indexcontent_reply (reply_no,content_no,id,text,image,level,date,like) values (?,?,?,?,?,?,?,?)",
+            if (![db executeUpdate:@"insert into indexcontent_reply (reply_no,content_no,id,text,image,level,date,simle) values (?,?,?,?,?,?,?,?)",
                   custDict[@"reply_no"],
                   custDict[@"content_no"],
                   custDict[@"id"],
@@ -564,7 +565,7 @@ mydb *sharedInstance;
                   custDict[@"image"],
                   custDict[@"level"],
                   custDict[@"date"],
-                  custDict[@"like"]
+                  custDict[@"simle"]
                   ]) {
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
                 
@@ -592,16 +593,26 @@ mydb *sharedInstance;
     while ([rs next]) {
         if ([rs intForColumnIndex:0]==0) {
             //可以新增
-            if (![db executeUpdate:@"insert into indexcontent (content_no,id,text,image,level,date,like,imageid,typetag) values (?,?,?,?,?,?,?,?,?)",
+            if (![db executeUpdate:@"insert into indexcontent (content_no,id,text,image,level,date,simle,imageid,typetag,sad,happy,cool,oho,impish) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                   custDict[@"content_no"],
                   custDict[@"id"],
                   custDict[@"text"],
                   custDict[@"image"],
                   custDict[@"level"],
                   custDict[@"date"],
-                  custDict[@"like"],
+                  custDict[@"simle"],
                   custDict[@"imageid"],
                   custDict[@"typetag"]
+                  ,
+                  custDict[@"sad"]
+                  ,
+                  custDict[@"happy"]
+                  ,
+                  custDict[@"cool"]
+                  ,
+                  custDict[@"oho"]
+                  ,
+                  custDict[@"impish"]
                   ]) {
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
                
@@ -765,6 +776,7 @@ mydb *sharedInstance;
             [self Searchcontentno:params[@"content_no"]];
             
             
+            
             NSLog(@"success");
         }else {
             
@@ -824,7 +836,7 @@ mydb *sharedInstance;
             
             
             //存到SQLITE
-            [self insertMemeberNo:reslutdata[@"id"] andcontenttext:reslutdata[@"text"] andlevel:@"0" anddate:reslutdata[@"date"]  andcontentno:reslutdata[@"content_no"] addimage:imagedata addimageid:reslutdata[@"imageid"]addtypetag:reslutdata[@"typetag"]addlike:reslutdata[@"like"] ];
+            [self insertMemeberNo:reslutdata[@"id"] andcontenttext:reslutdata[@"text"] andlevel:@"0" anddate:reslutdata[@"date"]  andcontentno:reslutdata[@"content_no"] addimage:imagedata addimageid:reslutdata[@"imageid"]addtypetag:reslutdata[@"typetag"]addlike:reslutdata[@"simle"] addsad:reslutdata[@"sad"] addhappy:reslutdata[@"happy"] addimpish:reslutdata[@"impish"] addcool:reslutdata[@"cool"] addoho:reslutdata[@"oho"] ];
             
         }else {
             
@@ -958,6 +970,56 @@ mydb *sharedInstance;
     
 }
 
+-(void)insertpin:(NSDictionary *)params{
+    
+    
+    
+    //設定要POST的鍵值
+    
+    NSLog(@"params:%@",params);
+    
+    NSLog(@"telephone:%@",params[@"userID"]);
+    
+    //產生控制request的物件
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    //以POST的方式request並
+    [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //request成功之後要做的事情
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        NSLog(@"apiResponse:%@",apiResponse);
+        // 取的signIn的key值，並輸出
+        NSString *result = [apiResponse objectForKey:@"insertcontentreply"];
+        NSLog(@"result:%@",result);
+        
+        //   判斷signUp的key值是否等於success
+        if ([result isEqualToString:@"success"]) {
+            
+            
+            [self Searchcontentno:params[@"content_no"]];
+            
+            
+            
+            NSLog(@"success");
+        }else {
+            
+            NSLog(@"no suceess");
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+        
+        
+        
+        
+        
+        
+    }];
+    
+}
 
 
 

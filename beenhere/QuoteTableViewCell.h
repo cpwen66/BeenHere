@@ -19,6 +19,7 @@
 @property (nonatomic) BOOL isExpanded;
 @property (weak, nonatomic) IBOutlet UIButton *emtionbutton;
 @property (weak, nonatomic) IBOutlet UIButton *showemtion;
+@property (weak, nonatomic) IBOutlet UIView *emtionview;
 
 @property (retain, strong) TreeViewNode *treeNode;
 
@@ -28,5 +29,14 @@
 @property (weak, nonatomic) IBOutlet UIView *cellbackground;
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconimage;
+@property (weak, nonatomic) IBOutlet UIView *simleView;
+@property (weak, nonatomic) IBOutlet UIButton *closeBtn;
+@property (weak, nonatomic) IBOutlet UIButton *simleBTN;
+@property (weak, nonatomic) IBOutlet UIButton *CoolBtn;
+@property (weak, nonatomic) IBOutlet UIButton *SadBtn;
+@property (weak, nonatomic) IBOutlet UIButton *HappyBtn;
+@property (weak, nonatomic) IBOutlet UIButton *ImpishBtn;
+@property (weak, nonatomic) IBOutlet UIButton *OhoBtn;
+
 
 @end

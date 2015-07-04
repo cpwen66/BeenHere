@@ -314,6 +314,65 @@ static NSString *const PHPAPI=@"http://localhost:8888/beenhere/usersUP.php";
 }
 
 
+#pragma mark - emtionbtn
+-(void)emtiontotal:(NSDictionary *)data{
+    
+    
+    
+    //設定根目錄
+    
+    //設定要POST的鍵值
+
+    
+//    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"updateID",@"cmd", beId, @"userID", bename, @"userName", beemail, @"email",nil];
+    
+    
+    NSLog(@"params:%@",data);
+    
+    //產生控制request的物件
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    //以POST的方式request並
+    
+    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:data success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //request成功之後要做的事情
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        NSLog(@"apiResponse:%@",apiResponse);
+        // 取的signIn的key值，並輸出
+        NSString *result = [apiResponse objectForKey:@"emtiontotal"];
+        NSLog(@"upid result:%@",result);
+        
+        //   判斷signUp的key值是否等於success
+        if ([result isEqualToString:@"success"]) {
+            
+            [self setField:result];
+            
+            NSLog(@"success");
+            
+            
+        }else {
+            
+            [self setField:result];
+            NSLog(@"up no suceess");
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+        
+    }];
+    
+    
+    
+    
+    
+    
+}
+
+
 
 @end
 

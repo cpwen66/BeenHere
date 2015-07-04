@@ -28,5 +28,5 @@
 - (void) postRequest:(NSDictionary *)postParameters success:(void (^)(id jsonObject))success failure:(void (^)(NSError *error))failure;
 
 -(NSDictionary*) getMutualFBFriendsWithFBid:(NSString*)fbID andCallback:(void (^)(NSDictionary *))callback;
-
+-(void)emtiontotal:(NSDictionary *)data;
 @end

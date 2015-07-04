@@ -229,6 +229,15 @@
     headShotImageView.layer.borderColor = [UIColor whiteColor].CGColor;
     headShotImageView.layer.cornerRadius = 25;
     headShotImageView.clipsToBounds = YES;
+    Pin * pin=[[Pin alloc]init ];
+    pin=pinArray[indexPath.row];
+    
+    
+    
+    
+    
+    
+    
     headShotImageView.image = [UIImage imageNamed:@"headphoto.jpg"];
     
     ownerLabel.text = [NSString stringWithFormat:@"%@", [pinArray[indexPath.row] pinId]];
