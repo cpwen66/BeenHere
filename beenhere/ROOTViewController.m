@@ -66,6 +66,8 @@ friendTableViewController * frinedview;
     
     //通知到indexTableviewController
     [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontent" object:TextContent];
+    
+   
 }
 
 - (IBAction)sendCancelaction:(id)sender {
@@ -81,7 +83,7 @@ friendTableViewController * frinedview;
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
    
-
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];
 
     [self userinfoinit];
     
@@ -189,7 +191,7 @@ friendTableViewController * frinedview;
 -(void)viewDidAppear:(BOOL)animated{
     [self contentview];
     
-
+    
 }
 
 
@@ -214,7 +216,7 @@ friendTableViewController * frinedview;
         [stack removeFromSuperview];
     
     stack = [[UPStackMenu alloc] initWithContentView:contentView];
-    [stack setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 260)];
+    [stack setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 220)];
     [stack setDelegate:self];
     
     UPStackMenuItem *squareItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"square"] highlightedImage:nil title:@"Square"];
@@ -602,8 +604,8 @@ friendTableViewController * frinedview;
        UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraview"];
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"AppleMap" bundle:nil];
 //    
-    id targetViewController = [storyBoard instantiateViewControllerWithIdentifier:@"appnav"];
-    NSUserDefaults *defaultsPhoto = [NSUserDefaults standardUserDefaults];
+    id targetViewController = [storyBoard instantiateViewControllerWithIdentifier:@"SWReveal"];
+    NSUserDefaults *defaultsImageC = [NSUserDefaults standardUserDefaults];
    
     
     switch (index) {
@@ -621,8 +623,10 @@ friendTableViewController * frinedview;
         case 2:
          
             [self presentViewController:cameraVC animated:YES completion:nil];
-            [defaultsPhoto setBool:YES forKey:@"isContent"];
-            [defaultsPhoto synchronize];
+            [defaultsImageC setBool:YES forKey:@"isContent"];
+            [defaultsImageC synchronize];
+            [defaultsImageC setBool:NO forKey:@"isImage"];
+            [defaultsImageC synchronize];
             
             break;
          case 3:
@@ -664,6 +668,29 @@ friendTableViewController * frinedview;
 }
 
 #pragma mark - Camera Method
+-(void)handleimage{
+
+    if ([PhotoSingleton shareInstance].thumbnailPhoto != nil ) {
+ 
+        self.userpicture.image = [PhotoSingleton shareInstance].thumbnailPhoto;
+    }
+    
+
+    
+    if ([PhotoSingleton shareInstance].frontPhoto != nil) {
+   
+        self.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
+    }
+    
+//    
+//    if ([PhotoSingleton shareInstance].frontPhoto != nil) {
+//      
+//        NSLog(@"www");
+//        
+//    }
+
+
+}
 // 點擊大頭照跳出選項
 - (void)handleTap:(UITapGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded) {
@@ -976,7 +1003,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
         [PhotoSingleton shareInstance].frontPhoto = imageEdited;
         
         [self dismissViewControllerAnimated:YES completion:^{
-            self.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
+           self.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
         }];
     }
 }

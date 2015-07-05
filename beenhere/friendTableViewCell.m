@@ -39,6 +39,17 @@
 }
 - (void)drawRect:(CGRect)rect
 {
+    
+    [[self.cellbackground layer] setBorderWidth:1.0];
+    //邊框顏色
+    [[self.cellbackground layer] setBorderColor:[UIColor colorWithRed:35.0 green:196.0 blue:246.0 alpha:0.9].CGColor];
+    //    [[self.cellbackground layer] setBorderColor:[UIColor colorWithRed:246.0 green:241.0 blue:236.0 alpha:0.9].CGColor];
+    self.cellbackground.layer.cornerRadius = 1.0;
+    [[self.cellbackground layer] setCornerRadius:5.0];
+    
+    self.emtionbutton.layer.borderWidth=1.0;
+    self.emtionbutton.layer.cornerRadius=10.0;
+    self.emtionbutton.layer.borderColor=[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor;
     CGRect cellFrame = self.contentlabel.frame;
     CGRect buttonFrame = self.cellButton.frame;
     CGRect detail=self.detaillabel.frame;

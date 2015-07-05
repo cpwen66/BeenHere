@@ -29,7 +29,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    UIBarButtonItem *homeButton=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRedo target:self action:@selector(home) ];
+    UIBarButtonItem *homeButton=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemPageCurl target:self action:@selector(home) ];
     
     self.navigationItem.rightBarButtonItem=homeButton;
     
@@ -46,6 +46,13 @@
 
 
     
+}
+-(void)home{
+
+
+
+
+
 }
 -(void)userinfoinit{
     

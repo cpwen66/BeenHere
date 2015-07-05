@@ -489,12 +489,17 @@
     NSLog(@"tree:%@",cell.treeNode.Typetag);
      int type = [cell.treeNode.Typetag intValue];
     if (type==1) {
-        UIImage *image =[UIImage imageNamed:@"camera16x.png"];
-        cell.iconimage.image=image;
-    }else if(type==2){
+       
         UIImage *image =[UIImage imageNamed:@"pencil.png"];
         cell.iconimage.image=image;
+    }else if(type==2){
+         UIImage *image =[UIImage imageNamed:@"camera16x.png"];
+        cell.iconimage.image=image;
     
+    
+    }else if(type==3){
+        UIImage *image =[UIImage imageNamed:@"camera16x.png"];
+        cell.iconimage.image=image;
     
     }
     

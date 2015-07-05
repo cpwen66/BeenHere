@@ -206,14 +206,33 @@
                 root.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
             }];
         }  else if (isContent == YES) {
-            [PhotoSingleton shareInstance].frontPhoto = self.previewView.image;
+            [PhotoSingleton shareInstance].contentPhoto = self.previewView.image;
             [self dismissViewControllerAnimated:YES completion:^{
-                root.userbackground.image = [PhotoSingleton shareInstance].frontPhoto;
+                NSDictionary *params = [NSDictionary new];
+                UIImage * contentimage=[PhotoSingleton shareInstance].contentPhoto;
+                UIGraphicsBeginImageContext(CGSizeMake(200, 200));
+                
+                //將原始影像重繪在此範圍中
+                [contentimage drawInRect:CGRectMake(0, 0, 200, 200)];
+                
+                //以目前的ImageContext來製作新的UIImage
+                UIImage *resizeImage =UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                params = @{
+                           @"text":@" ",
+                           @"image": resizeImage
+                           };
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentwith" object:params];
             }];
         }
-        
+           [[NSNotificationCenter defaultCenter]postNotificationName:@"handleimage" object:nil];
         
     }];
+    
+    
+    
+    
 }
     
 // 實作前後鏡頭平滑完成轉換的method，避免切換過程中形成資料斷斷續續的狀況
