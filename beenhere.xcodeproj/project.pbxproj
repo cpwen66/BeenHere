@@ -27,6 +27,7 @@
 		690D6C0C1B394EDD00DA83E6 /* DatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0B1B394EDD00DA83E6 /* DatabaseConnection.m */; };
 		690D6C0F1B394EFA00DA83E6 /* PinDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0E1B394EFA00DA83E6 /* PinDAO.m */; };
 		690D6C1A1B396FCB00DA83E6 /* beenhere.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 690D6C191B396FCB00DA83E6 /* beenhere.sqlite */; };
+		6933183D1B47B5DE00C140EE /* ReuseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */; };
 		693ED2FC1B43D4F4000341C1 /* trashcan.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FA1B43D4F4000341C1 /* trashcan.png */; };
 		693ED2FD1B43D4F4000341C1 /* userlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FB1B43D4F4000341C1 /* userlocation.png */; };
 		694683361B38061E00ADBAF8 /* AppleMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 694683351B38061E00ADBAF8 /* AppleMapViewController.m */; };
@@ -53,6 +54,7 @@
 		6967636B1B3E85C700B36B2A /* PinImageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6967636A1B3E85C700B36B2A /* PinImageDetailViewController.m */; };
 		6968AC9A1B44C1A300E14B09 /* tempReadMe in Resources */ = {isa = PBXBuildFile; fileRef = 6968AC991B44C1A300E14B09 /* tempReadMe */; };
 		6968AC9D1B44C1E800E14B09 /* PinTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6968AC9C1B44C1E800E14B09 /* PinTableViewController.m */; };
+		696A09211B46EF480072189A /* PinInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 696A09201B46EF480072189A /* PinInfoTableViewController.m */; };
 		696CC2021B3A3B9C005EFCD7 /* pin_V1_20150624.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 696CC2011B3A3B9C005EFCD7 /* pin_V1_20150624.sqlite */; };
 		696CC2061B3A5710005EFCD7 /* pointRed.png in Resources */ = {isa = PBXBuildFile; fileRef = 696CC2031B3A570F005EFCD7 /* pointRed.png */; };
 		696CC2071B3A5710005EFCD7 /* pointRed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696CC2041B3A570F005EFCD7 /* pointRed@2x.png */; };
@@ -238,6 +240,8 @@
 		690D6C0D1B394EFA00DA83E6 /* PinDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinDAO.h; path = AppleMap/PinDAO.h; sourceTree = "<group>"; };
 		690D6C0E1B394EFA00DA83E6 /* PinDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinDAO.m; path = AppleMap/PinDAO.m; sourceTree = "<group>"; };
 		690D6C191B396FCB00DA83E6 /* beenhere.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = beenhere.sqlite; sourceTree = "<group>"; };
+		6933183B1B47B5DE00C140EE /* ReuseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReuseTableViewCell.h; sourceTree = "<group>"; };
+		6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReuseTableViewCell.m; sourceTree = "<group>"; };
 		693ED2FA1B43D4F4000341C1 /* trashcan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trashcan.png; sourceTree = "<group>"; };
 		693ED2FB1B43D4F4000341C1 /* userlocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userlocation.png; sourceTree = "<group>"; };
 		694683341B38061E00ADBAF8 /* AppleMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleMapViewController.h; sourceTree = "<group>"; };
@@ -274,6 +278,8 @@
 		6968AC991B44C1A300E14B09 /* tempReadMe */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tempReadMe; path = AppleMap/tempReadMe; sourceTree = "<group>"; };
 		6968AC9B1B44C1E800E14B09 /* PinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinTableViewController.h; path = AppleMap/PinTableViewController.h; sourceTree = "<group>"; };
 		6968AC9C1B44C1E800E14B09 /* PinTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinTableViewController.m; path = AppleMap/PinTableViewController.m; sourceTree = "<group>"; };
+		696A091F1B46EF480072189A /* PinInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinInfoTableViewController.h; path = AppleMap/PinInfoTableViewController.h; sourceTree = "<group>"; };
+		696A09201B46EF480072189A /* PinInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinInfoTableViewController.m; path = AppleMap/PinInfoTableViewController.m; sourceTree = "<group>"; };
 		696CC2011B3A3B9C005EFCD7 /* pin_V1_20150624.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = pin_V1_20150624.sqlite; sourceTree = "<group>"; };
 		696CC2031B3A570F005EFCD7 /* pointRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pointRed.png; sourceTree = "<group>"; };
 		696CC2041B3A570F005EFCD7 /* pointRed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pointRed@2x.png"; sourceTree = "<group>"; };
@@ -605,6 +611,10 @@
 				695D93D51B456E690008502E /* CloudDAO.m */,
 				69703DBA1B46635700A02B7A /* SideBarTableViewController.h */,
 				69703DBB1B46635700A02B7A /* SideBarTableViewController.m */,
+				696A091F1B46EF480072189A /* PinInfoTableViewController.h */,
+				696A09201B46EF480072189A /* PinInfoTableViewController.m */,
+				6933183B1B47B5DE00C140EE /* ReuseTableViewCell.h */,
+				6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */,
 			);
 			name = AppleMap;
 			sourceTree = "<group>";
@@ -1246,10 +1256,12 @@
 				690D6C0F1B394EFA00DA83E6 /* PinDAO.m in Sources */,
 				696CC20B1B3A6F01005EFCD7 /* PinEditViewController.m in Sources */,
 				696763511B3E721100B36B2A /* PinEditTableViewController.m in Sources */,
+				6933183D1B47B5DE00C140EE /* ReuseTableViewCell.m in Sources */,
 				95A259D01B1F4BC7007641B0 /* UIRefreshControl+AFNetworking.m in Sources */,
 				95E3C5E41B2CA0B000071387 /* StoreInfo.m in Sources */,
 				95DC223A1B41A7320063DC2F /* friendTableViewCell.m in Sources */,
 				95A259C81B1F4BC7007641B0 /* AFURLResponseSerialization.m in Sources */,
+				696A09211B46EF480072189A /* PinInfoTableViewController.m in Sources */,
 				95A259C21B1F4BC7007641B0 /* AFHTTPRequestOperationManager.m in Sources */,
 				95656C841B3EEB9C002BA2C9 /* talkviewcontroller.m in Sources */,
 				952498061B342C7900513EE7 /* RATreeNodeItem+Private.m in Sources */,

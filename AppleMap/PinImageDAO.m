@@ -39,6 +39,7 @@ FMDatabase *sqlDB;
         
         //NSData *datas = [[NSData alloc] initWithBytes:(__bridge const void *)([resultSet.resultDictionary objectForKey:@"picture"]) length:[[resultSet.resultDictionary objectForKey:@"picture"] length]];
         pinImage.imageData = [resultSet dataForColumn:@"picture"];
+
         //NSData *datas = [resultSet.resultDictionary objectForKey:@"picture"];
         
 //        NSUInteger len = [[resultSet.resultDictionary objectForKey:@"picture"] length];

@@ -209,8 +209,8 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         }
     }
     
-
-/* 這裡是直接存SQLite的程式, 沒有上傳
+/*
+// 這裡是直接存SQLite的程式, 沒有上傳
     // 先練習只存到SQLite, 之後要改先上傳到server，之後再下載pinId
     // 先存Pin到SQLite
     self.currentPin.title = titleTextView.text;
@@ -247,7 +247,9 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         [pinImageDAO insertImageIntoSQLite:newPinImage];
         }
     }
- */
+ 
+*/
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 
 }
