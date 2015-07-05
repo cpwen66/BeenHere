@@ -123,8 +123,8 @@
          //從電話數字中加-
          NSMutableString *str = [[NSMutableString alloc] initWithString:mytelephone];
         // NSRange range = [str rangeOfString:@"-"];
-//             [str insertString:@"-" atIndex:3];
-//             [str insertString:@"-" atIndex:8];
+             [str insertString:@"-" atIndex:3];
+             [str insertString:@"-" atIndex:8];
              self.TeleohoneTextfield.text = str;
      }
     

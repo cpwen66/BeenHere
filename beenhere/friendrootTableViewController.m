@@ -36,7 +36,8 @@ NSUInteger indentation;
     
   
     
-       [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loaddata) name:@"loaddata" object:nil];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+      
     _friendid=[StoreInfo shareInstance].Friendid;
     NSLog(@"myfriendid:%@",_friendid);
     
@@ -66,7 +67,8 @@ NSUInteger indentation;
     nodes=[[NSMutableArray alloc]init ];
     
     
-    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"connecting"];
     
     
     
