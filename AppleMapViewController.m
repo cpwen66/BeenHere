@@ -20,7 +20,7 @@
 #import "PinInfoTableViewController.h"
 //因為Pin繼承至MKPointAnnotation，所以不用再import
 
-@interface AppleMapViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
+@interface AppleMapViewController ()<MKMapViewDelegate, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 {
     CLLocation *currentLocation;
     BOOL isFirstLocationReceived;
@@ -32,6 +32,10 @@
     NSInteger counting;
     NSMutableDictionary *distanceDict;
     UIButton *rightCalloutButton;
+    NSArray *pickerArray;
+    UIPickerView *pickerView;
+    CGFloat screenWidth;
+    CGFloat screenHeight;
     
     //必須先#import <CoreLocation/CoreLocation.h>才能使用CLLocationManager類別
     CLLocationManager *locationManager;
@@ -40,8 +44,10 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *appleMapView;
 @property (weak, nonatomic) IBOutlet UILabel *theLabel;
-@property (weak, nonatomic) IBOutlet UIButton *showSlideMenuButton;
+//@property (weak, nonatomic) IBOutlet UIButton *showSlideMenuButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *showSlideMenuBarBtnItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *filterBarBtnItem;
+
 
 @end
 
@@ -99,6 +105,24 @@
         //[self.showSlideMenuButton targetForAction:@selector(revealToggle:) withSender:self.revealViewController];
         [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     }
+    
+    screenWidth = ceilf([[UIScreen mainScreen] bounds].size.width);
+    screenHeight = ceilf([[UIScreen mainScreen] bounds].size.height);
+    CGRect pickerRect = CGRectMake(0, screenHeight, screenWidth, screenHeight*2/5);
+    pickerView = [[UIPickerView alloc] initWithFrame:pickerRect];
+    pickerArray = @[@"ALL", @"MY PINS",@"FRIEND'S"];
+    NSLog(@"(%f, %f, %f, %f", pickerView.frame.origin.x, pickerView.frame.origin.y, pickerView.frame.size.width, pickerView.frame.size.height);
+    
+
+    pickerView.backgroundColor = [UIColor whiteColor];
+    NSLog(@"screen width= %f, height= %f", screenWidth, screenHeight);
+    
+    // delegate加的位置會影響內容是否能呈現
+    pickerView.delegate = self;
+    pickerView.dataSource = self;
+
+    [self.view addSubview:pickerView];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -177,6 +201,17 @@
     
     
 }
+- (IBAction)filterBarBtnItemAction:(id)sender {
+    
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        //pickerView.frame.origin = CGPointMake(0, screenHeight*3/5);
+        pickerView.frame = CGRectMake(0, screenHeight*3/5, screenWidth, screenHeight*2/5);
+    } completion:nil];
+    
+    NSLog(@"(%f, %f, %f, %f", pickerView.frame.origin.x, pickerView.frame.origin.y, pickerView.frame.size.width, pickerView.frame.size.height);
+
+    
+}
 
 - (IBAction)addPinButtonAction:(id)sender {
     
@@ -205,6 +240,12 @@
     [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
 
     self.theLabel.text = [NSString stringWithFormat:@"%@", [dateFormat stringFromDate:pin.visitedDate]];
+    
+//    CGPoint *point= [CGPointMake(30, 30)];
+//    uiv
+    [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        self.theLabel.frame = CGRectMake(0, 0, self.theLabel.frame.size.width, self.theLabel.frame.size.height);
+    } completion:nil];
 }
 
 
@@ -464,6 +505,18 @@
     region.span.latitudeDelta = 0.01;
     region.span.longitudeDelta = 0.01;
     [self.appleMapView setRegion:region animated:YES];
+}
+
+#pragma mark - Picker View Delegate
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return [pickerArray count];
+}
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return pickerArray[row];
 }
 
 

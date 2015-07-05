@@ -64,9 +64,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
     pinImage = [[PinImage alloc] init];
     pinImageDAO = [[PinImageDAO alloc] init];
-    
-
-    
 
     // 監聽keyboard的動作
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
