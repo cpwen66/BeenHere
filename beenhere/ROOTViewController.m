@@ -214,7 +214,7 @@ friendTableViewController * frinedview;
         [stack removeFromSuperview];
     
     stack = [[UPStackMenu alloc] initWithContentView:contentView];
-    [stack setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 260)];
+    [stack setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 220)];
     [stack setDelegate:self];
     
     UPStackMenuItem *squareItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"square"] highlightedImage:nil title:@"Square"];

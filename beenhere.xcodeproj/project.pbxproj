@@ -26,7 +26,6 @@
 		2BFA754D1B3AB0A100F70A9C /* headphoto.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2BFA754C1B3AB0A100F70A9C /* headphoto.jpg */; };
 		690D6C0C1B394EDD00DA83E6 /* DatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0B1B394EDD00DA83E6 /* DatabaseConnection.m */; };
 		690D6C0F1B394EFA00DA83E6 /* PinDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0E1B394EFA00DA83E6 /* PinDAO.m */; };
-		690D6C1A1B396FCB00DA83E6 /* beenhere.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 690D6C191B396FCB00DA83E6 /* beenhere.sqlite */; };
 		6933183D1B47B5DE00C140EE /* ReuseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */; };
 		693ED2FC1B43D4F4000341C1 /* trashcan.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FA1B43D4F4000341C1 /* trashcan.png */; };
 		693ED2FD1B43D4F4000341C1 /* userlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FB1B43D4F4000341C1 /* userlocation.png */; };
@@ -239,7 +238,6 @@
 		690D6C0B1B394EDD00DA83E6 /* DatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseConnection.m; path = AppleMap/DatabaseConnection.m; sourceTree = "<group>"; };
 		690D6C0D1B394EFA00DA83E6 /* PinDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinDAO.h; path = AppleMap/PinDAO.h; sourceTree = "<group>"; };
 		690D6C0E1B394EFA00DA83E6 /* PinDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinDAO.m; path = AppleMap/PinDAO.m; sourceTree = "<group>"; };
-		690D6C191B396FCB00DA83E6 /* beenhere.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = beenhere.sqlite; sourceTree = "<group>"; };
 		6933183B1B47B5DE00C140EE /* ReuseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReuseTableViewCell.h; sourceTree = "<group>"; };
 		6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReuseTableViewCell.m; sourceTree = "<group>"; };
 		693ED2FA1B43D4F4000341C1 /* trashcan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trashcan.png; sourceTree = "<group>"; };
@@ -1065,7 +1063,7 @@
 		95B417431B01EB6A00EA9177 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0620;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = beenhere;
 				TargetAttributes = {
 					95B4174A1B01EB6A00EA9177 = {
@@ -1183,7 +1181,6 @@
 				696763641B3E731500B36B2A /* cat9.jpg in Resources */,
 				953FA0971B42CADE00C67BF5 /* notbad@1.5x.png in Resources */,
 				95B5F7291B131E3C00D7A342 /* ContextMenuCell.xib in Resources */,
-				690D6C1A1B396FCB00DA83E6 /* beenhere.sqlite in Resources */,
 				2BFA754B1B3A976E00F70A9C /* camerachangebb.png in Resources */,
 				953FA04B1B42C52500C67BF5 /* happy@1.5x.png in Resources */,
 				95016F981B25A50F00BD44C0 /* tool2.png in Resources */,
@@ -1379,7 +1376,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1416,7 +1413,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
