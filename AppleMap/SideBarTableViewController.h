@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SideBarTableViewController : UITableViewController
-
+@property (weak, nonatomic)NSUserDefaults *preference;
 @end

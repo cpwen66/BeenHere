@@ -208,6 +208,7 @@
     // Return the number of rows in the section.
     NSLog(@"cellViewArray count =%d", [cellViewArray count]);
     return [cellViewArray count];
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
