@@ -36,6 +36,7 @@
     self.navigationController.navigationBarHidden = NO;
     self.infoTableView.delegate = self;
     self.infoTableView.allowsSelection = NO;// 讓使用者對tableView的點擊無效
+    self.infoTableView.separatorColor = [UIColor clearColor];
     
     //[self.infoTableView reloadData];
     

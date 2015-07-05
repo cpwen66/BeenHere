@@ -33,9 +33,13 @@
     NSMutableDictionary *distanceDict;
     UIButton *rightCalloutButton;
     NSArray *pickerArray;
+    NSArray *pickerArray2;
+    NSArray *pickerArray3;
     UIPickerView *pickerView;
     CGFloat screenWidth;
     CGFloat screenHeight;
+    NSString *pickerViewComponent0;
+    NSString *pickerViewComponent1;
     
     //必須先#import <CoreLocation/CoreLocation.h>才能使用CLLocationManager類別
     CLLocationManager *locationManager;
@@ -108,10 +112,12 @@
     
     screenWidth = ceilf([[UIScreen mainScreen] bounds].size.width);
     screenHeight = ceilf([[UIScreen mainScreen] bounds].size.height);
-    CGRect pickerRect = CGRectMake(0, screenHeight, screenWidth, screenHeight*2/5);
+    CGRect pickerRect = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/4);
     pickerView = [[UIPickerView alloc] initWithFrame:pickerRect];
     pickerArray = @[@"ALL", @"MY PINS",@"FRIEND'S"];
-    NSLog(@"(%f, %f, %f, %f", pickerView.frame.origin.x, pickerView.frame.origin.y, pickerView.frame.size.width, pickerView.frame.size.height);
+    pickerArray2 = @[@"ALL", @"VISITED", @"UNVISITED"];
+    //pickerArray3 = @[@"", @""];
+    //NSLog(@"(%f, %f, %f, %f", pickerView.frame.origin.x, pickerView.frame.origin.y, pickerView.frame.size.width, pickerView.frame.size.height);
     
 
     pickerView.backgroundColor = [UIColor whiteColor];
@@ -122,7 +128,21 @@
     pickerView.dataSource = self;
 
     [self.view addSubview:pickerView];
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
+    
+    // 下一行self.myScrollView改成self.view也可以
+    [self.appleMapView addGestureRecognizer:tapGesture];
+    
+    pickerViewComponent0=@"0";
+    pickerViewComponent1=@"0";
 
+}
+
+- (void)hidePickerView {
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        pickerView.frame = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/4);
+    } completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -205,7 +225,7 @@
     
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         //pickerView.frame.origin = CGPointMake(0, screenHeight*3/5);
-        pickerView.frame = CGRectMake(0, screenHeight*3/5, screenWidth, screenHeight*2/5);
+        pickerView.frame = CGRectMake(0, screenHeight*2/3, screenWidth, screenHeight*1/3);
     } completion:nil];
     
     NSLog(@"(%f, %f, %f, %f", pickerView.frame.origin.x, pickerView.frame.origin.y, pickerView.frame.size.width, pickerView.frame.size.height);
@@ -238,14 +258,7 @@
     //self.theLabel = pin.visitedDate;
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
-
     self.theLabel.text = [NSString stringWithFormat:@"%@", [dateFormat stringFromDate:pin.visitedDate]];
-    
-//    CGPoint *point= [CGPointMake(30, 30)];
-//    uiv
-    [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.theLabel.frame = CGRectMake(0, 0, self.theLabel.frame.size.width, self.theLabel.frame.size.height);
-    } completion:nil];
 }
 
 
@@ -272,7 +285,6 @@
     
     // 叫mapView去佇列中拿名字叫newPin的AnnotationView
     MKAnnotationView *reuseAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:@"newPin"];
-    
     
     // 如果佇列中沒有叫newPin的AnnotationView，就會得到nil
     // 那就創建叫newPin的AnnotationView
@@ -509,14 +521,50 @@
 
 #pragma mark - Picker View Delegate
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return [pickerArray count];
+    if (component == 0) {
+        return [pickerArray count];
+    }else {
+        return [pickerArray2 count];
+    }
 }
+
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return pickerArray[row];
+    
+    if (component == 0) {
+        return pickerArray[row];
+    }else {
+        return pickerArray2[row];
+    }
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    PinDAO *pinDAO = [[PinDAO alloc] init];
+    
+    if (component == 0) {
+        pickerViewComponent0 = [NSString stringWithFormat:@"%d",row];
+    } else if (component ==1) {
+        pickerViewComponent1 = [NSString stringWithFormat:@"%d",row];
+    }
+    NSLog(@"pickerViewComponent0=%@, pickerViewComponent1=%@", pickerViewComponent0, pickerViewComponent1);
+
+    NSLog(@"row=%d, component=%d", row, component);
+    allPinRows = [pinDAO getPinsByFilter:pickerViewComponent0 visited:pickerViewComponent1];
+    
+    //先移除所有大頭針
+    [self.appleMapView removeAnnotations:[self.appleMapView annotations]];
+    
+    
+    Pin *pin = [[Pin alloc] init];;
+    
+    // 再從資料庫拿出資料，更新所有大頭針
+    for(pin in allPinRows) {
+        [self.appleMapView addAnnotation:pin];
+        NSLog(@"id = %@, latitude = %f, longitude = %f, title = %@", pin.pinId, pin.coordinate.latitude, pin.coordinate.longitude, pin.title);
+    }
 }
 
 

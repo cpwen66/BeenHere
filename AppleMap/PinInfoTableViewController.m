@@ -148,9 +148,8 @@
     CGRect labelRect = CGRectMake(0, 0, screenWidth, 50);
 
     UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
+    label.text = self.infoPin.title;
 
-    label.text = @"asdfadsfjasdlkfjalskdfjaoif kasdjfkasdjf asdjfasfdkfjasdfj fa dskfjasdl f asdjfksdjf  asd flasdkfj  asdfjasldfj  asdf asldfjas df a d fladkjf asdfj da d;fsad jasdfj dl a sdfjasdlf asdl f fasdlfj sdkddoifjasd";
-    
     CGSize maxSize2 = CGSizeMake(screenWidth-80, 999);
     NSString *contentString2 = label.text;
     UIFont *contentFont2 = label.font;
@@ -172,11 +171,13 @@
     
     CGRect headerViewRect = CGRectMake(0, 0, screenWidth, contentSize2.height + 40);
     UIView *view = [[UIView alloc] initWithFrame:headerViewRect];
-    view.backgroundColor = [UIColor whiteColor];//
+    view.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];//
     [view addSubview:label];
     
     [self.tableView.tableHeaderView sizeToFit];
     self.tableView.tableHeaderView = view;
+    
+    self.tableView.separatorColor = [UIColor clearColor];
     
     
 //    self.tableView.tableHeaderView = nil;

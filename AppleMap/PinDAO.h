@@ -15,6 +15,8 @@
 
 @interface PinDAO : NSObject
 
+//@property (weak, nonatomic)NSUserDefaults *preference;
+
 - (PinDAO *) init;
 
 - (NSMutableArray *) getAllPin;
@@ -22,5 +24,6 @@
 - (void) insertPinIntoSQLite: (Pin *)pin;
 - (NSString *)getLastPinId;
 - (void)updateVisitedDateFromSQLite:(NSString *)pinId setVisitedDate:(NSDate *) visitedDate;
+- (NSMutableArray*) getPinsByFilter:(NSString *)owner visited:(NSString *)visite;
 
 @end

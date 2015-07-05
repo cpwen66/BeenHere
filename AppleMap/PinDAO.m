@@ -11,14 +11,15 @@
 
 FMDatabase *sqlDB;
 
-@implementation PinDAO
 
+@implementation PinDAO
 
 - (PinDAO *)init {
     self = [super init];
     if (self) {
         DatabaseConnection *dbConnection = [DatabaseConnection sharedInstance];
         sqlDB = dbConnection.sqliteDatabase;
+        
     }
     return self;
 }
@@ -66,6 +67,64 @@ FMDatabase *sqlDB;
     return rows;
 }
 
+- (NSMutableArray*) getPinsByFilter:(NSString *)owner visited:(NSString *)visited {
+    NSMutableArray *rows = [NSMutableArray new];
+    NSString *ownerCondition;
+    NSString *visitedCondition;
+    
+//    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
+//    NSString *memberId = [preference stringForKey:@"bhereID"];
+   
+    //假資料
+    NSString *memberId = @"1";
+    
+    if ([owner  isEqualToString:@"0"]) {//ALL
+        ownerCondition = @"";
+    } else if([owner isEqualToString:@"1"]) {//Myself
+        ownerCondition = [NSString stringWithFormat:@" WHERE member_id=%@", memberId];
+    } else {//friends
+        ownerCondition = [NSString stringWithFormat:@" WHERE member_id<>%@", memberId];
+    }
+    
+    if ([visited isEqualToString:@"0"]) {//ALL
+        visitedCondition = @"";
+    } else if ([visited isEqualToString:@"1"]){//Visited
+        visitedCondition = @" WHERE pin_visited_date IS NOT NULL";
+    } else {//unvisited
+        visitedCondition = @" WHERE pin_visited_date IS NULL";
+    }
+    
+    NSString *queryString = [NSString stringWithFormat:@"SELECT * FROM pins%@%@", ownerCondition, visitedCondition];
+    FMResultSet *resultSet;
+    resultSet = [sqlDB executeQuery:queryString];
+    if ([sqlDB hadError]) {
+        NSLog(@"DB Error %d: %@", [sqlDB lastErrorCode], [sqlDB lastErrorMessage]);
+    }
+    
+    while ([resultSet next]) {
+        //NSLog(@"resultDictionary: %@", resultSet.resultDictionary);
+        Pin *pin = [[Pin alloc] init];
+        pin.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
+        
+        // 這裡有奇怪的地方，就是pin.pinId出來是__NSCFNumber格式，所以要轉NSString
+        // 這裡只是暫時用pinId來當subtitle，之後會用好友的名字
+        pin.subtitle = [NSString stringWithFormat:@"%@到此一遊", pin.pinId];
+        pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
+        pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
+        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
+        CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
+        CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
+        CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        pin.coordinate = locationCoordinate;
+        
+        [rows addObject:pin];
+        
+    }
+    //NSLog(@"rows = %@", rows);
+    return rows;
+    
+}
+
 - (Pin *) getPinById:(NSString *)pinId {
     FMResultSet *resultSet;
     resultSet = [sqlDB executeQuery:@"select * from pins where pin_id=?", pinId];
@@ -97,7 +156,7 @@ FMDatabase *sqlDB;
     NSString *pinLongitude = [NSString stringWithFormat:@"%1.6f", pin.coordinate.longitude];
 
     
-    if (![sqlDB executeUpdate:@"insert into pins (pin_title, pin_latitude, pin_longitude) values (?, ?, ?)", pin.title,  pinLatitude, pinLongitude]) {
+    if (![sqlDB executeUpdate:@"insert into pins (member_id, pin_title, pin_latitude, pin_longitude, pin_visited_date) values (?, ?, ?, ?, ?)", pin.memberId, pin.title, pinLatitude, pinLongitude, pin.visitedDate]) {
      
      //去executeUpdate看說明，裡面會提到lastErrorMessage
      NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
@@ -144,7 +203,6 @@ FMDatabase *sqlDB;
     
     FMResultSet *resultSet;
     //resultSet = [sqlDB executeQuery:@"select max(pin_id) from pins"];
-    
     resultSet = [sqlDB executeQuery:@"select pin_id from pins ORDER BY pin_id DESC LIMIT 1"];
 
     NSString *maxPinId;

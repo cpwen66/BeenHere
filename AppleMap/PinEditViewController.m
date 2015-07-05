@@ -55,11 +55,11 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
     //titleTextView.delegate = self;
     
-    Pin *pin = [[Pin alloc] init];
+    //Pin *pin = [[Pin alloc] init];
     //pin.memberId = @"3";
     
     pinDAO = [[PinDAO alloc] init];
-    NSMutableArray *rows = [pinDAO getAllPin];
+    //NSMutableArray *rows = [pinDAO getAllPin];
     //NSLog(@"rows= %@", rows);
     
     pinImage = [[PinImage alloc] init];
@@ -146,8 +146,14 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 }
 
 - (IBAction)donePostPinBtnAction:(id)sender {
-    
+/*
+    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
+    NSString *memberId = [preference stringForKey:@"bhereID"];
+    self.currentPin.memberId = memberId;
+
     self.currentPin.title = titleTextView.text;
+    self.currentPin.visitedDate = [NSDate date];
+
 
     CloudDAO *cloudDAO = [[CloudDAO alloc] init];
     NSString *pinIdFromCloud = [cloudDAO uploadNewPin:self.currentPin];
@@ -205,12 +211,18 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
             [pinImageDAO insertImageIntoSQLite:newPinImage];
         }
     }
-    
-/*
+*/
+
 // 這裡是直接存SQLite的程式, 沒有上傳
     // 先練習只存到SQLite, 之後要改先上傳到server，之後再下載pinId
     // 先存Pin到SQLite
+//    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
+//    NSString *memberId = [preference stringForKey:@"bhereID"];
+//    self.currentPin.memberId = memberId;
+    self.currentPin.memberId = @"1";// 真實情況要用上面三行取代這一行
     self.currentPin.title = titleTextView.text;
+    self.currentPin.visitedDate = [NSDate date];
+    NSLog(@"Date= %@", [NSDate date]);
     pinDAO = [[PinDAO alloc] init];
     [pinDAO insertPinIntoSQLite:self.currentPin];
     
@@ -245,7 +257,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         }
     }
  
-*/
+
     
     [self dismissViewControllerAnimated:YES completion:nil];
 
@@ -401,7 +413,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
     // 先把所有subView另存一份起來
     theSubViews = [NSMutableArray new];
-
 
     // 如果按鈕是被包在空白的UIView裡面的
     if ([self.theScrollView.subviews containsObject:sender.superview]) {
