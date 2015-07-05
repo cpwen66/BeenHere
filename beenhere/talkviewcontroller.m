@@ -11,14 +11,31 @@
 @interface talkviewcontroller ()<UITextViewDelegate>
 {
     NSString * talkcontent;
+    
 
 }
+@property (weak, nonatomic) IBOutlet UIView *emtionview;
 @property (weak, nonatomic) IBOutlet UITextView *textfield;
 @property (weak, nonatomic) IBOutlet UIImageView *talkpicture;
-
+@property (weak, nonatomic) IBOutlet UIButton *simle;
+@property (weak, nonatomic) IBOutlet UIButton *sad;
+@property (weak, nonatomic) IBOutlet UIButton *happy;
+@property (weak, nonatomic) IBOutlet UIButton *impish;
+@property (weak, nonatomic) IBOutlet UIButton *oho;
+@property (weak, nonatomic) IBOutlet UIButton *cool;
+@property (weak, nonatomic) IBOutlet UIButton *whereBtn;
+@property (weak, nonatomic) IBOutlet UIButton *withpeopleBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *moodimageview;
+@property (weak,nonatomic)UIImage * setimage;
 @end
 
 @implementation talkviewcontroller
+- (IBAction)emtionbtn:(id)sender {
+    
+    
+    _emtionview.hidden=NO;
+    
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -51,15 +68,68 @@
 }
 -(void)donenewcust{
 
-
+  
       talkcontent=_textfield.text;
+    _setimage=_moodimageview.image;
+    NSDictionary *params = [NSDictionary new];
+    params = @{
+               @"text":talkcontent,
+               @"image":_setimage
+               };
     
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentwith" object:talkcontent];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentwith" object:params];
     
     
  [self.navigationController popViewControllerAnimated:YES];
 
 }
+- (IBAction)simleAvtion:(id)sender {
+    
+    UIImage * image=[UIImage imageNamed:@"simle"];
+    _moodimageview.image=image;
+    
+    
+    _emtionview.hidden=YES;
+}
+
+- (IBAction)SadAction:(id)sender {
+    UIImage * image=[UIImage imageNamed:@"simle"];
+    _moodimageview.image=image;
+    
+    
+    _emtionview.hidden=YES;
+}
+- (IBAction)HappyAction:(id)sender {
+    UIImage * image=[UIImage imageNamed:@"happy"];
+    _moodimageview.image=image;
+    
+    
+    _emtionview.hidden=YES;
+}
+
+- (IBAction)ohoAction:(id)sender {
+    UIImage * image=[UIImage imageNamed:@"oho"];
+    _moodimageview.image=image;
+    
+    
+    _emtionview.hidden=YES;
+}
+
+- (IBAction)impishAvtion:(id)sender {
+    UIImage * image=[UIImage imageNamed:@"impish"];
+    _moodimageview.image=image;
+    
+    
+    _emtionview.hidden=YES;
+}
+- (IBAction)coolAction:(id)sender {
+    UIImage * image=[UIImage imageNamed:@"cool"];
+    _moodimageview.image=image;
+    
+    
+    _emtionview.hidden=YES;
+}
+
 /*
 #pragma mark - Navigation
 

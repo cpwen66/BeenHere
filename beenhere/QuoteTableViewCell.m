@@ -76,14 +76,19 @@
     CGRect userimage = self.userimage.frame;
     CGRect cellview=self.cellbackground.frame;
     CGRect emtionview=self.emtionbutton.frame;
-    
+    CGRect cellimage=self.cellimage.frame;
     
     
 //    int iInt1 = (int)self.treeNode.nodeLevel;
     BOOL bool1 = (BOOL)self.treeNode.nodeLevel;
     int indentation = bool1 * 40;
    
- 
+     BOOL bool2 = (BOOL)self.treeNode.Typetag;
+//    if ([self.treeNode.Typetag isEqualToString:@"3"]) {
+//        cellimage.size.height=100;
+//        cellimage.size.width=60;
+//    }
+    
     detail.origin.x = buttonFrame.size.width + indentation ;
     
      //cellFrame.origin.x = cellFrame.origin.x + indentation ;
@@ -93,14 +98,14 @@
     
 
     
-    int indent=indentation * 20;
+    int indent=bool1 * 20;
     
-    int indentat=indentation*70;
+    int indentat=bool1*70;
     
     // emtionview.origin.x=emtionview.origin.x - indentat;
     userimage.origin.x = indentat +3;
-    userimage.size.width= userimage.size.width - indent;
-    userimage.size.height= userimage.size.height - indent;
+    userimage.size.width= 46 - indent;
+    userimage.size.height= 40 - indent;
   //  buttonFrame.origin.x = 2 + indentation;
     self.contentlabel.frame = cellFrame;
     self.cellButton.frame = buttonFrame;
@@ -108,7 +113,7 @@
     self.detaillabel.frame=detail;
     self.cellbackground.frame=cellview;
     self.emtionbutton.frame=emtionview;
-    
+    self.cellimage.frame=cellimage;
 }
 
 - (void)setTheButtonBackgroundImage:(UIImage *)backgroundImage

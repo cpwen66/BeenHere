@@ -21,6 +21,8 @@
 
 @property (strong, nonatomic)UIImage * imagee;
 @property (nonatomic, strong) NSString* Friendid;
+@property (nonatomic, strong) NSString* apiurl;
+@property (nonatomic, strong) NSString* apiupdateurl;
 +(StoreInfo *)shareInstance;
 
 

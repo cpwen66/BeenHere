@@ -10,10 +10,12 @@
 #import "AFNetworking.h"
 #import "MBProgressHUD.h"
 #import "mydb.h"
+#import "StoreInfo.h"
 
-@interface LoginViewController ()
+@interface LoginViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *EmailTextfield;
 @property (weak, nonatomic) IBOutlet UITextField *PasswordTextfield;
+@property (weak, nonatomic) IBOutlet UIButton *backbutton;
 
 
 @property (weak, nonatomic) IBOutlet UIButton *loginbtn;
@@ -35,6 +37,21 @@
      PasswordTextfield.text=[[NSUserDefaults standardUserDefaults]stringForKey:@"bherePassword" ];
    // self.loginbtn.layer.borderWidth=1.0;
     self.loginbtn.layer.cornerRadius=5.0;
+    
+    EmailTextfield.delegate=self;
+    PasswordTextfield.delegate=self;
+
+    
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (![EmailTextfield isExclusiveTouch]) {
+        [EmailTextfield resignFirstResponder];
+    }
+    if (![PasswordTextfield isExclusiveTouch]) {
+        [PasswordTextfield resignFirstResponder];
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,13 +60,15 @@
 }
 - (IBAction)backBTN:(id)sender {
     
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 
 
 - (IBAction)ContinueBTN:(id)sender {
     
   
+    
     NSString *userID =EmailTextfield.text;
     NSString *password =PasswordTextfield.text;
     //設定根目錄
@@ -63,7 +82,8 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [manager POST:[StoreInfo shareInstance].apiurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         //將查詢資料存到NSDictionary

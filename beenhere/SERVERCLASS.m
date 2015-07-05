@@ -9,6 +9,7 @@
 
 #import "SERVERCLASS.h"
 #import "AFNetworking.h"
+#import "StoreInfo.h"
 
 static NSString *const PHPAPI=@"http://localhost:8888/beenhere/usersUP.php";
 
@@ -33,7 +34,7 @@ static NSString *const PHPAPI=@"http://localhost:8888/beenhere/usersUP.php";
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -105,7 +106,7 @@ static NSString *const PHPAPI=@"http://localhost:8888/beenhere/usersUP.php";
     
     //以POST的方式request並
     
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -164,7 +165,7 @@ static NSString *const PHPAPI=@"http://localhost:8888/beenhere/usersUP.php";
     
     //以POST的方式request並
     
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -295,7 +296,7 @@ static NSString *const PHPAPI=@"http://localhost:8888/beenhere/usersUP.php";
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:postParameters success:^(AFHTTPRequestOperation *operation, id responseObject)
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:postParameters success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
          if (success)
              success(responseObject);
@@ -336,7 +337,7 @@ static NSString *const PHPAPI=@"http://localhost:8888/beenhere/usersUP.php";
     
     //以POST的方式request並
     
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:data success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiurl parameters:data success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];

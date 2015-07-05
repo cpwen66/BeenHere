@@ -46,27 +46,30 @@
     CGRect cellview=self.cellbackground.frame;
     CGRect emtionview=self.emtionbutton.frame;
     
-    int iInt1 = (int)self.treeNode.nodeLevel;
-    int indentation = iInt1 * 40;
+    
+    
+    //    int iInt1 = (int)self.treeNode.nodeLevel;
+    BOOL bool1 = (BOOL)self.treeNode.nodeLevel;
+    int indentation = bool1 * 40;
     
     
     detail.origin.x = buttonFrame.size.width + indentation ;
     
-    cellFrame.origin.x = cellFrame.origin.x + indentation ;
-    cellview.origin.x=cellview.origin.x + indentation;
-    //cellFrame.size.width=cellFrame.size.width - indentation;
-    // emtionview.origin.x=emtionview.origin.x - indentation;
-    //cellFrame.size.width=cellFrame.size.width - indentation;
-    // cellview.size.width=cellview.size.width-indentation;
+    //cellFrame.origin.x = cellFrame.origin.x + indentation ;
+    NSLog(@"cellview's Frame:%@,%f,%i",NSStringFromCGRect(cellview),cellview.origin.x,indentation);
+    // cellview.origin.x+=indentation;
+    cellview.origin.x=87+indentation;
     
-    int indent=iInt1 * 20;
     
-    int indentat=iInt1*70;
+    
+    int indent=bool1 * 20;
+    
+    int indentat=bool1*70;
     
     // emtionview.origin.x=emtionview.origin.x - indentat;
     userimage.origin.x = indentat +3;
-    userimage.size.width= userimage.size.width - indent;
-    userimage.size.height= userimage.size.height - indent;
+    userimage.size.width= 46 - indent;
+    userimage.size.height= 40 - indent;
     //  buttonFrame.origin.x = 2 + indentation;
     self.contentlabel.frame = cellFrame;
     self.cellButton.frame = buttonFrame;

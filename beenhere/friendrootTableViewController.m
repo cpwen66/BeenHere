@@ -34,11 +34,8 @@ NSUInteger indentation;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+  
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loaddata) name:@"loaddata" object:nil];
     _friendid=[StoreInfo shareInstance].Friendid;
     NSLog(@"myfriendid:%@",_friendid);
@@ -256,7 +253,7 @@ NSUInteger indentation;
             manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
             
             //以POST的方式request並
-            [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 //request成功之後要做的事情
                 
                 NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -299,21 +296,22 @@ NSUInteger indentation;
     
 //userpicture////////////
     
+    NSData * picture=[[NSData alloc]init ];
+    picture= [[mydb sharedInstance]getuserpicture:cell.treeNode.beeid];
+    if (picture ==NULL) {
     
      NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",node.beeid , @"userID", nil];
     
      AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
     managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    [managere POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-      
-        
+    [managere POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+ 
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
         NSLog(@"result:%@",apiResponse);
         
         NSString *result = [apiResponse objectForKey:@"downloaduserimageresult"];
         
-        
-        NSLog(@"result:%@",apiResponse);
+       
       
         if ([result isEqualToString:@"success"]) {
             
@@ -323,6 +321,9 @@ NSUInteger indentation;
             
             if (![data[@"userpicture"] isEqual:@""]) {
                 NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                
+                //修改到sqlite 圖像
+                [[mydb sharedInstance]updateuserpicture:imagedata addID:cell.treeNode.beeid ];
                 
                 UIImage * image=[UIImage imageWithData:imagedata];
                 
@@ -348,8 +349,10 @@ NSUInteger indentation;
         
     }];
 
+    } else{  UIImage * image=[UIImage imageWithData:picture];
     
-    
+    cell.userimage.image=image;
+    }
     
     
     

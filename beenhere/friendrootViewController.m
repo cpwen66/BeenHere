@@ -20,6 +20,7 @@
 #import "MBProgressHUD.h"
 @interface friendrootViewController ()
 
+
 @end
 
 @implementation friendrootViewController
@@ -28,11 +29,22 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    UIBarButtonItem *homeButton=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRedo target:self action:@selector(home) ];
+    
+    self.navigationItem.rightBarButtonItem=homeButton;
+    
+    
     _friendid=[StoreInfo shareInstance].Friendid;
     NSLog(@"r:%@",_friendid);
     
 
+    self.userpicture.layer.borderWidth = 2.0f;
+    self.userpicture.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.userpicture.layer.cornerRadius = 25.0f;
+    _userpicture.clipsToBounds = YES;
     
+
+
     
 }
 -(void)userinfoinit{
@@ -44,7 +56,7 @@
     
     AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
     managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    [managere POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [managere POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -61,6 +73,9 @@
             
             NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
             
+            
+             [[mydb sharedInstance]insertimage:imagedata addcontent_no:_friendid ];
+            
             UIImage * image=[UIImage imageWithData:imagedata];
             
             _userpicture.image=image;
@@ -76,13 +91,13 @@
         NSLog(@"request error:%@",error);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
+        NSData * picture=[[NSData alloc]init ];
+        picture= [[mydb sharedInstance]getuserpicture:_friendid];
+        
+        
     }];
     
-    
-    
-    
-    
-    
+   
     
 }
 
