@@ -12,6 +12,7 @@
 #import "AFNetworking.h"
 #import "MBProgressHUD.h"
 #import "SERVERCLASS.h"
+#import "StoreInfo.h"
 
 
 
@@ -443,7 +444,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
     
     //以POST的方式request並
     
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -521,7 +522,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];

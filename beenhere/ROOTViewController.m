@@ -49,6 +49,7 @@ friendTableViewController * frinedview;
 @property (weak, nonatomic) IBOutlet UIButton *SendAction;
 @property (weak, nonatomic) IBOutlet UITextView *TextviewContent;
 
+@property (weak, nonatomic) IBOutlet UIButton *replysendBtn;
 
 @property (weak, nonatomic) IBOutlet UIView *Emtionview;
 
@@ -75,8 +76,7 @@ friendTableViewController * frinedview;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    // 測試
+  
  
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
@@ -106,6 +106,8 @@ friendTableViewController * frinedview;
     [[_Emtionview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
     
     [[_Emtionview layer] setCornerRadius:6.0];
+    
+      self.SendAction.layer.cornerRadius=5.0;
 }
 
 -(void)initfriendrequest {
@@ -139,7 +141,7 @@ friendTableViewController * frinedview;
     
     AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
     managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    [managere POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [managere POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
       
@@ -150,13 +152,16 @@ friendTableViewController * frinedview;
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
             
-            NSLog(@"data%@",data);
+           
             
             NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
             
-            NSLog(@"imagedata:%@",imagedata);
+     
             
             if ([data[@"userpicture"]   isEqual:@""]) {
+                
+                [[mydb sharedInstance]insertimage:imagedata addcontent_no:BEID];
+                
                 UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
                     _userpicture.image=image;
             } else {
@@ -494,7 +499,7 @@ friendTableViewController * frinedview;
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
-    [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];

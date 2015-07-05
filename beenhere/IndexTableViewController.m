@@ -179,7 +179,7 @@
     NSString  * wellcome=[NSString stringWithFormat:@"welcome %@",userNAME];
     
     TreeViewNode *firstLevelNode1 = [[TreeViewNode alloc]init];
-    firstLevelNode1.nodeLevel = 3;
+    firstLevelNode1.nodeLevel = 0;
     firstLevelNode1.Typetag = @"4";
     firstLevelNode1.nodeObject = wellcome;
     firstLevelNode1.isExpanded = YES;
@@ -308,11 +308,23 @@
     
     NSDictionary * dict=[[NSDictionary alloc]init];
     
-    dict = [NSDictionary dictionaryWithObject:message.object forKey:@"text"];
+//    dict = [NSDictionary dictionaryWithObject:message.object forKey:@"text"];
+    dict=message.object;
     
+    
+    NSLog(@"s:%@",dict);
     // [self fillNodesArray:dict];
     
-    NSString * text=message.object;
+   
+    
+    NSString * text=dict[@"text"];
+    UIImage * image;
+    
+    if (dict[@"image"]!=[NSNull null]) {
+         image=dict[@"image"];
+    }else{
+     image=nil;
+    }
     //輸入時間
     
     
@@ -330,9 +342,10 @@
     NSDate *localDate = [new dateByAddingTimeInterval:timeZoneOffset];
     
     
-    NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
+//    NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
+    NSData *imageData = UIImagePNGRepresentation(image);
     
-        params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"2",@"imageid",@"1",@"typetag",nil];
+        params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", userID, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"1",@"imageid",@"3",@"typetag",nil];
     
         NSLog(@"insert params:%@",params);
     
@@ -431,7 +444,7 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
-    [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -535,10 +548,28 @@
 
 
 
-- (QuoteTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"contentcell" forIndexPath:indexPath];
     
     QuoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([QuoteTableViewCell class])];
+ 
+//    if (cell != nil) {
+//       // [cell release];
+//    }
+
+       //customer
+    if (cell == nil) {
+    
+        cell.emtionbutton.tag=indexPath.row;
+        cell.closeBtn.tag=indexPath.row;
+        cell.simleBTN.tag=indexPath.row;
+        cell.SadBtn.tag=indexPath.row;
+        cell.CoolBtn.tag=indexPath.row;
+        cell.OhoBtn.tag=indexPath.row;
+        cell.ImpishBtn.tag=indexPath.row;
+    
+    
+    }
     
     [self configureCell:cell forRowAtIndexPath:indexPath];
    
@@ -553,7 +584,10 @@
     cell.emtionbutton.tag=indexPath.row;
     cell.closeBtn.tag=indexPath.row;
     cell.simleBTN.tag=indexPath.row;
-    
+    cell.SadBtn.tag=indexPath.row;
+    cell.CoolBtn.tag=indexPath.row;
+    cell.OhoBtn.tag=indexPath.row;
+    cell.ImpishBtn.tag=indexPath.row;
     
     return cell;
     
@@ -786,6 +820,8 @@
     
     
     NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+    
     
      NSDictionary *paramse = [NSDictionary dictionaryWithObjectsAndKeys:@"emtiontotal",@"cmd", @"123", @"userID", numsimle, @"simle", numsad, @"sad",numhappy, @"happy",numimpish, @"impish",numoho, @"oho",numcool, @"cool",contentno, @"content_no",nil];
     

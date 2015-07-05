@@ -66,6 +66,9 @@
 
 //sqlite取頭像
 - (NSData *)getuserpicture:(NSString *)beid;
+//新增頭像
+-(void)updateuserpicture:(NSData*)userpicture addID:(NSString*)Userid;
+
 
 -(void)insertpin:(NSDictionary *)params;
 @end

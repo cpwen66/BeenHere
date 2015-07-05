@@ -218,8 +218,71 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    
+//    UIImage * userpicture=[UIImage imageNamed:@"headphoto.jpg"];
+//    cell.imageView.image=userpicture;
+    NSData * picture=[[NSData alloc]init ];
+    picture= [[mydb sharedInstance]getuserpicture:MyfriendList[indexPath.row][@"id"]];
+    if (picture ==NULL) {
+        
+        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",MyfriendList[indexPath.row][@"id"] , @"userID", nil];
+        
+        
+        
+        
+        AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
+        managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        [managere POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+            NSLog(@"result:%@",apiResponse);
+            
+            NSString *result = [apiResponse objectForKey:@"downloaduserimageresult"];
+            
+            
+            
+            if ([result isEqualToString:@"success"]) {
+                
+             
+                NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
+                
+                if (![data[@"userpicture"] isEqual:@""]) {
+                    NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                    
+                    //修改到sqlite 圖像
+                    [[mydb sharedInstance]updateuserpicture:imagedata addID:MyfriendList[indexPath.row][@"id"] ];
+                    
+                    UIImage * image=[UIImage imageWithData:imagedata];
+                    
+                    cell.imageView.image=image;
+                }else{
+                    UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
+                    
+                    cell.imageView.image=image;
+                    
+                }
+                
+                
+                
+                
+            }else {
+                NSLog(@"image download no suceess");
+                
+            }
+                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"request error:%@",error);
+          
+            
+        }];
+        
+    } else{  UIImage * image=[UIImage imageWithData:picture];
+        
+        cell.imageView.image=image;
+    }
+
     return cell;
+    
+    
+    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -530,7 +593,7 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
-    [manager POST:@"http://localhost:8888/beenhere/apiupdate.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
@@ -598,7 +661,7 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
-    [manager POST:@"http://localhost:8888/beenhere/api.php" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];

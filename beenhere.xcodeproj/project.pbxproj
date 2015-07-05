@@ -124,6 +124,8 @@
 		955B4C6C1B3475C8007AB049 /* TreeViewNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 955B4C6B1B3475C8007AB049 /* TreeViewNode.m */; };
 		95606DC01B332A0A00A59D2B /* QuoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95606DBF1B332A0A00A59D2B /* QuoteTableViewCell.m */; };
 		95656C841B3EEB9C002BA2C9 /* talkviewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 95656C831B3EEB9C002BA2C9 /* talkviewcontroller.m */; };
+		956C53211B485AB300DE3E62 /* buttonimage.png in Resources */ = {isa = PBXBuildFile; fileRef = 956C53201B485AB300DE3E62 /* buttonimage.png */; };
+		956C53231B485E4D00DE3E62 /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 956C53221B485E4D00DE3E62 /* Facebook.png */; };
 		95701EE21B10C9DD00A7CB93 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 95701EE11B10C9DD00A7CB93 /* camera.png */; };
 		95701EEC1B10DF2700A7CB93 /* camera1.png in Resources */ = {isa = PBXBuildFile; fileRef = 95701EEB1B10DF2700A7CB93 /* camera1.png */; };
 		957111C31B14C41E00D8A443 /* YALNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 957111C21B14C41E00D8A443 /* YALNavigationBar.m */; };
@@ -367,6 +369,8 @@
 		95606DBF1B332A0A00A59D2B /* QuoteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuoteTableViewCell.m; sourceTree = "<group>"; };
 		95656C821B3EEB9C002BA2C9 /* talkviewcontroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = talkviewcontroller.h; sourceTree = "<group>"; };
 		95656C831B3EEB9C002BA2C9 /* talkviewcontroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = talkviewcontroller.m; sourceTree = "<group>"; };
+		956C53201B485AB300DE3E62 /* buttonimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttonimage.png; sourceTree = "<group>"; };
+		956C53221B485E4D00DE3E62 /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Facebook.png; sourceTree = "<group>"; };
 		95701EE11B10C9DD00A7CB93 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		95701EEB1B10DF2700A7CB93 /* camera1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera1.png; sourceTree = "<group>"; };
 		957111C11B14C41E00D8A443 /* YALNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YALNavigationBar.h; sourceTree = "<group>"; };
@@ -966,6 +970,8 @@
 		95B5F6EC1B12EE9A00D7A342 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				956C53201B485AB300DE3E62 /* buttonimage.png */,
+				956C53221B485E4D00DE3E62 /* Facebook.png */,
 				95D607CD1B4035CC00DB90C8 /* cell.png */,
 				9516DACA1B3C3B9000A5996C /* demo.jpg */,
 				951DA4171B1EFE9D00C7577A /* login.png */,
@@ -1054,6 +1060,7 @@
 				TargetAttributes = {
 					95B4174A1B01EB6A00EA9177 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = DT8H5D6X99;
 					};
 					95B417631B01EB6A00EA9177 = {
 						CreatedOnToolsVersion = 6.2;
@@ -1136,6 +1143,7 @@
 				953FA09F1B42CADE00C67BF5 /* oho.png in Resources */,
 				2BFA753F1B3A946800F70A9C /* camerab.png in Resources */,
 				2BFA75411B3A947B00F70A9C /* flash.png in Resources */,
+				956C53211B485AB300DE3E62 /* buttonimage.png in Resources */,
 				696763611B3E731500B36B2A /* cat6.jpg in Resources */,
 				696CC2061B3A5710005EFCD7 /* pointRed.png in Resources */,
 				953FA0491B42C52500C67BF5 /* cool@3x.png in Resources */,
@@ -1178,6 +1186,7 @@
 				953FA0471B42C52500C67BF5 /* cool@1.5x.png in Resources */,
 				95701EE21B10C9DD00A7CB93 /* camera.png in Resources */,
 				953FA0A61B42CADE00C67BF5 /* sad@1.5x.png in Resources */,
+				956C53231B485E4D00DE3E62 /* Facebook.png in Resources */,
 				95D607CA1B402B8900DB90C8 /* favorite-3.png in Resources */,
 				95016F9B1B25A7A700BD44C0 /* tool4.png in Resources */,
 				951DA41A1B1F023B00C7577A /* buttonbackground.png in Resources */,
@@ -1409,10 +1418,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = beenhere/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
@@ -1422,10 +1433,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = beenhere/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
