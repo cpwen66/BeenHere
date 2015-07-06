@@ -87,6 +87,7 @@ NSUInteger indentation;
             firstLevelNode1.nodeObject = Content[a][@"text"];
             firstLevelNode1.isExpanded = YES;
             firstLevelNode1.beeid = Content[a][@"id"];
+            firstLevelNode1.Typetag = Content[a][@"typetag"];
             if (Content[a][@"imageid"] != [NSNull null]){
                 firstLevelNode1.imageid= Content[a][@"imageid"];
             }else{
@@ -311,8 +312,10 @@ NSUInteger indentation;
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
         NSLog(@"result:%@",apiResponse);
         
-        NSString *result = [apiResponse objectForKey:@"downloaduserimageresult"];
-        
+        NSString *result;
+        if (responseObject[@"api"]!=[NSNull null]) {
+            result = [apiResponse objectForKey:@"downloaduserimageresult"];
+        }
        
       
         if ([result isEqualToString:@"success"]) {
@@ -331,7 +334,7 @@ NSUInteger indentation;
                 
                 cell.userimage.image=image;
             }else{
-                UIImage * image=[UIImage imageNamed:@"system_users.png"];
+                UIImage * image=[UIImage imageNamed:@"system_user_picture.jpg"];
                 
                 cell.userimage.image=image;
 
@@ -357,6 +360,27 @@ NSUInteger indentation;
     }
     
     
+    
+    int type = [cell.treeNode.Typetag intValue];
+    if (type==1) {
+        
+        UIImage *image =[UIImage imageNamed:@"pencil.png"];
+        cell.iconimage.image=image;
+    }else if(type==2){
+        UIImage *image =[UIImage imageNamed:@"camera16x.png"];
+        cell.iconimage.image=image;
+        
+        
+    }else if(type==3){
+        UIImage *image =[UIImage imageNamed:@"camera16x.png"];
+        cell.iconimage.image=image;
+        
+    }else{
+    
+     cell.iconimage.image=nil;
+    }
+    
+
     
     
 }

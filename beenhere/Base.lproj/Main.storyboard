@@ -1284,9 +1284,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qpG-lU-ynL">
-                                                    <rect key="frame" x="204" y="8" width="192" height="29"/>
+                                                    <rect key="frame" x="152" y="8" width="192" height="29"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="192" id="S4p-af-hAj"/>
+                                                        <constraint firstAttribute="height" constant="28" id="7Hs-pu-8MD"/>
+                                                        <constraint firstAttribute="width" constant="192" id="9AV-Wk-zvR"/>
                                                     </constraints>
                                                     <segments>
                                                         <segment title="男"/>
@@ -1299,12 +1300,11 @@
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="qpG-lU-ynL" firstAttribute="top" secondItem="RmH-66-I5f" secondAttribute="topMargin" id="20X-6o-Gif"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="qpG-lU-ynL" secondAttribute="bottom" constant="-0.5" id="CeH-YD-EGI"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="qpG-lU-ynL" secondAttribute="bottom" constant="-0.5" id="Lwn-G9-y6Z"/>
                                                 <constraint firstItem="M9P-rD-1Lv" firstAttribute="top" secondItem="RmH-66-I5f" secondAttribute="topMargin" constant="3" id="W37-jp-GNR"/>
-                                                <constraint firstItem="qpG-lU-ynL" firstAttribute="leading" secondItem="M9P-rD-1Lv" secondAttribute="trailing" constant="136" id="eah-to-IWU"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="M9P-rD-1Lv" secondAttribute="bottom" constant="3.5" id="hrX-3T-KQj"/>
                                                 <constraint firstItem="M9P-rD-1Lv" firstAttribute="leading" secondItem="RmH-66-I5f" secondAttribute="leadingMargin" constant="26" id="n0f-NL-tMG"/>
+                                                <constraint firstItem="qpG-lU-ynL" firstAttribute="leading" secondItem="M9P-rD-1Lv" secondAttribute="trailing" constant="84" id="rC6-JP-bd3"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1361,16 +1361,16 @@
                                             </connections>
                                         </barButtonItem>
                                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ybn-ub-XNh">
-                                            <rect key="frame" x="284" y="6" width="32" height="32"/>
+                                            <rect key="frame" x="159" y="6" width="282" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" image="flash.png">
+                                            <state key="normal" image="flash">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
                                                 <action selector="flashButtonPressed:" destination="aqx-TG-A0q" eventType="touchUpInside" id="zKp-1J-BbH"/>
                                             </connections>
                                         </button>
-                                        <barButtonItem key="rightBarButtonItem" image="camerachangebb.png" id="C4d-nq-41Z">
+                                        <barButtonItem key="rightBarButtonItem" image="camerasturn50" id="C4d-nq-41Z">
                                             <connections>
                                                 <action selector="cameraChangeButton:" destination="aqx-TG-A0q" id="RFN-Dt-bFv"/>
                                             </connections>
@@ -1530,11 +1530,11 @@
                         <viewControllerLayoutGuide type="bottom" id="QVj-Xe-2nz"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="dQn-CE-2Gb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="587" height="417"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bv2-6Z-ym0">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="691"/>
+                                <rect key="frame" x="0.0" y="0.0" width="587" height="372"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="detailreplyTableViewCell" id="mZa-Ra-2WD" customClass="detailreplyTableViewCell">
@@ -1604,7 +1604,7 @@
                                 </constraints>
                             </containerView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iHV-Hr-yFA">
-                                <rect key="frame" x="8" y="698" width="311" height="30"/>
+                                <rect key="frame" x="8" y="379" width="311" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="0fS-BY-5Vh"/>
                                     <constraint firstAttribute="width" constant="311" id="oSJ-NE-zmF"/>
@@ -1613,7 +1613,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PkN-A3-VbZ">
-                                <rect key="frame" x="359" y="698" width="52" height="30"/>
+                                <rect key="frame" x="359" y="379" width="52" height="30"/>
                                 <color key="backgroundColor" red="0.094117647060000004" green="0.71372549019999998" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="52" id="DuH-kf-ryc"/>
@@ -1628,7 +1628,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rvh-DD-0Mx">
-                                <rect key="frame" x="327" y="701" width="24" height="23"/>
+                                <rect key="frame" x="327" y="382" width="24" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="DDa-0n-bwA"/>
                                     <constraint firstAttribute="height" constant="23" id="jef-U6-HlS"/>
@@ -1759,7 +1759,7 @@
                                                 <constraint firstAttribute="width" constant="46" id="hhT-KM-79a"/>
                                             </constraints>
                                         </imageView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-XO-L61">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-XO-L61">
                                             <rect key="frame" x="62" y="8" width="22" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="AiQ-sU-lsh"/>
@@ -1830,7 +1830,7 @@
                                                 <constraint firstAttribute="width" constant="71" id="zNH-J8-8RY"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -1856,6 +1856,7 @@
                                     <outlet property="contentlabel" destination="Ejz-MO-JeF" id="DUw-jJ-yD1"/>
                                     <outlet property="detaillabel" destination="xhT-le-a2S" id="xDX-3a-CwE"/>
                                     <outlet property="emtionbutton" destination="1zy-gE-bLs" id="mJa-Ed-gNy"/>
+                                    <outlet property="iconimage" destination="Fla-XO-L61" id="VM4-no-Rlf"/>
                                     <outlet property="userimage" destination="Zpz-Ol-q4r" id="DhA-Wx-ivT"/>
                                     <segue destination="TCq-38-CQ2" kind="show" id="HKA-1j-IDo"/>
                                 </connections>
@@ -1912,22 +1913,22 @@
     <resources>
         <image name="Facebook.png" width="282" height="55"/>
         <image name="Oval 1.png" width="179" height="179"/>
-        <image name="album.png" width="90" height="85"/>
+        <image name="album.png" width="180" height="169"/>
         <image name="background.jpg" width="600" height="338"/>
         <image name="beenherebg.png" width="350" height="600"/>
         <image name="buttonimage.png" width="282" height="52"/>
-        <image name="camera.png" width="36" height="36"/>
-        <image name="camerab.png" width="104" height="104"/>
-        <image name="camerachangebb.png" width="30" height="24"/>
+        <image name="camera.png" width="150" height="150"/>
+        <image name="camerab.png" width="208" height="208"/>
+        <image name="camerasturn50" width="25" height="25"/>
         <image name="circel.png" width="22" height="22"/>
         <image name="cool.png" width="34" height="34"/>
-        <image name="flash.png" width="32" height="32"/>
+        <image name="flash" width="25" height="25"/>
         <image name="happy.png" width="34" height="34"/>
         <image name="headphoto.jpg" width="180" height="192"/>
         <image name="heart.png" width="22" height="22"/>
         <image name="impish.png" width="34" height="34"/>
         <image name="oho.png" width="34" height="34"/>
-        <image name="pencil.png" width="16" height="16"/>
+        <image name="pencil.png" width="92" height="92"/>
         <image name="sad.png" width="34" height="34"/>
         <image name="simle.png" width="34" height="34"/>
         <image name="system_user_picture.jpg" width="96" height="96"/>
@@ -1935,6 +1936,6 @@
         <image name="tool3.png" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qVx-ZW-J3Q"/>
+        <segue reference="HKA-1j-IDo"/>
     </inferredMetricsTieBreakers>
 </document>

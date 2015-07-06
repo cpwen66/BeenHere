@@ -39,7 +39,11 @@
 }
 - (void)drawRect:(CGRect)rect
 {
+    self.userimage.layer.borderWidth=2.0f;
+    self.userimage.layer.borderColor = [UIColor whiteColor].CGColor;
     
+//   self.userimage.layer.borderColor =  [UIColor colorWithRed:35.0 green:196.0 blue:246.0 alpha:0.9].CGColor;
+
     [[self.cellbackground layer] setBorderWidth:1.0];
     //邊框顏色
     [[self.cellbackground layer] setBorderColor:[UIColor colorWithRed:35.0 green:196.0 blue:246.0 alpha:0.9].CGColor];

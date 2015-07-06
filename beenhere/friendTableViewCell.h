@@ -27,5 +27,5 @@
 - (void)setTheButtonBackgroundImage:(UIImage *)backgroundImage;
 
 @property (weak, nonatomic) IBOutlet UIView *cellbackground;
-
+@property (weak, nonatomic) IBOutlet UIImageView *iconimage;
 @end

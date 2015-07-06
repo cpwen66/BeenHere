@@ -63,6 +63,10 @@
     self.emtionbutton.layer.borderWidth=1.0;
     self.emtionbutton.layer.cornerRadius=10.0;
     self.emtionbutton.layer.borderColor=[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor;
+    
+    
+    self.userimage.layer.borderWidth=2.0f;
+     self.userimage.layer.borderColor = [UIColor whiteColor].CGColor;
 //    CGRect cellFrame = self.contentlabel.frame;
 //    CGRect buttonFrame = self.cellButton.frame;
 //    int indentation = self.treeNode.nodeLevel * 25;

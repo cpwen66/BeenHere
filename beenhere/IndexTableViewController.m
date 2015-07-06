@@ -486,7 +486,77 @@
     }
 
     //userpicture
-    NSLog(@"tree:%@",cell.treeNode.Typetag);
+    NSData * picture=[[NSData alloc]init ];
+    picture= [[mydb sharedInstance]getuserpicture:cell.treeNode.beeid];
+    
+    NSString * bid=node.beeid;
+    if (picture ==NULL) {
+        
+        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",bid , @"userID", nil];
+        
+        NSLog(@"parm:%@",params);
+        
+        AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
+        managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        [managere POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+            NSLog(@"result:%@",apiResponse);
+            NSString *result;
+            
+            
+            //待修的ＢＵＧ
+            if ((responseObject[@"api"]!=[NSNull null])) {
+            result = [apiResponse objectForKey:@"downloaduserimageresult"];
+            }
+        
+            
+            
+            
+            if ([result isEqualToString:@"success"]) {
+                
+                
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
+                
+                if (![data[@"userpicture"] isEqual:@""]) {
+                    NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                    
+                    //修改到sqlite 圖像
+                    
+                    [[mydb sharedInstance]updateuserpicture:imagedata addID:cell.treeNode.beeid ];
+                    
+                    UIImage * image=[UIImage imageWithData:imagedata];
+                    
+                    cell.userimage.image=image;
+                }else{
+                    UIImage * image=[UIImage imageNamed:@"system_user_picture.jpg"];
+                    
+                    cell.userimage.image=image;
+                    
+                }
+                
+                
+                
+                
+            }else {
+                NSLog(@"image download no suceess");
+                
+            }
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"request error:%@",error);
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            
+        }];
+        
+    } else{  UIImage * image=[UIImage imageWithData:picture];
+        
+        cell.userimage.image=image;
+    }
+
+    
+    //icon
      int type = [cell.treeNode.Typetag intValue];
     if (type==1) {
        
@@ -504,8 +574,14 @@
     }
     
 
-   
     
+
+    if (cell.treeNode.nodeLevel==1) {
+        cell.emtionbutton.hidden=YES;
+    }else{
+     cell.emtionbutton.hidden=NO;
+    
+    }
     
 
     

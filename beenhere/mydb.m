@@ -590,7 +590,7 @@ mydb *sharedInstance;
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
                 
             };
-            
+             [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
             
         }
         
@@ -776,7 +776,7 @@ mydb *sharedInstance;
     
     //產生控制request的物件
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+ 
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
@@ -793,6 +793,8 @@ mydb *sharedInstance;
         if ([result isEqualToString:@"success"]) {
             
         
+            
+            //待改
             [self Searchcontentno:params[@"content_no"]];
             
             

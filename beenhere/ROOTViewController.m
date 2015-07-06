@@ -219,13 +219,13 @@ friendTableViewController * frinedview;
     [stack setCenter:CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2 + 220)];
     [stack setDelegate:self];
     
-    UPStackMenuItem *squareItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"square"] highlightedImage:nil title:@"Square"];
-    UPStackMenuItem *circleItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"circle"] highlightedImage:nil title:@"Circle"];
-    UPStackMenuItem *triangleItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"triangle"] highlightedImage:nil title:@"Triangle"];
-    UPStackMenuItem *crossItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"cross"] highlightedImage:nil title:@"Cross"];
+    UPStackMenuItem *squareItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"message40"] highlightedImage:nil title:@"留言"];
+    UPStackMenuItem *circleItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"mood40"] highlightedImage:nil title:@"心情"];
+    UPStackMenuItem *triangleItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"camera40"] highlightedImage:nil title:@"相機"];
+    UPStackMenuItem *crossItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"map40"] highlightedImage:nil title:@"地圖"];
     NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:squareItem, circleItem, triangleItem, crossItem, nil];
     [items enumerateObjectsUsingBlock:^(UPStackMenuItem *item, NSUInteger idx, BOOL *stop) {
-        [item setTitleColor:[UIColor blueColor]];
+        [item setTitleColor:[UIColor orangeColor]];
     }];
             [stack setAnimationType:UPStackMenuAnimationType_progressive];
             [stack setStackPosition:UPStackMenuStackPosition_up];
