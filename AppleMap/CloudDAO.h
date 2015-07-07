@@ -15,11 +15,10 @@
 
 @property (weak, nonatomic)NSUserDefaults *preference;
 
-- (NSString *)uploadNewPin:(Pin *)pin
-                   success:(successBlock)success
-                   failure:(failBlock)failure;
+- (NSString *)uploadNewPin:(Pin *)pin;
 
--(void)hello:(stringBlock)block;
+
+//-(void)hello:(stringBlock)block;
 
 -(void)uploadImageOfPin:(PinImage *)pinImage;
 
