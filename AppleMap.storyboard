@@ -222,7 +222,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="aPV-Jw-A9z">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="ax5-vu-a2D"/>
+                        <barButtonItem key="rightBarButtonItem" title="X" id="ax5-vu-a2D"/>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QrE-Ok-ivo" userLabel="First Responder" sceneMemberID="firstResponder"/>

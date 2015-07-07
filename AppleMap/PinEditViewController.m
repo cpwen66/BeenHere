@@ -14,10 +14,11 @@
 #import "PinImageDAO.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "CloudDAO.h"
+#import "MapDateStore.h"
 
 CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 
-@interface PinEditViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface PinEditViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, MapDataProtocol>
 {
     CGFloat titleTextViewHeight;
     int imageIndex;
@@ -170,7 +171,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 }
 
 
-
 - (IBAction)donePostPinBtnAction:(id)sender {
 
     NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
@@ -180,64 +180,9 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     self.currentPin.title = titleTextView.text;
     self.currentPin.visitedDate = [NSDate date];
 
-
-//    CloudDAO *cloudDAO = [[CloudDAO alloc] init];
-    NSString *pinIdFromCloud = [cloudDAO uploadNewPin:self.currentPin];
+    // 請求上傳動作
+    [cloudDAO uploadNewPin:self.currentPin];
     
-    // 如果錯誤會pinId是-1
-    if ([pinIdFromCloud integerValue] >= 1) {
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sync" message:@"Sync OK" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [alert show];
-        
-    } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sync" message:@"Sync Error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-        return;//不確定可以直接return，要測試
-    }
-    
-    // 將PinId給image，把圖片存到SQLite
-    NSMutableArray *ary = [NSMutableArray new];
-    
-    // 把scrollView裡的圖片，取出來放到另一個陣列
-    for (UIView *view in self.theScrollView.subviews) {
-        //NSLog(@"self.theScrollView.subviews view = %@", view);
-        
-        if ([view isMemberOfClass:UIView.class]) {
-            UIImageView *imageView = view.subviews[0];
-            [ary addObject:imageView.image];
-        }
-    }
-   
-    // 有圖才可以做上傳圖片的動作
-    if ([ary count] >= 1) {
-        PinImage *newPinImage = [[PinImage alloc] init];
-        
-        // 加迴圈，存全部的圖
-        for (UIImage *img in ary) {
-            newPinImage.imageData = UIImageJPEGRepresentation(img, 1);
-            newPinImage.pinId = pinIdFromCloud;
-            [cloudDAO uploadImageOfPin:newPinImage];
-        }
-    }
-    
-    // ---------------------此線以上是上傳的工作，以下是存SQLite
-    
-    // 存Pin到SQLite
-    pinDAO = [[PinDAO alloc] init];
-    [pinDAO insertPinIntoSQLite:self.currentPin];
-    
-    // 有圖才可以做存圖的動作
-    if ([ary count] >= 1) {
-        PinImage *newPinImage = [[PinImage alloc] init];
-        
-        // 加迴圈，存全部的圖
-        for (UIImage *img in ary) {
-            newPinImage.imageData = UIImageJPEGRepresentation(img, 1);
-            newPinImage.pinId = pinIdFromCloud;
-            [pinImageDAO insertImageIntoSQLite:newPinImage];
-        }
-    }
-
 /*
 // 這裡是直接存SQLite的程式, 沒有上傳
     // 先練習只存到SQLite, 之後要改先上傳到server，之後再下載pinId
@@ -282,13 +227,73 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         [pinImageDAO insertImageIntoSQLite:newPinImage];
         }
     }
- */
-
-    
+ 
     [self dismissViewControllerAnimated:YES completion:nil];
-
+*/
 }
 
+- (void)returnPinID:(NSString *)pinid {
+    
+    // 如果錯誤會pinId是-1
+    if ([pinid integerValue] >= 1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sync" message:@"Sync OK" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sync" message:@"Sync Error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        return;//不確定可以直接return，要測試
+    }
+    
+    // 將PinId給image，把圖片存到SQLite
+    
+    NSMutableArray *ary = [NSMutableArray new];
+    
+    // 把scrollView裡的圖片，取出來放到另一個陣列
+    for (UIView *view in self.theScrollView.subviews) {
+        //NSLog(@"self.theScrollView.subviews view = %@", view);
+        
+        if ([view isMemberOfClass:UIView.class]) {
+            UIImageView *imageView = view.subviews[0];
+            [ary addObject:imageView.image];
+        }
+    }
+    
+    // 有圖才可以做上傳圖片的動作
+    if ([ary count] >= 1) {
+        PinImage *newPinImage = [[PinImage alloc] init];
+        
+        // 加迴圈，存全部的圖
+        for (UIImage *img in ary) {
+            newPinImage.imageData = UIImageJPEGRepresentation(img, 1);
+            newPinImage.pinId = pinid;
+            
+            // 上傳圖片到伺服器
+            [cloudDAO uploadImageOfPin:newPinImage];
+        }
+    }
+    
+    // ---------------------此線以上是上傳的工作，以下是存SQLite
+    
+    // 存Pin到SQLite
+    pinDAO = [[PinDAO alloc] init];
+    [pinDAO insertPinIntoSQLite:self.currentPin];
+    
+    // 有圖才可以做存圖的動作
+    if ([ary count] >= 1) {
+        PinImage *newPinImage = [[PinImage alloc] init];
+        
+        // 加迴圈，存全部的圖
+        for (UIImage *img in ary) {
+            newPinImage.imageData = UIImageJPEGRepresentation(img, 1);
+            newPinImage.pinId = pinid;
+            [pinImageDAO insertImageIntoSQLite:newPinImage];
+        }
+    }
+    
+    // 離開目前畫面
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
 
 
 // Called when the UIKeyboardDidShowNotification is sent.
@@ -314,11 +319,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     } else {
         self.doneBarBtnItem.enabled = YES;
     }
-}
-
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"touched");
 }
 
 
