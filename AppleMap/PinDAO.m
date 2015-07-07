@@ -69,32 +69,42 @@ FMDatabase *sqlDB;
 
 - (NSMutableArray*) getPinsByFilter:(NSString *)owner visited:(NSString *)visited {
     NSMutableArray *rows = [NSMutableArray new];
-    NSString *ownerCondition;
-    NSString *visitedCondition;
     
 //    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
 //    NSString *memberId = [preference stringForKey:@"bhereID"];
    
     //假資料
     NSString *memberId = @"1";
-    
-    if ([owner  isEqualToString:@"0"]) {//ALL
-        ownerCondition = @"";
-    } else if([owner isEqualToString:@"1"]) {//Myself
-        ownerCondition = [NSString stringWithFormat:@" WHERE member_id=%@", memberId];
-    } else {//friends
-        ownerCondition = [NSString stringWithFormat:@" WHERE member_id<>%@", memberId];
+    NSString *queryString;
+    if ([owner isEqualToString:@"0"]) {
+        
+        if ([visited isEqualToString:@"0"]) {
+            queryString = @"SELECT * FROM pins";
+        } else if ([visited isEqualToString:@"1"]){//Visited
+            queryString = @"SELECT * FROM pins WHERE pin_visited_date IS NOT NULL";
+        } else {//UNVISITED
+            queryString = @"SELECT * FROM pins WHERE pin_visited_date IS NULL";
+        }
+        
+    } else if([owner isEqualToString:@"1"]){
+        
+        queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id=%@", memberId];
+        
+    } else {
+        
+        if ([visited isEqualToString:@"0"]) {
+            queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@", memberId];
+            
+        } else if ([visited isEqualToString:@"1"]){//Visited
+            queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@ AND pin_visited_date IS NOT NULL", memberId];
+            
+        } else {//UNVISITED
+            queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@ AND pin_visited_date IS NULL", memberId];
+        }
     }
     
-    if ([visited isEqualToString:@"0"]) {//ALL
-        visitedCondition = @"";
-    } else if ([visited isEqualToString:@"1"]){//Visited
-        visitedCondition = @" WHERE pin_visited_date IS NOT NULL";
-    } else {//unvisited
-        visitedCondition = @" WHERE pin_visited_date IS NULL";
-    }
-    
-    NSString *queryString = [NSString stringWithFormat:@"SELECT * FROM pins%@%@", ownerCondition, visitedCondition];
+
+    NSLog(@"queryString= %@", queryString);
     FMResultSet *resultSet;
     resultSet = [sqlDB executeQuery:queryString];
     if ([sqlDB hadError]) {

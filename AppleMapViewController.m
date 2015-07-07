@@ -35,11 +35,12 @@
     NSArray *pickerArray;
     NSArray *pickerArray2;
     NSArray *pickerArray3;
-    UIPickerView *pickerView;
+    UIPickerView *filterPickerView;
     CGFloat screenWidth;
     CGFloat screenHeight;
     NSString *pickerViewComponent0;
     NSString *pickerViewComponent1;
+    NSDictionary *pickerDict;
     
     //必須先#import <CoreLocation/CoreLocation.h>才能使用CLLocationManager類別
     CLLocationManager *locationManager;
@@ -79,7 +80,7 @@
     }
     
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
+    locationManager.distanceFilter = 20;
     //使用者活動的種類
     locationManager.activityType = CLActivityTypeAutomotiveNavigation;
     
@@ -112,22 +113,29 @@
     
     screenWidth = ceilf([[UIScreen mainScreen] bounds].size.width);
     screenHeight = ceilf([[UIScreen mainScreen] bounds].size.height);
-    CGRect pickerRect = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/4);
-    pickerView = [[UIPickerView alloc] initWithFrame:pickerRect];
+    CGRect pickerRect = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/3);
+    filterPickerView = [[UIPickerView alloc] initWithFrame:pickerRect];
+    
+    
     pickerArray = @[@"ALL", @"MY PINS",@"FRIEND'S"];
     pickerArray2 = @[@"ALL", @"VISITED", @"UNVISITED"];
+    
+    pickerDict = @{@"ALL":@[@"ALL", @"VISITED", @"UNVISITED"],
+                   @"MY PINS":@[@"ALL"],
+                   @"FRIEND'S":@[@"ALL", @"VISITED", @"UNVISITED"]};
+    
     //pickerArray3 = @[@"", @""];
     //NSLog(@"(%f, %f, %f, %f", pickerView.frame.origin.x, pickerView.frame.origin.y, pickerView.frame.size.width, pickerView.frame.size.height);
     
 
-    pickerView.backgroundColor = [UIColor whiteColor];
+    filterPickerView.backgroundColor = [UIColor whiteColor];
     NSLog(@"screen width= %f, height= %f", screenWidth, screenHeight);
     
     // delegate加的位置會影響內容是否能呈現
-    pickerView.delegate = self;
-    pickerView.dataSource = self;
+    filterPickerView.delegate = self;
+    filterPickerView.dataSource = self;
 
-    [self.view addSubview:pickerView];
+    [self.view addSubview:filterPickerView];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
     
@@ -141,7 +149,7 @@
 
 - (void)hidePickerView {
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        pickerView.frame = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/4);
+        filterPickerView.frame = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/3);
     } completion:nil];
 }
 
@@ -225,10 +233,10 @@
     
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         //pickerView.frame.origin = CGPointMake(0, screenHeight*3/5);
-        pickerView.frame = CGRectMake(0, screenHeight*2/3, screenWidth, screenHeight*1/3);
+        filterPickerView.frame = CGRectMake(0, screenHeight*2/3, screenWidth, screenHeight*1/3);
     } completion:nil];
     
-    NSLog(@"(%f, %f, %f, %f", pickerView.frame.origin.x, pickerView.frame.origin.y, pickerView.frame.size.width, pickerView.frame.size.height);
+    NSLog(@"(%f, %f, %f, %f", filterPickerView.frame.origin.x, filterPickerView.frame.origin.y, filterPickerView.frame.size.width, filterPickerView.frame.size.height);
 
     
 }
@@ -246,6 +254,7 @@
     //[self performSegueWithIdentifier:@"showPinEditSegue" sender:nil];
 }
 
+// 使用者回到地圖中心
 - (IBAction)returnUserLocationBtnAction:(id)sender {
     
     [self returnUserLocation];
@@ -445,7 +454,7 @@
         self.theLabel.text = [NSString stringWithFormat:@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.visitedDate];
         
         // 把距離存在字典裡，準備廣播出去
-        [distanceDict setValue:[NSString stringWithFormat:@"%1.1f", distance/1000.0] forKey:pin.pinId];
+        //[distanceDict setValue:[NSString stringWithFormat:@"%1.1f", distance/1000.0] forKey:pin.pinId];
         
         // 需滿足三個條件才會要iOS送出通知，
         // 使用者離大頭針距離120公尺內、沒有到訪過此大頭針、尚未發送過通知
@@ -525,30 +534,41 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+
     if (component == 0) {
-        return [pickerArray count];
-    }else {
-        return [pickerArray2 count];
+        return [[pickerDict allKeys] count];
+    } else {
+        // [pickerView selectedRowInComponent:0]知道選了那一個row
+        // [pickerDict allKeys]會得到所有Key的陣列
+        // 利用上面兩行，可以得到每一個key值
+        // 再用key值得到value陣列
+        // 再用count，可以得到陣列數目
+        return[[pickerDict objectForKey:[[pickerDict allKeys] objectAtIndex:[filterPickerView selectedRowInComponent:0]]] count];
     }
+
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     
     if (component == 0) {
-        return pickerArray[row];
-    }else {
-        return pickerArray2[row];
+        return [[pickerDict allKeys] objectAtIndex:row] ;
+    } else {
+        return [[pickerDict objectForKey:[[pickerDict allKeys] objectAtIndex:[filterPickerView selectedRowInComponent:0]]] objectAtIndex:row];
     }
+    
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    
     PinDAO *pinDAO = [[PinDAO alloc] init];
     
     if (component == 0) {
+        [filterPickerView reloadComponent:1];
         pickerViewComponent0 = [NSString stringWithFormat:@"%d",row];
     } else if (component ==1) {
         pickerViewComponent1 = [NSString stringWithFormat:@"%d",row];
     }
+    
     NSLog(@"pickerViewComponent0=%@, pickerViewComponent1=%@", pickerViewComponent0, pickerViewComponent1);
 
     NSLog(@"row=%d, component=%d", row, component);

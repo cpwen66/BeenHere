@@ -32,6 +32,8 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     PinImage *pinImage;
     NSMutableArray *theSubViews;
     UITextView *titleTextView;
+    UIImagePickerController *imagePicker;
+
     
 }
 
@@ -145,7 +147,38 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
+- (IBAction)getPhotoBtnAction:(id)sender {
+    //另一個選項UIImagePickerControllerSourceTypeSavedPhotosAlbum是舊ios的使用者自拍的相簿
+    //PhotoLibrary是指iOS內建的相簿
+    UIImagePickerControllerSourceType targetType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePicker = [UIImagePickerController new];//在還沒有創建前，是nil
+    imagePicker.sourceType = targetType;
+    
+    //imagePicker.mediaTypes = @[@"public.image"];//@[@"public.image", @"public.movie"]如果相簿也要秀影片，就加@"public.movie"
+    //下面這一行功能和上一行相同，但要#import <MobileCoreServices/MobileCoreServices.h>
+    //kent建議用上一行就好了
+    //kUTTypeImage是C的定義
+    imagePicker.mediaTypes = @[(NSString *) kUTTypeImage];
+    imagePicker.delegate = self;//因會動用到NavigationController所以要<UINavigationControllerDelegate>
+    imagePicker.allowsEditing = YES;//允許imagePicker可以編輯
+    
+    //秀另一個viewController或跳到另一個app
+    [self presentViewController:imagePicker animated:YES completion:nil];
+    
+}
+
+
+
 - (IBAction)donePostPinBtnAction:(id)sender {
+//    NSString * str = [[[CloudDAO alloc] init] uploadNewPin:self.currentPin success:^(id responseObject) {
+//        <#code#>
+//    } failure:^(NSError *error) {
+//        <#code#>
+//    }]
+    
+//    [[[CloudDAO alloc] init] hello:^NSString *(NSNumber *value1) {
+//        <#code#>
+//    }]
 /*
     NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
     NSString *memberId = [preference stringForKey:@"bhereID"];
@@ -324,7 +357,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 //使用此方法，需<UIImagePickerControllerDelegate>
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     //NSString *mediaType = info[UIImagePickerControllerMediaType];
-    
+    NSLog(@"picker =%@", picker);
     //回到原來的view
     [picker dismissViewControllerAnimated:YES completion:nil];
     
@@ -350,7 +383,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     imagePosition = TEXT_MARGIN_IN_CELL + titleTextViewHeight + 20 + (20 + newViewHeight) * imageIndex;
     CGRect newViewRect = CGRectMake(20, imagePosition, contentWidth, newViewHeight);
     UIView *newView = [[UIView alloc]initWithFrame:newViewRect];
-    newView.backgroundColor = [UIColor blueColor];
+    //newView.backgroundColor = [UIColor blueColor];
     // 建立imageView，準備放進空白View
     
 //    CGRect imageRect = CGRectMake(0, 0, 200, 300);
@@ -359,10 +392,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     
     //NSLog(@"imageView width = %f, height = %f", imageView.frame.size.width, imageView.frame.size.height);
     
-    
     [newView addSubview:imageView];
-    
-    
     
     CGRect buttonRect = CGRectMake(contentWidth-20, 10, 20, 20);
     UIButton *deleteButton = [[UIButton alloc] initWithFrame:buttonRect];
@@ -484,11 +514,16 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 
 }
 
+#pragma mark - Get photo from Album
+
 
 // 強制手機畫面不打橫
 - (NSUInteger)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
 }
+
+
+
 
 /*
 #pragma mark - Navigation

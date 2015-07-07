@@ -5,16 +5,24 @@
 //  Created by CP Wen on 2015/7/2.
 //  Copyright (c) 2015年 beenhere. All rights reserved.
 //
-
+#import "AFHTTPRequestOperationManager.h"
 #import <Foundation/Foundation.h>
 #import "Pin.h"
 #import "PinImage.h"
+
+typedef void(^successBlock)(id responseObject);
+typedef void(^failBlock)(NSError* error);
+typedef NSString*(^stringBlock)(NSNumber * value1);
 
 @interface CloudDAO : NSObject
 
 @property (weak, nonatomic)NSUserDefaults *preference;
 
-- (NSString *)uploadNewPin:(Pin *)pin;
+- (NSString *)uploadNewPin:(Pin *)pin
+                   success:(successBlock)success
+                   failure:(failBlock)failure;
+
+-(void)hello:(stringBlock)block;
 
 -(void)uploadImageOfPin:(PinImage *)pinImage;
 

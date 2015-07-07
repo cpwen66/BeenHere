@@ -12,6 +12,7 @@
 #import "PinImageDAO.h"
 #import "PinImage.h"
 #import <QuartzCore/QuartzCore.h>
+#import "PinInfoTableViewCell.h"
 
 @interface PinInfoTableViewController ()
 {
@@ -50,9 +51,14 @@
     
     PinImageDAO *pinImageDAO = [[PinImageDAO alloc] init];
     //PinImage *pinImage = [[PinImage alloc] init];
-    
-    titleLabel.text = self.infoPin.title;
-    
+/*
+    if (self.infoPin.visitedDate != nil) {
+        NSLog(@"visitedDate = %@", self.infoPin.visitedDate);
+        titleLabel.text = [NSString stringWithFormat:@"%@\n\n在%@", self.infoPin.title, self.infoPin.visitedDate];
+    } else {
+        titleLabel.text = self.infoPin.title;
+    }
+*/
     // 上面要先拿到label的文字，下面是要算label的高度
     
     CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
@@ -61,7 +67,7 @@
     
 //    CGFloat tableViewWidth = self.infoTableView.frame.size.width;
 //    CGFloat tableViewHeight = self.infoTableView.frame.size.height;
-    
+/*
     CGSize maxSize = CGSizeMake(screenWidth-80, 999);
     NSString *contentString = titleLabel.text;
     UIFont *contentFont = titleLabel.font;
@@ -80,16 +86,16 @@
     //下面為倒圓角要用的二行程式，也要#import <QuartzCore/QuartzCore.h>
     titleLabel.layer.cornerRadius = 7;
     titleLabel.layer.masksToBounds = YES;
+
     
     CGRect rect = CGRectMake(0, 0, screenWidth, contentSize.height + 40);
     UIView *cellView = [[UIView alloc] initWithFrame:rect];
-    //cellView.frame = titleLabel.frame;
+    cellView.frame = titleLabel.frame;
     [cellView addSubview:titleLabel];
     [cellView bringSubviewToFront:titleLabel];
-    //這行先comment掉，先不放圖在scrollView cell裡面
-    //[cellViewArray addObject:cellView];
-   
-    
+    這行先comment掉，先不放圖在scrollView cell裡面
+    [cellViewArray addObject:cellView];
+ */
     // 用大頭針的id取出圖片
     
     pinImageArray = [pinImageDAO getAllImageByPinId:self.infoPin.pinId];
@@ -98,49 +104,40 @@
     if ([pinImageArray count] > 0) {
         for (PinImage *pinImg in pinImageArray) {
             UIImage *img = [[UIImage alloc] initWithData:pinImg.imageData];
-            CGRect imgRect = CGRectMake(20, 0, ceilf(screenWidth-40)/1, ceilf((img.size.height/img.size.width*(screenWidth-40)))/1);
-            UIImageView *imgView = [[UIImageView alloc] initWithFrame:imgRect];
+//            CGRect imgRect = CGRectMake(20, 0, ceilf(screenWidth-40)/1, ceilf((img.size.height/img.size.width*(screenWidth-40)))/1);
+//            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectZero];
             //imgView.backgroundColor = [UIColor blueColor];
-            imgView.image = img;
+//            imgView.image = img;
             
-            CGRect iRect = CGRectMake(0, 0, screenWidth, ceilf((img.size.height/img.size.width*(screenWidth-40)))/1);
-            
-            UIView *view = [[UIView alloc] initWithFrame:iRect];
+//            CGRect iRect = CGRectMake(0, 0, screenWidth, ceilf((img.size.height/img.size.width*(screenWidth-40)))/1);
+//            
+//            UIView *view = [[UIView alloc] initWithFrame:iRect];
             //            NSLog(@"view.height = %f", view.frame.size.height);
             //            NSLog(@"view.width = %f", view.frame.size.width);
-            view.backgroundColor = [UIColor whiteColor];//
-            [view addSubview:imgView];
-            [cellViewArray addObject:view];
+//            view.backgroundColor = [UIColor whiteColor];//
+//            [view addSubview:imgView];
+            //[cellViewArray addObject:view];
+            [cellViewArray addObject:img];
         }
     } else {
-        //下面還沒改
-        UIImage *img = [UIImage imageNamed:@"cat2.jpg"];
+        
+        UIImage *img = [UIImage imageNamed:@"noimage.png"];
 
-        UIImageView *imgView = [[UIImageView alloc] init];
-        //NSLog(@"imageWidth= %f", testImage.frame.size.width);
+//        UIImageView *imgView = [[UIImageView alloc] init];
+//        //NSLog(@"imageWidth= %f", testImage.frame.size.width);
+//        
+//        CGRect imgRect = CGRectMake(20, 0, ceilf(screenWidth-40)/1, ceilf((img.size.height/img.size.width*(screenWidth-40)))/1);
+//        imgView = [[UIImageView alloc] initWithFrame:imgRect];
+//        imgView.image = img;
         
-        CGRect imgRect = CGRectMake(20, 0, ceilf(screenWidth-40)/1, ceilf((img.size.height/img.size.width*(screenWidth-40)))/1);
-        imgView = [[UIImageView alloc] initWithFrame:imgRect];
-        imgView.image = img;
-        
-        CGRect iRect = CGRectMake(0, 0, screenWidth, ceilf((img.size.height/img.size.width*(screenWidth-40)))/1);
-        
-        UIView *view = [[UIView alloc] initWithFrame:iRect];
-        [view addSubview:imgView];
-        [cellViewArray addObject:view];
+        [cellViewArray addObject:img];
     }
-    UIView *uiv = cellViewArray[0];
-    UIImageView *uiiv = uiv.subviews[0];
-    imgForNavigationBar = uiiv.image;
-    
-    NSLog(@"cellViewArray = %@", cellViewArray);
-    NSLog(@"cellViewArray = %@", cellViewArray);
-    
-    
-    //self.postedTitleLabel.text = self.infoPin.title;
-    //self.postedTitleLabel.text = @"dsfadsfasdjfhadsjfhakdj sfhaksjdfhakjsdfaksdfjalksdfjalkfjalsdkj fsladkfjaslkdfjalskdfjalskdfjalskdf jaslkdfjaslkdfjaskdfjaskldfjaslkdfjaskldfjaklsdfjaklsdfjaskldfjaskldfjklsfjaskdfjasdkfjasdflkjsdfklasjdfklasdfjasldkfjasdlfkjaslkdfjasdlkfjaskdlfjasdklfjasdlkfjasldkfjaslkdfjaslkdfjaskfjsdkfjasdlkfj";
-    // 上面要先拿到label的文字，下面是要算label的高度
 
+//    UIImageView *img1 = cellViewArray[0];
+    imgForNavigationBar = cellViewArray[0];
+    
+    NSLog(@"cellViewArray = %@", cellViewArray);
+    
 //    self.postedTitleLabel.numberOfLines = 0;
 //    self.postedTitleLabel.lineBreakMode = NSLineBreakByWordWrapping;
 //    self.postedTitleLabel.preferredMaxLayoutWidth = self.postedTitleLabel.frame.size.width;
@@ -148,7 +145,21 @@
     CGRect labelRect = CGRectMake(0, 0, screenWidth, 50);
 
     UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
-    label.text = self.infoPin.title;
+    
+    if (self.infoPin.visitedDate != nil) {
+//        NSTimeZone *tz = [NSTimeZone localTimeZone];
+//        NSTimeInterval seconds = [tz secondsFromGMTForDate:self.infoPin.visitedDate];
+//        NSDate *dateInUTC = self.infoPin.visitedDate;
+//        NSDate *localDate = [dateInUTC dateByAddingTimeInterval:seconds];
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        //[dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+        [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+        NSLog(@"visitedDate = %@", self.infoPin.visitedDate);
+        label.text = [NSString stringWithFormat:@"%@在想：\n%@\n\n在%@", self.infoPin.memberId, self.infoPin.title, [dateFormat stringFromDate:self.infoPin.visitedDate]];
+    } else {
+        label.text = self.infoPin.title;
+    }
 
     CGSize maxSize2 = CGSizeMake(screenWidth-80, 999);
     NSString *contentString2 = label.text;
@@ -244,13 +255,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
 
     // 本來是想辦法把navigation Bar消失的顏色加回來，但只能用image的方法加回來
     [self.navigationController.navigationBar setBackgroundImage:imgForNavigationBar forBarMetrics:UIBarMetricsDefault];
 //    self.navigationController.navigationBar.shadowImage = imageView.image;
     [self.navigationController.navigationBar setTranslucent:NO];
-
     
 }
 
@@ -258,6 +267,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 #pragma mark - Table view data source
 
@@ -273,24 +283,50 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+
+    NSLog(@"count:%d", [cellViewArray count]);
     //[cell prepareForReuse];
     
     // Configure the cell...
-    //cell.contentView.backgroundColor = [UIColor whiteColor];
-    UIView *view = (UIView *)[cell viewWithTag:100];
-    //UIView *view = [[UIView alloc]initWithFrame:cell.contentView.frame];
-    view = cellViewArray[indexPath.row];
-    [cell addSubview:view];
+  
+//    PinInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([PinInfoTableViewCell class])];
+    //PinInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    PinInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    
+    CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    //CGFloat screenHeight = [[UIScreen mainScreen] bounds].size.height;
+    UIImage *cellImg = cellViewArray[indexPath.row];
+//    CGRect imgRect = CGRectMake(0, 0, ceilf(screenWidth-20)/1, ceilf((cellImg.size.height/cellImg.size.width*(screenWidth-20)))/1);
+//    cell.infoImageView.frame = imgRect;
+    
+    cell.infoImageView.image = cellImg;
+    
+    //[cell bringSubviewToFront:cell.infoImageView];
+        if (cell == nil) {
+            NSLog(@"cell == nil");
+        }
+    //UIImageView *imageView = (UIImageView *)[cell viewWithTag:100];
+    
+//    view = cellViewArray[indexPath.row];
+//    [cell addSubview:view];
+//    UIImageView *imgView = cellViewArray[indexPath.row];
+//    imageView.image = imgView.image;
+//    UIView * imageView = cellViewArray[indexPath.row];
+//    [view addSubview:imageView];
 
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIView *view = [UIView new];
-    view = cellViewArray[indexPath.row];
-    return view.frame.size.height+20;
+
+//    UIImageView *imageView = [UIImageView new];
+//    imageView.image = cellViewArray[indexPath.row];
+    
+    CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+    NSLog(@"screenWidth = %f", screenWidth);
+    UIImage *cellImg = cellViewArray[indexPath.row];
+    return ceilf((cellImg.size.height/cellImg.size.width*(screenWidth)))/1-40;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -311,6 +347,12 @@
     [view addSubview:label];
     return nil;
 }
+
+// 強制手機畫面不打橫
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

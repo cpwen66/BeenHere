@@ -13,5 +13,6 @@
 @property (strong, nonatomic)NSString *pinId;
 @property (strong, nonatomic)NSString *memberId;
 @property (strong, nonatomic)NSDate *visitedDate;
+@property (strong, nonatomic)NSNumber *distance;
 
 @end

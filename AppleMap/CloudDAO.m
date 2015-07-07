@@ -23,7 +23,7 @@ AFHTTPRequestOperationManager *manager;
    // manager.requestSerializer = [AFJSONRequestSerializer serializer];
 }
 
-- (NSString *)uploadNewPin:(Pin *)pin {
+- (NSString *)uploadNewPin:(Pin *)pin success:(successBlock)success failure:(failBlock)failure {
     // 指定url是連結到伺服器中負責 上傳 的程式
     NSURL *url = [NSURL URLWithString:@"http://localhost:8888/beenhere/apiupdate.php"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60.0];
@@ -38,6 +38,16 @@ AFHTTPRequestOperationManager *manager;
               @"pin_latitude":[NSString stringWithFormat:@"%f", pin.coordinate.latitude],
               @"pin_longitude":[NSString stringWithFormat:@"%f", pin.coordinate.longitude]
               };
+    
+    [[AFHTTPRequestOperationManager manager] POST:@"" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failBlock(error);
+        }
+    }];
     
     
     

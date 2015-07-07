@@ -79,20 +79,17 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    switch (indexPath.row) {
-//        case 2:
-//            if ( myPinCheckmark.alpha >= 0.5) {
-//                myPinCheckmark.alpha = 0;
-//            } else {
-//                myPinCheckmark.alpha = 1;
-//            }
-            //myPinCheckmark.alpha >= 0.5 ? myPinCheckmark.alpha = 0 : myPinCheckmark.alpha = 0 ;
-//            NSLog(@"alpha=%f", myPinCheckmark.alpha);
-        
-
-//}
+    if (indexPath.row == 0) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        id targetViewController = [storyboard instantiateViewControllerWithIdentifier:@"root"];
+        [self presentViewController:targetViewController animated:YES completion:nil];
+    } else if (indexPath.row == 3) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        id targetViewController = [storyboard instantiateViewControllerWithIdentifier:@"cameraview"];
+        [self presentViewController:targetViewController animated:YES completion:nil];
+    }
     
-    NSLog(@"indexPath=%d", [indexPath row]);
+    //NSLog(@"indexPath=%ld", (long)[indexPath row]);
 //    switch (indexPath.row) {
 //            case 2:
 //            if ([[self.preference valueForKey:@"pinOwner"] isEqualToString:@"friendsPin"]) {

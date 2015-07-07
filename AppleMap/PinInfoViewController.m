@@ -80,7 +80,7 @@
     //cellView.frame = titleLabel.frame;
     [cellView addSubview:titleLabel];
     [cellView bringSubviewToFront:titleLabel];
-    [cellViewArray addObject:cellView];
+    //[cellViewArray addObject:cellView];
     
     
     // 用大頭針的id取出圖片
