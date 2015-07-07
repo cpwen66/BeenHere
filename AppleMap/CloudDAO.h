@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Pin.h"
 #import "PinImage.h"
+#import "MapDateStore.h"
 
-@interface CloudDAO : NSObject
+@interface CloudDAO : NSObject<MapDataProtocol>
 
 @property (weak, nonatomic)NSUserDefaults *preference;
 

@@ -590,12 +590,11 @@ mydb *sharedInstance;
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
                 
             };
-             [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
             
         }
         
-        
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
+      
         
         
     }
@@ -638,7 +637,7 @@ mydb *sharedInstance;
                
             }else{
             
-            
+//            
               [[NSNotificationCenter defaultCenter]postNotificationName:@"loaddata" object:message];
             
             };
@@ -716,6 +715,7 @@ mydb *sharedInstance;
     
     //產生控制request的物件
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    [manager setRequestSerializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)]
     //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
@@ -738,7 +738,8 @@ mydb *sharedInstance;
               // 取的signIn的key值，並輸出
               NSString *result = [apiResponse objectForKey:@"insertcontent"];
               NSLog(@"result:%@",result);
-              
+        
+        
               //   判斷signUp的key值是否等於success
               if ([result isEqualToString:@"success"]) {
                   

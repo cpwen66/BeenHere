@@ -427,6 +427,7 @@ friendTableViewController * frinedview;
         case  (3) :
             
             [self.navigationController pushViewController:friend animated:YES];
+            
             break;
             
         default:

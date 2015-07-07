@@ -32,6 +32,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     PinImage *pinImage;
     NSMutableArray *theSubViews;
     UITextView *titleTextView;
+    CloudDAO *cloudDAO;
     
 }
 
@@ -48,6 +49,8 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     //self.childViewControllers.
+    
+    cloudDAO = [[CloudDAO alloc] init];
     
     imageIndex = 0;
     isFirstViewDidAppear = YES;
@@ -146,7 +149,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 }
 
 - (IBAction)donePostPinBtnAction:(id)sender {
-/*
+
     NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
     NSString *memberId = [preference stringForKey:@"bhereID"];
     self.currentPin.memberId = memberId;
@@ -155,7 +158,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     self.currentPin.visitedDate = [NSDate date];
 
 
-    CloudDAO *cloudDAO = [[CloudDAO alloc] init];
+//    CloudDAO *cloudDAO = [[CloudDAO alloc] init];
     NSString *pinIdFromCloud = [cloudDAO uploadNewPin:self.currentPin];
     
     // 如果錯誤會pinId是-1
@@ -211,8 +214,8 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
             [pinImageDAO insertImageIntoSQLite:newPinImage];
         }
     }
-*/
 
+/*
 // 這裡是直接存SQLite的程式, 沒有上傳
     // 先練習只存到SQLite, 之後要改先上傳到server，之後再下載pinId
     // 先存Pin到SQLite
@@ -256,7 +259,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         [pinImageDAO insertImageIntoSQLite:newPinImage];
         }
     }
- 
+ */
 
     
     [self dismissViewControllerAnimated:YES completion:nil];

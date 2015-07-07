@@ -34,17 +34,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *doneButton=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(addfriend) ];
-    
-    self.navigationItem.rightBarButtonItem=doneButton;
-    
- 
-   
-    [self showFriendList];
-    
-    
-       [self initlist];
-     self.searchBar.delegate = self;
+//    UIBarButtonItem *doneButton=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(addfriend) ];
+//    
+//    self.navigationItem.rightBarButtonItem=doneButton;
+//    
+// 
+//   
+//    [self showFriendList];
+//    
+//    
+//       [self initlist];
+//     self.searchBar.delegate = self;
 }
 
 
@@ -236,8 +236,11 @@
             NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
             NSLog(@"result:%@",apiResponse);
             
-            NSString *result = [apiResponse objectForKey:@"downloaduserimageresult"];
-            
+            NSString *result;
+            //bug 待修
+            if ((responseObject[@"api"]!=[NSNull null])) {
+            result = [apiResponse objectForKey:@"downloaduserimageresult"];
+            };
             
             
             if ([result isEqualToString:@"success"]) {
@@ -258,6 +261,7 @@
                     UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
                     
                     cell.imageView.image=image;
+//                    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
                     
                 }
                 
@@ -277,8 +281,13 @@
     } else{  UIImage * image=[UIImage imageWithData:picture];
         
         cell.imageView.image=image;
+//        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
     }
 
+    
+  
+    
     return cell;
     
     
@@ -309,6 +318,7 @@
     friendrootViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"custAddEditAc"];
     
     vc.friendid=MyfriendList[indexpath.row][@"id"];;
+   
    
     
     

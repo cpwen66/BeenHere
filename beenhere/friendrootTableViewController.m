@@ -50,11 +50,12 @@ NSUInteger indentation;
 }
 -(void)initdata{
     
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [hud setLabelText:@"connecting"];
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [hud setLabelText:@"connecting"];
     
     
     [[mydb sharedInstance]querymysqlindexcontent:_friendid ];
+    
     
     
     [self loaddata];
@@ -73,7 +74,6 @@ NSUInteger indentation;
     
     
     Content=[[mydb sharedInstance]queryindexcontent:_friendid ];
-    
     
     
     
@@ -379,7 +379,7 @@ NSUInteger indentation;
     
      cell.iconimage.image=nil;
     }
-    
+//
 
     
     
