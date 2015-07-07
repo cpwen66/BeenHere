@@ -7,8 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "MapDateStore.h"
 
-@interface ViewController ()
+@interface ViewController ()<MapDataProtocol>
 
 @end
 
@@ -34,6 +35,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    
+    MapDateStore * mapManager = [[MapDateStore alloc] init];
+    mapManager.delegate = self;
+    [mapManager SearchPinContent];
+    
     
     //判斷NSUserDefaults是否有值
     NSString * AccountCookie=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereEmail"];

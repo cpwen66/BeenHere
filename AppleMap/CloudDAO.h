@@ -9,12 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Pin.h"
 #import "PinImage.h"
+#import "MapDateStore.h"
 
-typedef void(^successBlock)(id responseObject);
-typedef void(^failBlock)(NSError* error);
-typedef NSString*(^stringBlock)(NSNumber * value1);
-
-@interface CloudDAO : NSObject
+@interface CloudDAO : NSObject<MapDataProtocol>
 
 @property (weak, nonatomic)NSUserDefaults *preference;
 

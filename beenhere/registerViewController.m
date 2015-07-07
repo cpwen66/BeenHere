@@ -67,7 +67,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
     NSString *myString1 = [[NSUserDefaults standardUserDefaults] stringForKey:bherePassword];
     
     
-    NSLog(@"%@ %@ ",myString,myString1);
+   
 
     
     UIAlertController *alertcontroller=[UIAlertController alertControllerWithTitle:@"註冊" message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -94,6 +94,8 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
     [alertcontroller addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder=@"密碼";
         textField.secureTextEntry=YES;
+        
+        
         
         CGFloat yourSelectedFontSize = 20.0 ;
         UIFont *yourNewSameStyleFont = [textField.font fontWithSize:yourSelectedFontSize];

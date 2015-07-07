@@ -427,7 +427,6 @@
     //如果sqlite裏有圖就直接存取 沒有就從mysql查詢
     if (cell.treeNode.imagedate!=NULL) {
       
-        
         UIImage * image=[UIImage imageWithData:cell.treeNode.imagedate];
         
         cell.cellimage.image=image;
@@ -634,10 +633,10 @@
     
     QuoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([QuoteTableViewCell class])];
  
-//    if (cell != nil) {
+//    if (cell == nil) {
 //       // [cell release];
 //    }
-
+    
        //customer
     if (cell == nil) {
     
@@ -648,8 +647,8 @@
         cell.CoolBtn.tag=indexPath.row;
         cell.OhoBtn.tag=indexPath.row;
         cell.ImpishBtn.tag=indexPath.row;
-    
-    
+        
+        
     }
     
     [self configureCell:cell forRowAtIndexPath:indexPath];
