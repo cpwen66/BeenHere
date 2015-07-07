@@ -151,8 +151,57 @@ mydb *sharedInstance;
    // [self uploadUsers:BeEMAIL];
     
 }
+-(void)inserfriendlist:(NSDictionary*)friendlist{
+
+    
+    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+    
+    NSLog(@"friend%@",friendlist);
+    
+      FMResultSet *rs=[db executeQuery:@"select count(*) from bh_friendlist where friendID=?",friendlist[@"id"]];
+    
+    
+
+    while ([rs next]) {
+        if ([rs intForColumnIndex:0]==0) {
+            //可以新增
+            if (![db executeUpdate:@"insert into bh_friendlist(id,friendID,friendname) values (?,?,?)",
+                  userID,
+                  friendlist[@"id"],
+                  friendlist[@"name"]
+                  
+                  ]) {
+                NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
+           
+            };
+            
+            
+        }
+    }
 
 
+
+}
+#pragma mark - friend 
+-(id)SearchFriendList:(NSString *)beeid {
+    
+    
+    
+    
+    NSMutableArray *rows = [NSMutableArray new];
+    FMResultSet *result = [db executeQuery:@"select * from bh_friendlist where id=?  ", beeid];
+    
+    while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
+        [rows addObject:result.resultDictionary];
+    }
+    
+    
+    
+    return rows;
+    
+    
+}
 //新增使用者圖片
 -(void)insertuserpicture:(NSDate*)picture addbeeid:(NSString*)beeid{
 
@@ -211,25 +260,31 @@ mydb *sharedInstance;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"success" object:message];
 }
 
-
-
+//上傳朋友頭像
 -(void)updateuserpicture:(NSData*)userpicture addID:(NSString*)Userid{
-
-    if (![db executeUpdate:@"update memeber set userpicture=? where id=?",userpicture,Userid]) {
+    
+    if (![db executeUpdate:@"update bh_friendlist set friend_userpicture=? where friendID=?",userpicture,Userid]) {
         NSLog(@"Could not update data:\n%@",[db lastErrorMessage]);
-        message=@"已有此EMAIL或ID";
-    }else{ message=@"修改完成";
+        NSLog(@"userpicture update sucess ");
+    }else{
         
-       
+        
     };
     
-
-
-
-
-
-
 }
+//-(void)updateuserpicture:(NSData*)userpicture addID:(NSString*)Userid{
+//    
+//    if (![db executeUpdate:@"update memeber set userpicture=? where id=?",userpicture,Userid]) {
+//        NSLog(@"Could not update data:\n%@",[db lastErrorMessage]);
+//        message=@"已有此EMAIL或ID";
+//    }else{ message=@"修改完成";
+//        
+//        
+//    };
+//    
+//}
+
+
 //- (void)updateBeName:(NSString *)bename andBeTel:(NSInteger *)betel andBeemail:(NSString *)Beemail andBebirthday:(NSDate *)Bebthday andBeid:(NSString *)Beid andBelocation:(NSString *)Belocation andBepassword:(NSString *)bpw andBesex:(NSString *)bsex andbhereno:(NSString *)bhereno {
 //    
 //    if (![db executeUpdate:@"update memeber set name=?,telephone=?,location=?,email=? ,sex=? ,password=? ,birthday=? , id=? where bhere_no=?",bename,betel,Belocation,Beemail,bsex,bpw,Bebthday,Beid,bhereno]) {

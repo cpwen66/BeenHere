@@ -82,8 +82,11 @@ friendTableViewController * frinedview;
  
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
-   
-     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];
+
+    
+
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];
 
     [self userinfoinit];
     

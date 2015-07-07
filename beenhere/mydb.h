@@ -68,7 +68,10 @@
 - (NSData *)getuserpicture:(NSString *)beid;
 //新增頭像
 -(void)updateuserpicture:(NSData*)userpicture addID:(NSString*)Userid;
-
+-(void)inserfriendlist:(NSDictionary*)friendlist;
 
 -(void)insertpin:(NSDictionary *)params;
+
+//search friend
+-(id)SearchFriendList:(NSString *)beeid;
 @end

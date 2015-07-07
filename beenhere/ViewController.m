@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "MapDateStore.h"
 
+
 @interface ViewController ()<MapDataProtocol>
 
 @end
@@ -42,6 +43,8 @@
     [mapManager SearchPinContent];
     
     
+    
+
     //判斷NSUserDefaults是否有值
     NSString * AccountCookie=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereEmail"];
     //有值代表已有帳號並登入

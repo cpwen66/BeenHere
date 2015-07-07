@@ -38,12 +38,12 @@
     replychildrn= _node.nodeChildren;
 
         
-    NSLog(@"replyc:%@",replychildrn);
+  
      [replylist addObject:_node];
     
-    NSLog(@"id:%@",_node.beeid);
+   
     
-     NSLog(@"contentno:%@",_node.content_no);
+    
     [self fillNodeWithChildrenArray:_node.nodeChildren];
  
  

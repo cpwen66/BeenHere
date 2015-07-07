@@ -35,4 +35,6 @@
     
     self.contentLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.timeLabel.frame);
 }
+
+
 @end
