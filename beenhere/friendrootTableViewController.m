@@ -213,7 +213,7 @@ NSUInteger indentation;
     cell.treeNode = node;
     cell.contentlabel.text = node.nodeObject;
     
-    NSLog(@"tree=%lu",(unsigned long)cell.treeNode.nodeLevel);
+   
     
     if (cell.treeNode.nodeLevel==1) {
         
@@ -226,13 +226,12 @@ NSUInteger indentation;
     
     cell.detaillabel.text=currentTime;
     
-    
-    NSLog(@"no:%@,cellimage:%@",cell.treeNode.content_no,cell.treeNode.imagedate);
+
     
     
     int number = [cell.treeNode.imageid intValue];
     
-    NSLog(@"number:%d",number);
+ 
     
     if (number == 1) {
         //如果sqlite裏有圖就直接存取 沒有就從mysql查詢

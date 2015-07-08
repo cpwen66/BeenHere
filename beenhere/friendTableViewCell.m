@@ -117,4 +117,14 @@
     
     
 }
+-(void)prepareForReuse
+{
+    self.iconimage.image =nil;
+    self.imageView.hidden = YES;
+    self.userimage.image=nil;
+    //    self.cellButton=nil;
+    self.cellimage.image=nil;
+    // self.cellbackground=nil;
+    
+}
 @end

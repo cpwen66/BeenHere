@@ -34,17 +34,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    UIBarButtonItem *doneButton=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(addfriend) ];
-//    
-//    self.navigationItem.rightBarButtonItem=doneButton;
-//    
-// 
-//   
-//    [self showFriendList];
-//    
-//    
-//       [self initlist];
-//     self.searchBar.delegate = self;
+    UIBarButtonItem *doneButton=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(addfriend) ];
+    
+    self.navigationItem.rightBarButtonItem=doneButton;
+    
+ 
+   
+    [self showFriendList];
+    
+    
+       [self initlist];
+     self.searchBar.delegate = self;
 }
 
 
@@ -216,18 +216,20 @@
          cell.textLabel.text =[NSString stringWithFormat:@"%@ ",MyfriendList[indexPath.row][@"name"]];
         
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
+  
     
-//    UIImage * userpicture=[UIImage imageNamed:@"headphoto.jpg"];
-//    cell.imageView.image=userpicture;
+
     NSData * picture=[[NSData alloc]init ];
-    picture= [[mydb sharedInstance]getuserpicture:MyfriendList[indexPath.row][@"id"]];
+    
+        picture= [[mydb sharedInstance]getuserpicture:MyfriendList[indexPath.row][@"id"]];
+    
+    
     if (picture ==NULL) {
         
         NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",MyfriendList[indexPath.row][@"id"] , @"userID", nil];
         
         
-        
+        NSLog(@"params%@",params);
         
         AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
         managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
@@ -281,11 +283,11 @@
     } else{  UIImage * image=[UIImage imageWithData:picture];
         
         cell.imageView.image=image;
-//        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+
         
     }
 
-    
+}
   
     
     return cell;
@@ -306,7 +308,7 @@
     tvc.friendid=MyfriendList[indexpath.row][@"id"];
     [StoreInfo shareInstance].Friendid=MyfriendList[indexpath.row][@"id"];
     
-    NSLog(@"s:%@", [StoreInfo shareInstance].Friendid);
+
 }
 
 
@@ -333,7 +335,6 @@
 -(void)agreefriend:(id)sender{
 
     UIButton *senderButton = (UIButton *)sender;
-    NSLog(@"current Row=%ld",(long)senderButton.tag);
     
     NSString * requestid=[NSString stringWithFormat:@"%@ ",frindRequestList[senderButton.tag][@"id"]];
     NSString * RequestFriendName=[NSString stringWithFormat:@"%@",frindRequestList[senderButton.tag][@"name"]];
@@ -341,7 +342,6 @@
     NSString * Myid=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
     
-    NSLog(@"id:%@ ,fid:%@ ",Myid,requestid);
     
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"addfriendrequest",@"cmd", Myid, @"userID", requestid, @"friendID",@"2", @"numchange",nil];
     
@@ -363,7 +363,7 @@
            
            [[StoreInfo shareInstance].FriendRequestList removeObjectAtIndex:senderButton.tag];
            [self initlist];
-           NSLog(@"find%@",frindRequestList);
+         
            
            
              [[NSNotificationCenter defaultCenter]postNotificationName:@"serachfriend" object:nil];
@@ -371,7 +371,7 @@
            //同時存進sqlite
            [[mydb sharedInstance]insertfriendname:Myid friendname:RequestFriendName andffriendID:requestid ];
            
-           
+           [self.tableView reloadData];
        }
     } failure:^(NSError *error) {
         
@@ -422,15 +422,23 @@
         NSLog(@"apiResponse friend:%@",apiResponse);
         // 取的signIn的key值，並輸出
         NSString *result = [apiResponse objectForKey:@"showfriend"];
-      //  NSLog(@"addfriendrequest result:%@",result);
-       // NSMutableArray * list=[apiResponse objectForKey:@"showfriendinfo"];
+   
      
         
         if ([result isEqualToString:@"success"]) {
             
             [StoreInfo shareInstance].MyFriendtList=[apiResponse[@"showfriendinfo"]mutableCopy];
-      
+            
+             NSDictionary *reslutdata = [apiResponse objectForKey:@"showfriendinfo"];
+            for (NSDictionary *dict in reslutdata) {
+                
+                
+           [[mydb sharedInstance]inserfriendlist:dict];
+             
+            }
             [self initlist];
+            
+            
             
         }
     } failure:^(NSError *error) {

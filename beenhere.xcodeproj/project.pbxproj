@@ -86,6 +86,7 @@
 		9524980D1B342C7900513EE7 /* RATreeView+UIScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 952497FE1B342C7900513EE7 /* RATreeView+UIScrollView.m */; };
 		9524980E1B342C7900513EE7 /* RATreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 952498011B342C7900513EE7 /* RATreeView.m */; };
 		95446F941B4146D60014CCB5 /* IndexTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95C6182D1B2EAFFF00B75940 /* IndexTableViewController.m */; };
+		95541E061B4C58DD00C741EE /* beenhere.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 95541E051B4C58DD00C741EE /* beenhere.sqlite */; };
 		955B4C6C1B3475C8007AB049 /* TreeViewNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 955B4C6B1B3475C8007AB049 /* TreeViewNode.m */; };
 		95606DC01B332A0A00A59D2B /* QuoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 95606DBF1B332A0A00A59D2B /* QuoteTableViewCell.m */; };
 		95656C841B3EEB9C002BA2C9 /* talkviewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 95656C831B3EEB9C002BA2C9 /* talkviewcontroller.m */; };
@@ -157,7 +158,6 @@
 		95A259D01B1F4BC7007641B0 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 95A259BE1B1F4BC7007641B0 /* UIRefreshControl+AFNetworking.m */; };
 		95A259D11B1F4BC7007641B0 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 95A259C01B1F4BC7007641B0 /* UIWebView+AFNetworking.m */; };
 		95A259D41B1F4DF9007641B0 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 95A259D31B1F4DF9007641B0 /* MBProgressHUD.m */; };
-		95A992CC1B49208A00F8A364 /* beenhere.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 95A992CB1B49208A00F8A364 /* beenhere.sqlite */; };
 		95B417511B01EB6A00EA9177 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B417501B01EB6A00EA9177 /* main.m */; };
 		95B417541B01EB6A00EA9177 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B417531B01EB6A00EA9177 /* AppDelegate.m */; };
 		95B417571B01EB6A00EA9177 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B417561B01EB6A00EA9177 /* ViewController.m */; };
@@ -325,6 +325,7 @@
 		952497FF1B342C7900513EE7 /* RATreeView_ClassExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RATreeView_ClassExtension.h; sourceTree = "<group>"; };
 		952498001B342C7900513EE7 /* RATreeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RATreeView.h; sourceTree = "<group>"; };
 		952498011B342C7900513EE7 /* RATreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RATreeView.m; sourceTree = "<group>"; };
+		95541E051B4C58DD00C741EE /* beenhere.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = beenhere.sqlite; sourceTree = "<group>"; };
 		955B4C6A1B3475C8007AB049 /* TreeViewNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeViewNode.h; sourceTree = "<group>"; };
 		955B4C6B1B3475C8007AB049 /* TreeViewNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreeViewNode.m; sourceTree = "<group>"; };
 		95606DBE1B332A0A00A59D2B /* QuoteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuoteTableViewCell.h; sourceTree = "<group>"; };
@@ -430,7 +431,6 @@
 		95A259C01B1F4BC7007641B0 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		95A259D21B1F4DF9007641B0 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		95A259D31B1F4DF9007641B0 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		95A992CB1B49208A00F8A364 /* beenhere.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = beenhere.sqlite; sourceTree = "<group>"; };
 		95B4174B1B01EB6A00EA9177 /* beenhere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beenhere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95B4174F1B01EB6A00EA9177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		95B417501B01EB6A00EA9177 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -866,7 +866,7 @@
 		95B417421B01EB6A00EA9177 = {
 			isa = PBXGroup;
 			children = (
-				95A992CB1B49208A00F8A364 /* beenhere.sqlite */,
+				95541E051B4C58DD00C741EE /* beenhere.sqlite */,
 				6968AC991B44C1A300E14B09 /* tempReadMe */,
 				2BFA752A1B3A8CA100F70A9C /* Frameworks */,
 				69657B6E1B37F0EE0060FB67 /* AppleMap */,
@@ -1170,7 +1170,6 @@
 				956C53211B485AB300DE3E62 /* buttonimage.png in Resources */,
 				696763611B3E731500B36B2A /* cat6.jpg in Resources */,
 				696CC2061B3A5710005EFCD7 /* pointRed.png in Resources */,
-				95A992CC1B49208A00F8A364 /* beenhere.sqlite in Resources */,
 				9584646E1B4A2ABB007B68BF /* none@1.5x.png in Resources */,
 				95DC223F1B4200E90063DC2F /* heart.png in Resources */,
 				95B5F6FD1B130B7B00D7A342 /* beenherebg.png in Resources */,
@@ -1193,6 +1192,7 @@
 				2BFA75471B3A962C00F70A9C /* album.png in Resources */,
 				696763641B3E731500B36B2A /* cat9.jpg in Resources */,
 				95B5F7291B131E3C00D7A342 /* ContextMenuCell.xib in Resources */,
+				95541E061B4C58DD00C741EE /* beenhere.sqlite in Resources */,
 				958464701B4A2ABB007B68BF /* none@2x.png in Resources */,
 				95016F981B25A50F00BD44C0 /* tool2.png in Resources */,
 				9584645E1B4A2ABB007B68BF /* cool@0.5x.png in Resources */,

@@ -68,6 +68,8 @@
 
 
 }
+
+//搜尋有沒有pin內容
 -(void)SearchPinContent{
 
     NSUserDefaults * userdefaults = [NSUserDefaults standardUserDefaults];
@@ -77,7 +79,7 @@
     
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+   
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
     //以POST的方式request並
@@ -94,14 +96,15 @@
         if ([result isEqualToString:@"success"]) {
             
             
-            NSString *pin_id = [apiResponse objectForKey:@"searchPinresult"];
+            NSDictionary *pin = [apiResponse objectForKey:@"searchPinResult"];
             
             // [self recievePinID:pin_id];
            // [self.delegate returnPinID:pin_id];
+         for (NSDictionary *dict in pin) {
+             NSLog(@"id:%@",dict[@"pin_id"]);
+        [self SearchPinContentimage:dict[@"pin_id"]];
             
-            
-            
-            NSLog(@"success:%@",pin_id);
+         }
         }else {
             
             NSLog(@"no suceess");
@@ -122,6 +125,53 @@
 
 
 
+
+
+
+
+}
+-(void)SearchPinContentimage:(NSString*)pin_id{
+
+
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"searchPinimage",@"cmd", pin_id, @"pin_id", nil];
+    
+    
+    NSLog(@"pas,%@",params);
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    //以POST的方式request並
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        NSLog(@"apiResponse:%@",apiResponse);
+        // 取的signIn的key值，並輸出
+        NSString *result = [apiResponse objectForKey:@"searchPinimage"];
+   
+        
+        //   判斷signUp的key值是否等於success
+        if ([result isEqualToString:@"success"]) {
+            
+            
+            NSLog(@"success");
+        }else {
+            
+            NSLog(@"no suceess");
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+        
+        
+        
+        
+        
+        
+    }];
+    
 
 
 
