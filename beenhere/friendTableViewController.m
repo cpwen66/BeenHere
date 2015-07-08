@@ -19,6 +19,7 @@
  NSString * friendID;
     NSInteger * cellindex;
     NSMutableArray *allUsers;
+    UIView * userview;
 }
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
@@ -236,7 +237,7 @@
         [managere POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             
             NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
-            NSLog(@"result:%@",apiResponse);
+          
             
             NSString *result;
             //bug 待修
@@ -658,10 +659,76 @@
 #pragma mark - php searech friend
 -(void)resultInfo:(NSDictionary*)Response{
 
-     friendID=[Response objectForKey:@"findid"];
+   
+    
+    NSLog(@"re:%@",Response);
+    friendID=[Response objectForKey:@"findid"][@"id"];
+    
+    NSDictionary * data=Response[@"findid"];
     NSLog(@"friend id:%@",friendID);
     
+   userview=[[UIView alloc]
+                initWithFrame:CGRectMake(self.view.frame.size.width/2-105, 100, 230, 150)];
     
+        userview.backgroundColor=[UIColor whiteColor];
+    
+    NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    
+    UIImage * userpicture=[UIImage imageWithData:imagedata];
+    
+    UIImageView *userimage = [[UIImageView alloc]initWithImage:userpicture];
+    
+    userimage.frame = CGRectMake(userview.frame.size.width/2-27, userview.frame.size.height/2-40, 54 , 54);
+ 
+     userimage.layer.borderWidth = 2.0f;
+     userimage.layer.borderColor = [UIColor whiteColor].CGColor;
+     userimage.layer.cornerRadius = 25.0f;
+     userimage.clipsToBounds = YES;
+
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(userview.frame.size.width/2-15, userview.frame.size.height/2+5, 75, 40)];
+    label.text=data[@"name"];
+    
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(userview.frame.size.width/2-45, 0, 90, 40)];
+    title.text=@"是否加好友";
+    
+    
+    [userview addSubview:userimage];
+    [[userview layer] setBorderWidth:2.0];
+    //邊框顏色
+    [[userview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
+    
+    [[userview layer] setCornerRadius:10.0];
+    
+    UIButton *theButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    theButton.frame = CGRectMake(130, 100, 80,60);
+
+    [theButton setTitle:@"確認" forState:UIControlStateNormal];
+    theButton.tintColor=[UIColor blackColor];
+    [theButton addTarget:self action:@selector(onSkillButton) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    cancelButton.frame = CGRectMake(20, 100, 80, 60);
+    
+    [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    
+    [cancelButton addTarget:self action:@selector(oncancel) forControlEvents:UIControlEventTouchUpInside];
+    [userview addSubview:title];
+    [userview addSubview:cancelButton];
+    [userview addSubview:theButton];
+    [userview addSubview:label];
+    [self.view addSubview:userview];
+
+    
+    
+}
+
+-(void)oncancel{
+
+
+    [userview removeFromSuperview];
+    NSLog(@"cancel");
 }
 
 //找尋使用者
@@ -683,20 +750,19 @@
         //request成功之後要做的事情
         
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
-        NSLog(@"apiResponse:%@",apiResponse);
+       // NSLog(@"apiResponse:%@",apiResponse);
        
         
         // 取的signIn的key值，並輸出
         NSString *result = [apiResponse objectForKey:@"findaccount"];
          NSString * friend = [apiResponse objectForKey:@"findid"];
-        NSLog(@"result:%@   %@",result,friend);
         
         
         //   判斷signUp的key值是否等於success
         if ([result isEqualToString:@"success"]) {
             //
             //
-           [self SearchResult:@"是否加好友"];
+          // [self SearchResult:@"是否加好友"];
             [self resultInfo:apiResponse];
             
             //

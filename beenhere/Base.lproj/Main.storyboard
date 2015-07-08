@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="QUh-dk-scQ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -845,7 +845,7 @@
         <!--Setting-->
         <scene sceneID="Vda-uT-FLt">
             <objects>
-                <viewController storyboardIdentifier="setting" id="ptO-4N-Or2" customClass="setting" sceneMemberID="viewController">
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="ptO-4N-Or2" customClass="setting" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TfF-Ma-CF2"/>
                         <viewControllerLayoutGuide type="bottom" id="xnB-pL-aru"/>
@@ -858,7 +858,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="569"/>
                                 <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
-                                    <segue destination="AXk-xe-L4x" kind="embed" id="eeB-f9-77P"/>
+                                    <segue destination="AXk-xe-L4x" kind="embed" id="Ys0-I1-hdE"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -873,12 +873,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MtQ-56-bP0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3178" y="16"/>
+            <point key="canvasLocation" x="3146" y="96"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="Quc-6D-lt3">
             <objects>
-                <tableViewController id="AXk-xe-L4x" customClass="TableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="setting" id="AXk-xe-L4x" customClass="TableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="47" sectionHeaderHeight="33" sectionFooterHeight="22" id="U5q-US-Hjn">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="569"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1530,11 +1530,11 @@
                         <viewControllerLayoutGuide type="bottom" id="QVj-Xe-2nz"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="dQn-CE-2Gb">
-                        <rect key="frame" x="0.0" y="0.0" width="587" height="417"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bv2-6Z-ym0">
-                                <rect key="frame" x="0.0" y="0.0" width="587" height="372"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="691"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="detailreplyTableViewCell" id="mZa-Ra-2WD" customClass="detailreplyTableViewCell">
@@ -1604,7 +1604,7 @@
                                 </constraints>
                             </containerView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iHV-Hr-yFA">
-                                <rect key="frame" x="8" y="379" width="311" height="30"/>
+                                <rect key="frame" x="8" y="698" width="311" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="0fS-BY-5Vh"/>
                                     <constraint firstAttribute="width" constant="311" id="oSJ-NE-zmF"/>
@@ -1613,7 +1613,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PkN-A3-VbZ">
-                                <rect key="frame" x="359" y="379" width="52" height="30"/>
+                                <rect key="frame" x="359" y="698" width="52" height="30"/>
                                 <color key="backgroundColor" red="0.094117647060000004" green="0.71372549019999998" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="52" id="DuH-kf-ryc"/>
@@ -1628,7 +1628,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rvh-DD-0Mx">
-                                <rect key="frame" x="327" y="382" width="24" height="23"/>
+                                <rect key="frame" x="327" y="701" width="24" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="DDa-0n-bwA"/>
                                     <constraint firstAttribute="height" constant="23" id="jef-U6-HlS"/>
@@ -1899,6 +1899,6 @@
         <image name="tool3.png" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HKA-1j-IDo"/>
+        <segue reference="qVx-ZW-J3Q"/>
     </inferredMetricsTieBreakers>
 </document>

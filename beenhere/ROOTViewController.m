@@ -631,6 +631,8 @@ friendTableViewController * frinedview;
             [defaultsImageC synchronize];
             [defaultsImageC setBool:NO forKey:@"isImage"];
             [defaultsImageC synchronize];
+            [defaultsImageC setBool:NO forKey:@"isPhoto"];
+            [defaultsImageC synchronize];
             
             break;
          case 3:

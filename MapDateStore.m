@@ -9,6 +9,9 @@
 #import "MapDateStore.h"
 #import "StoreInfo.h"
 #import "AFNetworking.h"
+#import "Pin.h"
+#import "PinDAO.h"
+
 
 
 @implementation MapDateStore
@@ -57,11 +60,7 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"request error:%@",error);
-        
-        
-        
-        
-        
+       
         
     }];
 
@@ -103,7 +102,28 @@
          for (NSDictionary *dict in pin) {
              NSLog(@"id:%@",dict[@"pin_id"]);
         [self SearchPinContentimage:dict[@"pin_id"]];
+            //存ＰＩＮ
+             
+             Pin * pin=[[Pin alloc]init];
+             pin.pinId=dict[@"pin_id"];
+             pin.memberId=dict[@"member_id"];
+             pin.title=dict[@"pin_title"];
+             CGFloat latitude=  (CGFloat)[dict[@"pin_latitude"] floatValue];
+             CGFloat longitude=  (CGFloat)[dict[@"pin_longitude"] floatValue];
+             CLLocationCoordinate2D pinCoordinate;
+             pinCoordinate.latitude =latitude;
+             pinCoordinate.longitude = longitude;
+             pin.coordinate = pinCoordinate;
+             
+             
+             //存到sqlite
+              PinDAO*pinDAO = [[PinDAO alloc] init];
+             [pinDAO insertPinIntoSQLite:pin];
             
+          //   PIN.coordinate.latitude=dict[@""]
+             
+             
+             
          }
         }else {
             
@@ -154,6 +174,10 @@
         
         //   判斷signUp的key值是否等於success
         if ([result isEqualToString:@"success"]) {
+            
+            //存sqlite pin_picture
+            Pin * pin=[[Pin alloc]init];
+     
             
             
             NSLog(@"success");
