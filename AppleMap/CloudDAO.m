@@ -40,11 +40,19 @@ AFHTTPRequestOperationManager *manager;
     self.preference = [NSUserDefaults standardUserDefaults];
     NSString *memberId = [self.preference stringForKey:@"bhereID"];
     NSDictionary *params = [NSDictionary new];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *postedDate = [dateFormatter stringFromDate:pin.postedDate];
+    NSString *visitedDate = [dateFormatter stringFromDate:pin.visitedDate];
+    
     params = @{@"cmd": @"uploadNewPin",
                @"member_id": memberId,
                @"pin_title":pin.title,
                @"pin_latitude":[NSString stringWithFormat:@"%f", pin.coordinate.latitude],
-               @"pin_longitude":[NSString stringWithFormat:@"%f", pin.coordinate.longitude]
+               @"pin_longitude":[NSString stringWithFormat:@"%f", pin.coordinate.longitude],
+               @"pin_posted_date":postedDate,
+               @"pin_visited_date":visitedDate
                };
 //    mapManager = [MapDateStore new];
 //    [mapManager setDelegate:self];

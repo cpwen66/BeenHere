@@ -39,7 +39,7 @@
                                     <constraint firstAttribute="width" constant="40" id="0tl-XY-hoy"/>
                                     <constraint firstAttribute="height" constant="40" id="SOP-4a-SXR"/>
                                 </constraints>
-                                <state key="normal" image="userlocation.png">
+                                <state key="normal" image="indicator.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -181,7 +181,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="cd7-jM-Jea">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="s5T-Tu-2Sp"/>
-                        <barButtonItem key="rightBarButtonItem" image="filter1.png" id="MYT-MO-b6T">
+                        <barButtonItem key="rightBarButtonItem" image="filter" id="MYT-MO-b6T">
                             <connections>
                                 <action selector="sortingBarBtnItem:" destination="0P8-S4-FJn" id="D0O-mm-8Xg"/>
                             </connections>
@@ -251,7 +251,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="aPV-Jw-A9z">
-                        <barButtonItem key="rightBarButtonItem" title="Navi" id="ax5-vu-a2D">
+                        <barButtonItem key="rightBarButtonItem" image="guide" id="ax5-vu-a2D">
                             <connections>
                                 <action selector="naviBtnAction:" destination="8HH-NO-vTf" id="yP9-Bw-OZv"/>
                             </connections>
@@ -775,13 +775,15 @@
         <image name="album.png" width="180" height="169"/>
         <image name="camera.png" width="150" height="150"/>
         <image name="cat5.jpg" width="640" height="480"/>
+        <image name="filter" width="25" height="25"/>
         <image name="filter1.png" width="32" height="32"/>
+        <image name="guide" width="25" height="25"/>
+        <image name="indicator.png" width="204" height="204"/>
         <image name="menu.png" width="28" height="20"/>
         <image name="trashcan.png" width="85" height="105"/>
-        <image name="userlocation.png" width="103" height="103"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="wcA-bE-srM"/>
-        <segue reference="Pb1-n8-214"/>
+        <segue reference="hSb-mB-6Ol"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -22,6 +22,7 @@
 		690D6C0C1B394EDD00DA83E6 /* DatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0B1B394EDD00DA83E6 /* DatabaseConnection.m */; };
 		690D6C0F1B394EFA00DA83E6 /* PinDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0E1B394EFA00DA83E6 /* PinDAO.m */; };
 		6932AA9D1B4D8C200005F45F /* PinListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6932AA9C1B4D8C200005F45F /* PinListViewController.m */; };
+		6932AA9F1B4DBCAF0005F45F /* indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 6932AA9E1B4DBCAF0005F45F /* indicator.png */; };
 		6933183D1B47B5DE00C140EE /* ReuseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */; };
 		693ED2FC1B43D4F4000341C1 /* trashcan.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FA1B43D4F4000341C1 /* trashcan.png */; };
 		693ED2FD1B43D4F4000341C1 /* userlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FB1B43D4F4000341C1 /* userlocation.png */; };
@@ -34,7 +35,6 @@
 		6961AC601B4AB62C00DFADB7 /* noimage.png in Resources */ = {isa = PBXBuildFile; fileRef = 6961AC5F1B4AB62C00DFADB7 /* noimage.png */; };
 		6961AC621B4AB8ED00DFADB7 /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6961AC611B4AB8ED00DFADB7 /* View.xib */; };
 		6961AC651B4AB9B400DFADB7 /* PinInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6961AC641B4AB9B400DFADB7 /* PinInfoTableViewCell.m */; };
-		6961AC6B1B4AECE600DFADB7 /* filter1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6961AC6A1B4AECE600DFADB7 /* filter1.png */; };
 		6963FABB1B3B3509005BD414 /* Pin.m in Sources */ = {isa = PBXBuildFile; fileRef = 6963FABA1B3B3509005BD414 /* Pin.m */; };
 		6963FABE1B3B3CE9005BD414 /* PinDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6963FABD1B3B3CE9005BD414 /* PinDetailViewController.m */; };
 		6964811B1B3BAB9D003476B6 /* PinInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6964811A1B3BAB9C003476B6 /* PinInfoViewController.m */; };
@@ -229,6 +229,7 @@
 		690D6C0E1B394EFA00DA83E6 /* PinDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinDAO.m; path = AppleMap/PinDAO.m; sourceTree = "<group>"; };
 		6932AA9B1B4D8C200005F45F /* PinListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinListViewController.h; path = AppleMap/PinListViewController.h; sourceTree = "<group>"; };
 		6932AA9C1B4D8C200005F45F /* PinListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinListViewController.m; path = AppleMap/PinListViewController.m; sourceTree = "<group>"; };
+		6932AA9E1B4DBCAF0005F45F /* indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = indicator.png; sourceTree = "<group>"; };
 		6933183B1B47B5DE00C140EE /* ReuseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReuseTableViewCell.h; sourceTree = "<group>"; };
 		6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReuseTableViewCell.m; sourceTree = "<group>"; };
 		693ED2FA1B43D4F4000341C1 /* trashcan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trashcan.png; sourceTree = "<group>"; };
@@ -247,7 +248,6 @@
 		6961AC611B4AB8ED00DFADB7 /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = View.xib; path = AppleMap/View.xib; sourceTree = "<group>"; };
 		6961AC631B4AB9B400DFADB7 /* PinInfoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinInfoTableViewCell.h; path = AppleMap/PinInfoTableViewCell.h; sourceTree = "<group>"; };
 		6961AC641B4AB9B400DFADB7 /* PinInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinInfoTableViewCell.m; path = AppleMap/PinInfoTableViewCell.m; sourceTree = "<group>"; };
-		6961AC6A1B4AECE600DFADB7 /* filter1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filter1.png; sourceTree = "<group>"; };
 		6963FAB91B3B3509005BD414 /* Pin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pin.h; path = AppleMap/Pin.h; sourceTree = "<group>"; };
 		6963FABA1B3B3509005BD414 /* Pin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Pin.m; path = AppleMap/Pin.m; sourceTree = "<group>"; };
 		6963FABC1B3B3CE9005BD414 /* PinDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinDetailViewController.h; path = AppleMap/PinDetailViewController.h; sourceTree = "<group>"; };
@@ -608,7 +608,7 @@
 		6967636C1B3E88DB00B36B2A /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				6961AC6A1B4AECE600DFADB7 /* filter1.png */,
+				6932AA9E1B4DBCAF0005F45F /* indicator.png */,
 				6961AC5F1B4AB62C00DFADB7 /* noimage.png */,
 				69DA33AE1B463BB6000836F0 /* menu.png */,
 				69DA33AF1B463BB6000836F0 /* menu@2x.png */,
@@ -1088,7 +1088,6 @@
 				TargetAttributes = {
 					95B4174A1B01EB6A00EA9177 = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = DT8H5D6X99;
 					};
 					95B417631B01EB6A00EA9177 = {
 						CreatedOnToolsVersion = 6.2;
@@ -1130,6 +1129,7 @@
 				958464691B4A2ABB007B68BF /* impish@1.5x.png in Resources */,
 				9584646B1B4A2ABB007B68BF /* impish@2x.png in Resources */,
 				95B4175A1B01EB6A00EA9177 /* Main.storyboard in Resources */,
+				6932AA9F1B4DBCAF0005F45F /* indicator.png in Resources */,
 				95B5F6F51B13054700D7A342 /* hbeenbg.png in Resources */,
 				95D607C21B400B1A00DB90C8 /* background.jpg in Resources */,
 				95B4175F1B01EB6A00EA9177 /* LaunchScreen.xib in Resources */,
@@ -1150,7 +1150,6 @@
 				958464751B4A2ABB007B68BF /* notbad@2x.png in Resources */,
 				95B5F6FB1B13090900D7A342 /* beenhbg.png in Resources */,
 				9584647D1B4A2ABB007B68BF /* sad@1.5x.png in Resources */,
-				6961AC6B1B4AECE600DFADB7 /* filter1.png in Resources */,
 				958464641B4A2ABB007B68BF /* happy@1.5x.png in Resources */,
 				95701EEC1B10DF2700A7CB93 /* camera1.png in Resources */,
 				958464801B4A2ABB007B68BF /* sad@3x.png in Resources */,
