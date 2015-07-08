@@ -18,6 +18,7 @@
 #import "AppDelegate.h"
 #import "SWRevealViewController.h"
 #import "PinInfoTableViewController.h"
+#import "mydb.h"
 //因為Pin繼承至MKPointAnnotation，所以不用再import
 
 @interface AppleMapViewController ()<MKMapViewDelegate, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
@@ -66,6 +67,7 @@
     
     self.appleMapView.delegate = self;
     
+    
     notifiedArray = [[NSMutableArray alloc] init];
     
     locationManager = [CLLocationManager new];
@@ -89,6 +91,9 @@
     //[locationManager startMonitoringSignificantLocationChanges];
 
     [locationManager startUpdatingLocation];//開始更新位置
+    
+    
+
     
     // 先以 非自動 的方式指定座標給currentLocation，不然從別的view回來，會沒有座標，這樣距離算不出來。
     // 但目前的問題是callout的距離不會改變
@@ -386,6 +391,9 @@
 // 當在地圖上按下一個大頭針，就會進到這方法
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
 
+    MKAnnotationView *av = [mapView viewForAnnotation:mapView.userLocation];
+    av.enabled = NO;
+    
     //[self.appleMapView selectAnnotation:view.annotation animated:YES];
     //NSLog(@"MKAnnotationView.annotation = %@", view.annotation);
 

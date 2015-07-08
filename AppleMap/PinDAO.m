@@ -8,6 +8,7 @@
 
 #import "PinDAO.h"
 #import "Pin.h"
+#import "mydb.h"
 
 FMDatabase *sqlDB;
 
@@ -51,6 +52,8 @@ FMDatabase *sqlDB;
     
         // 這裡有奇怪的地方，就是pin.pinId出來是__NSCFNumber格式，所以要轉NSString
         // 這裡只是暫時用pinId來當subtitle，之後會用好友的名字
+        mydb *friendDB = [[mydb alloc] init];
+        
         pin.subtitle = [NSString stringWithFormat:@"%@到此一遊", pin.pinId];
         pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
         pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
