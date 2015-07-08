@@ -13,6 +13,8 @@
 #import "PinImage.h"
 #import <QuartzCore/QuartzCore.h>
 #import "PinInfoTableViewCell.h"
+#import <CoreLocation/CoreLocation.h>
+#import "mydb.h"
 
 @interface PinInfoTableViewController ()
 {
@@ -33,7 +35,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -42,7 +43,9 @@
     
     self.navigationController.navigationBarHidden = NO;
     
-    //self.allowsSelection = NO;// 讓使用者對tableView的點擊無效
+    self.tableView.allowsSelection = NO;// 讓使用者對tableView的點擊無效
+    
+    mydb *friendDB =[[mydb alloc] init];
     
     //[self.infoTableView reloadData];
     
@@ -63,7 +66,7 @@
     
     CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
     CGFloat screenHeight = [[UIScreen mainScreen] bounds].size.height;
-    NSLog(@"screen width= %f, height= %f", screenWidth, screenHeight);
+    //NSLog(@"screen width= %f, height= %f", screenWidth, screenHeight);
     
 //    CGFloat tableViewWidth = self.infoTableView.frame.size.width;
 //    CGFloat tableViewHeight = self.infoTableView.frame.size.height;
@@ -146,20 +149,23 @@
 
     UILabel *label = [[UILabel alloc] initWithFrame:labelRect];
     
-    if (self.infoPin.visitedDate != nil) {
-//        NSTimeZone *tz = [NSTimeZone localTimeZone];
-//        NSTimeInterval seconds = [tz secondsFromGMTForDate:self.infoPin.visitedDate];
-//        NSDate *dateInUTC = self.infoPin.visitedDate;
-//        NSDate *localDate = [dateInUTC dateByAddingTimeInterval:seconds];
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        //[dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
-        [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
-        NSLog(@"visitedDate = %@", self.infoPin.visitedDate);
-        label.text = [NSString stringWithFormat:@"%@在想：\n%@\n\n在%@", self.infoPin.memberId, self.infoPin.title, [dateFormat stringFromDate:self.infoPin.visitedDate]];
-    } else {
-        label.text = self.infoPin.title;
-    }
+
+    NSLog(@"postedDate= %@", self.infoPin.postedDate);
+    NSLog(@"visitedDate= %@", self.infoPin.visitedDate);
+
+    // NSString to NSDate
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    //NSLog(@"visitedDate = %@", self.infoPin.visitedDate);
+    
+    NSMutableArray *memberInfoArray =[NSMutableArray new];
+    memberInfoArray = [friendDB SearchFriendList:self.infoPin.memberId];
+
+    NSString *memberName = memberInfoArray[0][@"friendname"];
+    
+    label.text = [NSString stringWithFormat:@"%@ 在想：\n  %@\n\n在%@", memberName, self.infoPin.title, [dateFormat stringFromDate:self.infoPin.postedDate]];
+    
 
     CGSize maxSize2 = CGSizeMake(screenWidth-80, 999);
     NSString *contentString2 = label.text;
@@ -266,6 +272,18 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (IBAction)naviBtnAction:(id)sender {
+//    CLGeocoder *geocoder = [CLGeocoder new];
+//    CLPlacemark *placemark = [CLPlacemark new];
+//    placemark.location.coordinate.latitude = self.infoPin.coordinate.latitude;
+    MKPlacemark *targetPlacemark = [[MKPlacemark alloc] initWithCoordinate:self.infoPin.coordinate addressDictionary:nil];
+    MKMapItem *targetMapItem = [[MKMapItem alloc] initWithPlacemark:targetPlacemark];
+    NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving};
+    [targetMapItem openInMapsWithLaunchOptions:options];
+    
 }
 
 

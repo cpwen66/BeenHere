@@ -11,8 +11,4 @@
 @implementation Pin
 
 
-
-- (void)setValue:(id)value forKey:(NSString *)key {
-    self.distance = value;
-}
 @end

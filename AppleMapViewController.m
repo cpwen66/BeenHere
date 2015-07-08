@@ -92,9 +92,6 @@
 
     [locationManager startUpdatingLocation];//開始更新位置
     
-    
-
-    
     // 先以 非自動 的方式指定座標給currentLocation，不然從別的view回來，會沒有座標，這樣距離算不出來。
     // 但目前的問題是callout的距離不會改變
     currentLocation = [locationManager location];
@@ -225,7 +222,7 @@
         // PinInfoViewController *pinInfoVC = (PinInfoViewController *)[[segue destinationViewController] topViewController];
         
         pinInfoVC.infoPin = sender;
-        
+      
     }
 //    else if ([segue.identifier isEqualToString:@"showPinListSegue"]) {
 //        PinTableViewController *pinTableVC = (PinTableViewController *)segue.destinationViewController;
@@ -459,7 +456,7 @@
         CLLocation *annoLocation = [[CLLocation alloc] initWithLatitude:pin.coordinate.latitude longitude:pin.coordinate.longitude];
         CGFloat distance = [currentLocation distanceFromLocation:annoLocation];
         //NSLog(@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.visitedDate);
-        self.theLabel.text = [NSString stringWithFormat:@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.visitedDate];
+        //self.theLabel.text = [NSString stringWithFormat:@"pinId = %@, distance = %f, date=%@", pin.pinId, distance, pin.postedDate];
         
         // 把距離存在字典裡，準備廣播出去
         //[distanceDict setValue:[NSString stringWithFormat:@"%1.1f", distance/1000.0] forKey:pin.pinId];

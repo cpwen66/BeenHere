@@ -1,23 +1,20 @@
 //
-//  PinTableViewController.m
+//  PinListViewController.m
 //  beenhere
 //
-//  Created by CP Wen on 2015/7/2.
+//  Created by CP Wen on 2015/7/9.
 //  Copyright (c) 2015年 beenhere. All rights reserved.
 //
 
-//#import "PinInfoViewController.h"
+#import "PinListViewController.h"
 #import "AppleMapViewController.h"
-#import "PinTableViewController.h"
 #import "PinDAO.h"
 #import "SWRevealViewController.h"
 #import "PinInfoTableViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "mydb.h"
 
-//#import "PinImageDAO.h"
-
-@interface PinTableViewController ()<CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>//<updatePinDistanceDelegate>
+@interface PinListViewController ()<UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 {
     NSMutableArray *pinArray;
     CLLocation *currentLocation;
@@ -30,30 +27,32 @@
     UITapGestureRecognizer *tapGesture;
     UIPanGestureRecognizer *panGesture;
     mydb *friendDB;
-
+    
 }
 
-@property (strong, nonatomic) IBOutlet UITableView *pinListTableView;
+@property (weak, nonatomic) IBOutlet UITableView *pinListTableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *showSlideMenuBarBtnItem;
+@property (weak, nonatomic) IBOutlet UIPickerView *sortingPickerView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sortingPickerViewConstraint;
 
 @end
 
-@implementation PinTableViewController
+@implementation PinListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    // Do any additional setup after loading the view.
     friendDB = [[mydb alloc] init];
     self.distanceDict = [NSMutableDictionary new];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-//    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    //    self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-//    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"tool3.png"] style:UIBarButtonItemStyleDone target:self action:@selector(showCustomAlterView)];
-//    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    //    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"tool3.png"] style:UIBarButtonItemStyleDone target:self action:@selector(showCustomAlterView)];
+    //    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
     pinArray = [NSMutableArray new];
     PinDAO *pinDAO = [[PinDAO alloc] init];
@@ -64,7 +63,7 @@
     // 使用Slide menu (第三方套件)
     SWRevealViewController *revealViewController = self.revealViewController;
     if (revealViewController) {
-    
+        
         [self.showSlideMenuBarBtnItem setTarget:self.revealViewController];
         [self.showSlideMenuBarBtnItem setAction:@selector(revealToggle:)];
         [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
@@ -97,58 +96,29 @@
     // 但目前的問題是callout的距離不會改變
     currentLocation = [locationManager location];
     NSLog(@"currentLocationTable= %@", currentLocation);
-
-    // 自訂delegate
-//    AppleMapViewController *appleMapVC = [AppleMapViewController new];
-//    appleMapVC.delegate = self;
-//    [appleMapVC updatePinDistance];
     
-//    screenWidth = ceilf([[UIScreen mainScreen] bounds].size.width);
-//    screenHeight = ceilf([[UIScreen mainScreen] bounds].size.height);
-//    CGRect pickerRect = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/2);
-//    filterPickerView = [[UIPickerView alloc] initWithFrame:pickerRect];
-//    filterPickerView.backgroundColor = [UIColor whiteColor];
-//    pickerArray = @[@"FROM 🐣 TO 🐔", @"FROM 🐔 TO 🐣", @"FROM 🚲 TO ✈️", @"FROM ✈️ TO 🚲"];
-//    
-//    filterPickerView.delegate = self;
-//    filterPickerView.dataSource = self;
-//    
-//    [self.view addSubview:filterPickerView];
+    //self.pinListTableView.delegate = self;
     
+    self.sortingPickerView.backgroundColor = [UIColor whiteColor];
+    pickerArray = @[@"FROM 🐣 TO 🐔", @"FROM 🐔 TO 🐣", @"FROM 🚲 TO ✈️", @"FROM ✈️ TO 🚲"];
+    
+    self.sortingPickerView.delegate = self;
+    self.sortingPickerView.dataSource = self;
 }
-
-
-
-//- (void)userLocationChanged:(NSNotification *)aNotification {
-//    //NSLog(@"aNotification.description = %@", aNotification.description);
-//    self.distanceDict = [[NSMutableDictionary alloc] init];
-//    self.distanceDict = aNotification.object;
-//    NSLog(@"distanceDict = %@", self.distanceDict);
-//
-//    [self.pinListTableView reloadData];
-//}
-
-// 自訂delegate
-//- (void)dealPinDistance:(NSMutableDictionary *)pinDistanceDict {
-//    self.distanceDict = pinDistanceDict;
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     // 因為在上一頁已經將navigationBar隱藏，所以這裡要再打開才會出現navigationBar
     self.navigationController.navigationBarHidden = NO;
-
-}
-
--(void) showCustomAlterView {
     
 }
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showPinInfoSegue"]) {
@@ -158,25 +128,11 @@
     }
 }
 
-- (IBAction)filterPinBtnAction:(id)sender {
-    
-    if (filterPickerView == nil) {
-        screenWidth = ceilf([[UIScreen mainScreen] bounds].size.width);
-        screenHeight = ceilf([[UIScreen mainScreen] bounds].size.height);
-        NSLog(@"%f, %f", screenWidth, screenHeight);
-        CGRect pickerRect = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/2);
-        filterPickerView = [[UIPickerView alloc] initWithFrame:pickerRect];
-        filterPickerView.backgroundColor = [UIColor whiteColor];
-        pickerArray = @[@"FROM 🐣 TO 🐔", @"FROM 🐔 TO 🐣", @"FROM 🚲 TO ✈️", @"FROM ✈️ TO 🚲"];
-
-        filterPickerView.delegate = self;
-        filterPickerView.dataSource = self;
-
-        [self.view addSubview:filterPickerView];
-
+- (IBAction)sortingBarBtnItem:(id)sender {
+        
         [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            //pickerView.frame.origin = CGPointMake(0, screenHeight*3/5);
-            filterPickerView.frame = CGRectMake(0, screenHeight*2/3-20, screenWidth, screenHeight*1/3);
+            
+            self.sortingPickerViewConstraint.constant = -170;
         } completion:nil];
         
         tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
@@ -185,24 +141,16 @@
         [self.view addGestureRecognizer:tapGesture];
         panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
         [self.view addGestureRecognizer:panGesture];
-        
-        
-        
-    }
-    
 
 }
 
 - (void)hidePickerView {
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        filterPickerView.frame = CGRectMake(0, screenHeight, screenWidth, screenHeight*1/3);
+        self.sortingPickerViewConstraint.constant = 0;
     } completion:nil];
     [self.view removeGestureRecognizer:tapGesture];
     [self.view removeGestureRecognizer:panGesture];
     
-    
-    [filterPickerView removeFromSuperview];
-    filterPickerView = nil;
 }
 
 
@@ -217,10 +165,10 @@
 // 要#import <CoreLocation/CoreLocation.h>及加上<CLLocationManagerDelegate>，才能用這個方法
 // 當iOS更新使用者位置，會進到這個方法
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-
+    
     
     [self.distanceDict removeAllObjects];
-
+    
     // 因為iOS的延遲，可能會丟出多個座標
     currentLocation = [locations lastObject];
     
@@ -236,40 +184,40 @@
         [self.distanceDict setValue:[NSString stringWithFormat:@"%1.1f", distance/1000.0] forKey:pin.pinId];
         
         
- /*
-        // 需滿足三個條件才會要iOS送出通知，
-        // 使用者離大頭針距離120公尺內、沒有到訪過此大頭針、尚未發送過通知
-        if (distance < 120 && pin.visitedDate == nil && [notifiedArray containsObject:pin]==false) {
-            UILocalNotification *localNoti = [[UILocalNotification alloc] init];
-            localNoti.fireDate = nil;// nil表示馬上發出通知，不排程
-            localNoti.timeZone = [NSTimeZone defaultTimeZone];
-            localNoti.alertBody = pin.title;
-            localNoti.soundName = UILocalNotificationDefaultSoundName;
-            localNoti.applicationIconBadgeNumber = badgeNumber;
-            
-            [[UIApplication sharedApplication] scheduleLocalNotification:localNoti];
-            
-            //AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
-            // 因為有加新的通知，所以要馬上更新編號
-            //[appDelegate reorderApplicationIconBadgeNumber];
-            
-            // 程式要自己控制badgeNumber的編號，所以這裡badgeNumber+1
-            badgeNumber++;
-            
-            // 將已經送出的notification先存在暫存的array
-            [notifiedArray addObject:pin];
-            self.theLabel.text = [NSString stringWithFormat:@"id=%@, D= %f", pin.pinId, distance];
-        }
-  */
+        /*
+         // 需滿足三個條件才會要iOS送出通知，
+         // 使用者離大頭針距離120公尺內、沒有到訪過此大頭針、尚未發送過通知
+         if (distance < 120 && pin.visitedDate == nil && [notifiedArray containsObject:pin]==false) {
+         UILocalNotification *localNoti = [[UILocalNotification alloc] init];
+         localNoti.fireDate = nil;// nil表示馬上發出通知，不排程
+         localNoti.timeZone = [NSTimeZone defaultTimeZone];
+         localNoti.alertBody = pin.title;
+         localNoti.soundName = UILocalNotificationDefaultSoundName;
+         localNoti.applicationIconBadgeNumber = badgeNumber;
+         
+         [[UIApplication sharedApplication] scheduleLocalNotification:localNoti];
+         
+         //AppDelegate *appDelegate = (AppDelegate *) [[UIApplication sharedApplication] delegate];
+         // 因為有加新的通知，所以要馬上更新編號
+         //[appDelegate reorderApplicationIconBadgeNumber];
+         
+         // 程式要自己控制badgeNumber的編號，所以這裡badgeNumber+1
+         badgeNumber++;
+         
+         // 將已經送出的notification先存在暫存的array
+         [notifiedArray addObject:pin];
+         self.theLabel.text = [NSString stringWithFormat:@"id=%@, D= %f", pin.pinId, distance];
+         }
+         */
         
     }
- 
+    
     //self.distanceDict = [[NSMutableDictionary alloc] init];
     
     NSLog(@"distanceDict = %@", self.distanceDict);
     
     [self.pinListTableView reloadData];
-  
+    
 }
 
 
@@ -287,7 +235,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     // Configure the cell...
     UIImageView *headShotImageView = (UIImageView *)[cell viewWithTag:10];
@@ -307,7 +255,7 @@
     NSMutableArray *memberInfoArray = [NSMutableArray new];
     memberInfoArray = [friendDB SearchFriendList:pin.memberId];
     //pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
-
+    
     
     ownerLabel.text = [NSString stringWithFormat:@"%@ 在想：", memberInfoArray[0][@"friendname"]];
     titleLabel.text = [NSString stringWithFormat:@"  %@",[sortedPinArray[indexPath.row] title]];
@@ -330,55 +278,55 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    PinInfoTableViewController *infoTableVC = [[PinInfoTableViewController alloc] init];
-//    
-//    infoTableVC.infoPin = pinArray[indexPath.row];
-//    [self.navigationController pushViewController:infoTableVC animated:YES];
+    //    PinInfoTableViewController *infoTableVC = [[PinInfoTableViewController alloc] init];
+    //
+    //    infoTableVC.infoPin = pinArray[indexPath.row];
+    //    [self.navigationController pushViewController:infoTableVC animated:YES];
 }
 
 /*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
 
 /*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
 
 /*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 #pragma mark - Picker View Delegate
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
@@ -386,16 +334,16 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-        return [pickerArray count];
+    return [pickerArray count];
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     
-        return [pickerArray objectAtIndex:row];
+    return [pickerArray objectAtIndex:row];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-
+    
     if (row == 0) {
         sortedPinArray = [pinArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSDate *n1 = [(Pin *) obj1 postedDate];
@@ -413,14 +361,14 @@
         sortedPinArray =[[ary reverseObjectEnumerator] allObjects];
         
     } else if (row == 2) {
-    //PinDAO *pinDAO = [[PinDAO alloc] init];
-
+        //PinDAO *pinDAO = [[PinDAO alloc] init];
+        
         sortedPinArray = [pinArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             NSNumber *n1 = [(Pin *) obj1 distance];
             NSNumber *n2 = [(Pin *) obj2 distance];
             return [n1 compare:n2];
         }];
-
+        
     } else {
         NSArray *ary = [NSArray new];
         
@@ -432,14 +380,25 @@
         sortedPinArray =[[ary reverseObjectEnumerator] allObjects];
         
     }
-//    Pin *pin = [[Pin alloc] init];
-//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"pin.distance" ascending:YES];
-//    
-//    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-//    sortedPickerArray = [pickerArray sortedArrayUsingDescriptors:sortDescriptors];
+    //    Pin *pin = [[Pin alloc] init];
+    //    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"pin.distance" ascending:YES];
+    //
+    //    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    //    sortedPickerArray = [pickerArray sortedArrayUsingDescriptors:sortDescriptors];
     
-    [self.tableView reloadData];
+    [self.pinListTableView reloadData];
 }
 
+
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end

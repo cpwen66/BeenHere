@@ -21,6 +21,7 @@
 		2BFA754D1B3AB0A100F70A9C /* headphoto.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2BFA754C1B3AB0A100F70A9C /* headphoto.jpg */; };
 		690D6C0C1B394EDD00DA83E6 /* DatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0B1B394EDD00DA83E6 /* DatabaseConnection.m */; };
 		690D6C0F1B394EFA00DA83E6 /* PinDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D6C0E1B394EFA00DA83E6 /* PinDAO.m */; };
+		6932AA9D1B4D8C200005F45F /* PinListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6932AA9C1B4D8C200005F45F /* PinListViewController.m */; };
 		6933183D1B47B5DE00C140EE /* ReuseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */; };
 		693ED2FC1B43D4F4000341C1 /* trashcan.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FA1B43D4F4000341C1 /* trashcan.png */; };
 		693ED2FD1B43D4F4000341C1 /* userlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 693ED2FB1B43D4F4000341C1 /* userlocation.png */; };
@@ -226,6 +227,8 @@
 		690D6C0B1B394EDD00DA83E6 /* DatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseConnection.m; path = AppleMap/DatabaseConnection.m; sourceTree = "<group>"; };
 		690D6C0D1B394EFA00DA83E6 /* PinDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinDAO.h; path = AppleMap/PinDAO.h; sourceTree = "<group>"; };
 		690D6C0E1B394EFA00DA83E6 /* PinDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinDAO.m; path = AppleMap/PinDAO.m; sourceTree = "<group>"; };
+		6932AA9B1B4D8C200005F45F /* PinListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinListViewController.h; path = AppleMap/PinListViewController.h; sourceTree = "<group>"; };
+		6932AA9C1B4D8C200005F45F /* PinListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinListViewController.m; path = AppleMap/PinListViewController.m; sourceTree = "<group>"; };
 		6933183B1B47B5DE00C140EE /* ReuseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReuseTableViewCell.h; sourceTree = "<group>"; };
 		6933183C1B47B5DE00C140EE /* ReuseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReuseTableViewCell.m; sourceTree = "<group>"; };
 		693ED2FA1B43D4F4000341C1 /* trashcan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trashcan.png; sourceTree = "<group>"; };
@@ -583,6 +586,8 @@
 				6963FABD1B3B3CE9005BD414 /* PinDetailViewController.m */,
 				6968AC9B1B44C1E800E14B09 /* PinTableViewController.h */,
 				6968AC9C1B44C1E800E14B09 /* PinTableViewController.m */,
+				6932AA9B1B4D8C200005F45F /* PinListViewController.h */,
+				6932AA9C1B4D8C200005F45F /* PinListViewController.m */,
 				695D93D41B456E690008502E /* CloudDAO.h */,
 				695D93D51B456E690008502E /* CloudDAO.m */,
 				69703DBA1B46635700A02B7A /* SideBarTableViewController.h */,
@@ -1240,6 +1245,7 @@
 				9524980D1B342C7900513EE7 /* RATreeView+UIScrollView.m in Sources */,
 				952498091B342C7900513EE7 /* RATreeView+Private.m in Sources */,
 				952498021B342C7900513EE7 /* RABatchChanges.m in Sources */,
+				6932AA9D1B4D8C200005F45F /* PinListViewController.m in Sources */,
 				695D93D61B456E690008502E /* CloudDAO.m in Sources */,
 				95A1D97B1B19B2BC0044CE80 /* TableViewController.m in Sources */,
 				95DC22371B41A55B0063DC2F /* friendrootViewController.m in Sources */,

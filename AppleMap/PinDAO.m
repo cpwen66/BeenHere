@@ -36,9 +36,13 @@ FMDatabase *sqlDB;
 - (NSMutableArray *)getAllPin{
     NSMutableArray *rows = [NSMutableArray new];
     
+    mydb *friendDB = [[mydb alloc] init];
+
+    
     //如果這行發生找不到table的error，表示沒有拿到sqlite檔案
     //上次發生錯誤，是sqlite的fileName打錯
     FMResultSet *resultSet;
+//    FMResultSet *friendResutlSet;
     resultSet = [sqlDB executeQuery:@"select * from pins"];
     
     if ([sqlDB hadError]) {
@@ -49,15 +53,56 @@ FMDatabase *sqlDB;
         //NSLog(@"resultDictionary: %@", resultSet.resultDictionary);
         Pin *pin = [[Pin alloc] init];
         pin.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
-    
-        // 這裡有奇怪的地方，就是pin.pinId出來是__NSCFNumber格式，所以要轉NSString
-        // 這裡只是暫時用pinId來當subtitle，之後會用好友的名字
-        mydb *friendDB = [[mydb alloc] init];
-        
-        pin.subtitle = [NSString stringWithFormat:@"%@到此一遊", pin.pinId];
+
         pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
         pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
-        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
+        
+        // 如果資料庫裡沒資料會有"No such table ..." 的錯誤訊息
+        NSMutableArray *memberInfoArray = [NSMutableArray new];
+        memberInfoArray = [friendDB SearchFriendList:pin.memberId];
+        NSLog(@"pin.memberId = %@", pin.memberId);
+        NSLog(@"array = %@", memberInfoArray);
+        pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
+        NSLog(@"pin.pinId = %@, subtitle= %@, title = %@", pin.pinId, pin.subtitle, pin.title);
+
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+        // 此格式必須完全符合SQLite裡時間欄位的格式，不然回傳會是nil
+        // 24小時制，要用大寫的H
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        
+        NSTimeZone *tz = [NSTimeZone localTimeZone];
+        // 取出時間，還要一些轉換
+        NSString *postedTime = [resultSet.resultDictionary objectForKey:@"pin_posted_date"];
+        NSDate *postUTCDate = [dateFormat dateFromString:postedTime];
+        NSTimeInterval seconds = [tz secondsFromGMTForDate:postUTCDate];
+        //NSDate *dateInUTC = pin.postedDate;
+        pin.postedDate = [postUTCDate dateByAddingTimeInterval:seconds];
+        
+    
+        NSString *visitedTime = [resultSet.resultDictionary objectForKey:@"pin_visited_date"];
+        NSLog(@"visitedTime= %@", visitedTime);
+
+        if (![[resultSet.resultDictionary objectForKey:@"pin_visited_date"] isEqual:[NSNull new]]) {
+        
+            NSDate *visitedUTCDate = [dateFormat dateFromString:visitedTime];
+            seconds = [tz secondsFromGMTForDate:visitedUTCDate];
+            pin.visitedDate = [visitedUTCDate dateByAddingTimeInterval:seconds];
+            
+        } else {
+            //pin.visitedDate = [dateFormat dateFromString:@"1970-01-01 00:00:00"];
+        }
+       
+    
+//        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
+
+
+
+//        NSDate *date = [NSDate new];
+//        date = [dateFormat dateFromString:postedTime];
+//
+        NSLog(@"postedDate = %@", pin.postedDate);
+        
         CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
         CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
         CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
@@ -70,7 +115,7 @@ FMDatabase *sqlDB;
     return rows;
 }
 
-- (NSMutableArray*) getPinsByFilter:(NSString *)owner visited:(NSString *)visited {
+- (NSMutableArray*)getPinsByFilter:(NSString *)owner visited:(NSString *)visited {
     NSMutableArray *rows = [NSMutableArray new];
     
 //    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
@@ -124,7 +169,10 @@ FMDatabase *sqlDB;
         pin.subtitle = [NSString stringWithFormat:@"%@到此一遊", pin.pinId];
         pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
         pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
+        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
         pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
+        NSLog(@"postedDate= %@", pin.postedDate);
+        NSLog(@"visitedDate= %@", pin.visitedDate);
         CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
         CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
         CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
@@ -147,7 +195,11 @@ FMDatabase *sqlDB;
         pin.subtitle= [resultSet stringForColumn:@"pin_id"];
         pin.title = [resultSet stringForColumn:@"pin_title"];
         pin.memberId = [resultSet stringForColumn:@"member_id"];
+        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
+        NSLog(@"postedDate = %@", pin.postedDate);
         pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
+        NSLog(@"postedDate= %@", pin.postedDate);
+        NSLog(@"visitedDate= %@", pin.visitedDate);
         CLLocationDegrees latitude = [resultSet doubleForColumn:@"pin_latitude"];
         CLLocationDegrees longitude = [resultSet doubleForColumn:@"pin_longitude"];
         CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
@@ -168,8 +220,13 @@ FMDatabase *sqlDB;
     NSString *pinLatitude = [NSString stringWithFormat:@"%1.6f", pin.coordinate.latitude];
     NSString *pinLongitude = [NSString stringWithFormat:@"%1.6f", pin.coordinate.longitude];
 
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *postedDate = [dateFormatter stringFromDate:pin.postedDate];
+    NSString *visitedDate = [dateFormatter stringFromDate:pin.visitedDate];
+
     
-    if (![sqlDB executeUpdate:@"insert into pins (member_id, pin_title, pin_latitude, pin_longitude, pin_visited_date) values (?, ?, ?, ?, ?)", pin.memberId, pin.title, pinLatitude, pinLongitude, pin.visitedDate]) {
+    if (![sqlDB executeUpdate:@"insert into pins (member_id, pin_title, pin_latitude, pin_longitude, pin_posted_date, pin_visited_date) values (?, ?, ?, ?, ?)", pin.memberId, pin.title, pinLatitude, pinLongitude, postedDate, visitedDate]) {
      
      //去executeUpdate看說明，裡面會提到lastErrorMessage
      NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
