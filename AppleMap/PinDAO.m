@@ -60,34 +60,20 @@ FMDatabase *sqlDB;
         // 如果資料庫裡沒資料會有"No such table ..." 的錯誤訊息
         NSMutableArray *memberInfoArray = [NSMutableArray new];
         memberInfoArray = [friendDB SearchFriendList:pin.memberId];
-        NSLog(@"pin.memberId = %@", pin.memberId);
-        NSLog(@"array = %@", memberInfoArray);
+        //NSLog(@"pin.memberId = %@", pin.memberId);
+        //NSLog(@"array = %@", memberInfoArray);
         pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
-        NSLog(@"pin.pinId = %@, subtitle= %@, title = %@", pin.pinId, pin.subtitle, pin.title);
+        //NSLog(@"pin.pinId = %@, subtitle= %@, title = %@", pin.pinId, pin.subtitle, pin.title);
 
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
-        // 此格式必須完全符合SQLite裡時間欄位的格式，不然回傳會是nil
-        // 24小時制，要用大寫的H
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        
-        NSTimeZone *tz = [NSTimeZone localTimeZone];
-        // 取出時間，還要一些轉換
-        NSString *postedTime = [resultSet.resultDictionary objectForKey:@"pin_posted_date"];
-        NSDate *postUTCDate = [dateFormat dateFromString:postedTime];
-        NSTimeInterval seconds = [tz secondsFromGMTForDate:postUTCDate];
-        //NSDate *dateInUTC = pin.postedDate;
-        pin.postedDate = [postUTCDate dateByAddingTimeInterval:seconds];
-        
+        // 自訂方法，把UTC時間字串轉本地時間NSData
+        pin.postedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_posted_date"]];
     
-        NSString *visitedTime = [resultSet.resultDictionary objectForKey:@"pin_visited_date"];
-        NSLog(@"visitedTime= %@", visitedTime);
+//        NSString *visitedTime = [resultSet.resultDictionary objectForKey:@"pin_visited_date"];
+//        NSLog(@"visitedTime= %@", visitedTime);
 
         if (![[resultSet.resultDictionary objectForKey:@"pin_visited_date"] isEqual:[NSNull new]]) {
-        
-            NSDate *visitedUTCDate = [dateFormat dateFromString:visitedTime];
-            seconds = [tz secondsFromGMTForDate:visitedUTCDate];
-            pin.visitedDate = [visitedUTCDate dateByAddingTimeInterval:seconds];
+            
+            pin.visitedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_visited_date"]];
             
         } else {
             //pin.visitedDate = [dateFormat dateFromString:@"1970-01-01 00:00:00"];
@@ -95,13 +81,6 @@ FMDatabase *sqlDB;
        
     
 //        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
-
-
-
-//        NSDate *date = [NSDate new];
-//        date = [dateFormat dateFromString:postedTime];
-//
-        NSLog(@"postedDate = %@", pin.postedDate);
         
         CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
         CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
@@ -169,10 +148,20 @@ FMDatabase *sqlDB;
         pin.subtitle = [NSString stringWithFormat:@"%@到此一遊", pin.pinId];
         pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
         pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
-        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
-        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
-        NSLog(@"postedDate= %@", pin.postedDate);
-        NSLog(@"visitedDate= %@", pin.visitedDate);
+//        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
+//        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
+
+        // 自訂方法，把UTC時間字串轉本地時間NSData
+        pin.postedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_posted_date"]];
+        
+        if (![[resultSet.resultDictionary objectForKey:@"pin_visited_date"] isEqual:[NSNull new]]) {
+            
+            pin.visitedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_visited_date"]];
+            
+        } else {
+            //pin.visitedDate = [dateFormat dateFromString:@"1970-01-01 00:00:00"];
+        }
+
         CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
         CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
         CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
@@ -186,7 +175,7 @@ FMDatabase *sqlDB;
     
 }
 
-- (Pin *) getPinById:(NSString *)pinId {
+- (Pin *)getPinById:(NSString *)pinId {
     FMResultSet *resultSet;
     resultSet = [sqlDB executeQuery:@"select * from pins where pin_id=?", pinId];
     Pin *pin = [[Pin alloc] init];
@@ -226,7 +215,7 @@ FMDatabase *sqlDB;
     NSString *visitedDate = [dateFormatter stringFromDate:pin.visitedDate];
 
     
-    if (![sqlDB executeUpdate:@"insert into pins (member_id, pin_title, pin_latitude, pin_longitude, pin_posted_date, pin_visited_date) values (?, ?, ?, ?, ?)", pin.memberId, pin.title, pinLatitude, pinLongitude, postedDate, visitedDate]) {
+    if (![sqlDB executeUpdate:@"insert into pins (member_id, pin_title, pin_latitude, pin_longitude, pin_posted_date, pin_visited_date) values (?, ?, ?, ?, ?, ?)", pin.memberId, pin.title, pinLatitude, pinLongitude, postedDate, visitedDate]) {
      
      //去executeUpdate看說明，裡面會提到lastErrorMessage
      NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
@@ -285,6 +274,29 @@ FMDatabase *sqlDB;
         NSLog(@"DB Error %d: %@", [sqlDB lastErrorCode], [sqlDB lastErrorMessage]);
     }
     return maxPinId;
+}
+
+// 自訂方法，把UTC時間字串轉本地時間NSData
+-(NSDate *)transfromUTCTimeToLocalTime:(NSString *)UTCTime {
+    
+    NSDate *localTime = [NSDate new];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+    // 此格式必須完全符合SQLite裡時間欄位的格式，不然回傳會是nil
+    // 24小時制，要用大寫的H
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSTimeZone *tz = [NSTimeZone localTimeZone];
+    // 取出時間
+    NSString *postedTime = UTCTime;
+    // 換成NSDate
+    NSDate *postUTCDate = [dateFormat dateFromString:postedTime];
+    // UTC時間與本地時間的秒數差
+    NSTimeInterval seconds = [tz secondsFromGMTForDate:postUTCDate];
+    // 利用秒數差，換成本地時間
+    localTime = [postUTCDate dateByAddingTimeInterval:seconds];
+    
+    return localTime;
 }
 
 @end
