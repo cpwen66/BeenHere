@@ -11,9 +11,12 @@
 #import "PinImage.h"
 #import "MapDateStore.h"
 
-@interface CloudDAO : NSObject<MapDataProtocol>
-@property (strong,nonatomic) MapDateStore *mapManager ;
+
+@interface CloudDAO : NSObject//<MapDataProtocol>
+
+
 @property (weak, nonatomic)NSUserDefaults *preference;
+@property (strong,nonatomic) MapDateStore *mapManager ;
 
 - (NSString *)uploadNewPin:(Pin *)pin;
 

@@ -23,8 +23,8 @@ AFHTTPRequestOperationManager *manager;
 {
     self = [super init];
     if (self) {
-        self.mapManager = [[MapDateStore alloc] init];
-        self.mapManager.delegate = self;
+       self.mapManager = [[MapDateStore alloc] init];
+        //self.mapManager.delegate = self;
     }
     return self;
 }
@@ -140,13 +140,8 @@ AFHTTPRequestOperationManager *manager;
 
 }
 
-//測試delgate
--(void)returnPinID:(NSString *)pinid{
-    NSLog(@"pin_id:%@",pinid);
-}
+
 -(void)StoreTagdata{
-
-
 
 }
 
@@ -176,13 +171,7 @@ AFHTTPRequestOperationManager *manager;
         }
         
     }];
-
-
     
 }
-
-
-
-
 
 @end

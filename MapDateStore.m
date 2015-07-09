@@ -14,8 +14,6 @@
 #import "PinImageDAO.h"
 #import "PinImage.h"
 
-
-
 @implementation MapDateStore
 
 -(instancetype)init
