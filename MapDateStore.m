@@ -11,6 +11,8 @@
 #import "AFNetworking.h"
 #import "Pin.h"
 #import "PinDAO.h"
+#import "PinImageDAO.h"
+#import "PinImage.h"
 
 
 
@@ -116,13 +118,28 @@
              pin.coordinate = pinCoordinate;
              
              
+             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+             [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+             // 此格式必須完全符合SQLite裡時間欄位的格式，不然回傳會是nil
+             // 24小時制，要用大寫的H
+             [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+             
+             NSTimeZone *tz = [NSTimeZone localTimeZone];
+             // 取出時間，還要一些轉換
+             NSString *postedTime = dict[@"pin_posted_date"];
+             NSDate *postUTCDate = [dateFormat dateFromString:postedTime];
+             NSTimeInterval seconds = [tz secondsFromGMTForDate:postUTCDate];
+             //NSDate *dateInUTC = pin.postedDate;
+             pin.postedDate = [postUTCDate dateByAddingTimeInterval:seconds];
+
+             
              //存到sqlite
               PinDAO*pinDAO = [[PinDAO alloc] init];
              [pinDAO insertPinIntoSQLite:pin];
             
-          //   PIN.coordinate.latitude=dict[@""]
-             
-             
+    
+             //去從mysql取pin的圖
+             [self SearchPinContentimage:dict[@"pin_id"]];
              
          }
         }else {
@@ -155,8 +172,7 @@
 
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"searchPinimage",@"cmd", pin_id, @"pin_id", nil];
     
-    
-    NSLog(@"pas,%@",params);
+
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -176,10 +192,28 @@
         if ([result isEqualToString:@"success"]) {
             
             //存sqlite pin_picture
-            Pin * pin=[[Pin alloc]init];
-     
             
             
+               NSDictionary * pin=[apiResponse objectForKey:@"searchPinimageResult"];
+            
+               for (NSDictionary *dict in pin) {
+         
+            
+            
+            NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:dict[@"picture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+            // UIImage * image=[UIImage imageWithData:imagedata];
+            
+            PinImage * pinimage=[[PinImage alloc]init];
+          
+                pinimage.imageData=imagedata;
+                   
+                pinimage.pinId=dict[@"pin_id"];
+            
+            PinImageDAO * pinimageDAO=[[PinImageDAO alloc] init];
+            
+            [pinimageDAO insertImageIntoSQLite:pinimage];
+                   
+               }
             NSLog(@"success");
         }else {
             

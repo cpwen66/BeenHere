@@ -667,10 +667,34 @@
     NSDictionary * data=Response[@"findid"];
     NSLog(@"friend id:%@",friendID);
     
+ 
+    UIView * colorview=[[UIView alloc]
+              initWithFrame:CGRectMake(0, 0, 250, 75)];
+         [colorview setBackgroundColor:[UIColor colorWithRed:24./255. green:182./255. blue:246./255. alpha:1.]];
+    
+   
+     //  [[colorview layer] setBorderWidth:2.0];
+    //邊框顏色
+   // [[colorview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
+    
+    [[colorview layer] setCornerRadius:10.0];
+    
+    //第一個圖層
+    
    userview=[[UIView alloc]
-                initWithFrame:CGRectMake(self.view.frame.size.width/2-105, 100, 230, 150)];
+                initWithFrame:CGRectMake(self.view.frame.size.width/2-115, 100, 250, 150)];
     
         userview.backgroundColor=[UIColor whiteColor];
+    
+
+    [[userview layer] setBorderWidth:2.0];
+    //邊框顏色
+    [[userview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
+    
+    [[userview layer] setCornerRadius:10.0];
+    
+    
+    
     
     NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
     
@@ -693,12 +717,7 @@
     title.text=@"是否加好友";
     
     
-    [userview addSubview:userimage];
-    [[userview layer] setBorderWidth:2.0];
-    //邊框顏色
-    [[userview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
-    
-    [[userview layer] setCornerRadius:10.0];
+ 
     
     UIButton *theButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     theButton.frame = CGRectMake(130, 100, 80,60);
@@ -706,7 +725,7 @@
     [theButton setTitle:@"確認" forState:UIControlStateNormal];
     theButton.tintColor=[UIColor blackColor];
     [theButton addTarget:self action:@selector(onSkillButton) forControlEvents:UIControlEventTouchUpInside];
-    
+   
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     cancelButton.frame = CGRectMake(20, 100, 80, 60);
@@ -714,6 +733,10 @@
     [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
     
     [cancelButton addTarget:self action:@selector(oncancel) forControlEvents:UIControlEventTouchUpInside];
+    
+        [userview addSubview:userimage];
+    [userview addSubview:colorview];
+    [userview bringSubviewToFront:userimage];
     [userview addSubview:title];
     [userview addSubview:cancelButton];
     [userview addSubview:theButton];
