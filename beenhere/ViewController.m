@@ -38,9 +38,9 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     
-    MapDateStore * mapManager = [[MapDateStore alloc] init];
-    mapManager.delegate = self;
-    [mapManager SearchPinContent];
+//    MapDateStore * mapManager = [[MapDateStore alloc] init];
+//    mapManager.delegate = self;
+//    [mapManager SearchPinContent];
     
     
     
