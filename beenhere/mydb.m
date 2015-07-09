@@ -183,6 +183,7 @@ mydb *sharedInstance;
 
 
 }
+
 #pragma mark - friend 
 -(id)SearchFriendList:(NSString *)beeid {
     

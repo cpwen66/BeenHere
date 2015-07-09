@@ -10,6 +10,7 @@
 #import "Pin.h"
 #import "PinImage.h"
 #import "AFNetworking.h"
+#import "StoreInfo.h"
 //#import "AFHTTPRequestOperationManager.h"
 
 AFHTTPRequestOperationManager *manager;
@@ -164,7 +165,7 @@ AFHTTPRequestOperationManager *manager;
                @"pin_image":pinImage.imageData
                };
     
-    [manager POST:@"http://192.168.196.159:8000/pins/addpin/" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"operation success: %@", responseObject);
         
