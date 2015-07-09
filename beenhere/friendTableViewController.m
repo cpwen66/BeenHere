@@ -677,7 +677,7 @@
     //邊框顏色
    // [[colorview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
     
-    [[colorview layer] setCornerRadius:10.0];
+  //  [[colorview layer] setCornerRadius:10.0];
  
     //第一個圖層
     
@@ -686,7 +686,7 @@
     
     userview.backgroundColor=[UIColor whiteColor];
     
-    
+    userview.clipsToBounds=YES;
     
     [[userview layer] setBorderWidth:2.0];
     //邊框顏色
