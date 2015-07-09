@@ -61,7 +61,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="aDu-h8-5L2">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="7nC-qG-mgF"/>
-                        <barButtonItem key="rightBarButtonItem" image="filter1.png" id="HOI-ZM-uZY">
+                        <barButtonItem key="rightBarButtonItem" image="filter" id="HOI-ZM-uZY">
                             <connections>
                                 <action selector="filterBarBtnItemAction:" destination="wlv-CV-jgl" id="Yqd-BQ-LHl"/>
                             </connections>
@@ -181,7 +181,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="cd7-jM-Jea">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="s5T-Tu-2Sp"/>
-                        <barButtonItem key="rightBarButtonItem" image="filter" id="MYT-MO-b6T">
+                        <barButtonItem key="rightBarButtonItem" image="sort" id="MYT-MO-b6T">
                             <connections>
                                 <action selector="sortingBarBtnItem:" destination="0P8-S4-FJn" id="D0O-mm-8Xg"/>
                             </connections>
@@ -212,7 +212,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7R5-mB-ZJd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1012" y="-982"/>
+            <point key="canvasLocation" x="1015" y="-1258"/>
         </scene>
         <!--Pin Info Table View Controller-->
         <scene sceneID="dP9-1t-dGr">
@@ -443,7 +443,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="Yj7-Fs-6ql">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="ngT-IW-qxt"/>
-                        <barButtonItem key="rightBarButtonItem" image="filter1.png" id="s98-ec-X5A">
+                        <barButtonItem key="rightBarButtonItem" image="sort" id="s98-ec-X5A">
                             <connections>
                                 <action selector="filterPinBtnAction:" destination="gdA-OA-gK7" id="pGn-T1-A9y"/>
                             </connections>
@@ -776,14 +776,14 @@
         <image name="camera.png" width="150" height="150"/>
         <image name="cat5.jpg" width="640" height="480"/>
         <image name="filter" width="25" height="25"/>
-        <image name="filter1.png" width="32" height="32"/>
         <image name="guide" width="25" height="25"/>
         <image name="indicator.png" width="204" height="204"/>
         <image name="menu.png" width="28" height="20"/>
+        <image name="sort" width="25" height="25"/>
         <image name="trashcan.png" width="85" height="105"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="wcA-bE-srM"/>
-        <segue reference="hSb-mB-6Ol"/>
+        <segue reference="Pb1-n8-214"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -124,7 +124,7 @@
     if ([segue.identifier isEqualToString:@"showPinInfoSegue"]) {
         NSIndexPath *indexPath = [self.pinListTableView indexPathForSelectedRow];
         PinInfoTableViewController *pinInfoTableVC = segue.destinationViewController;
-        pinInfoTableVC.infoPin = pinArray[indexPath.row];
+        pinInfoTableVC.infoPin = sortedPinArray[indexPath.row];
     }
 }
 

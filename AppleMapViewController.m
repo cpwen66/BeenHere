@@ -180,6 +180,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
+    // 從資料庫中先把所有大頭針拿出來
     pinImageDAO = [[PinImageDAO alloc] init];
     PinDAO *pinDAO = [[PinDAO alloc] init];
     allPinRows = [pinDAO getAllPin];
@@ -262,22 +263,22 @@
     [self returnUserLocation];
 }
 
-- (IBAction)showPinMessage:(id)sender {
-    Pin *pin = [[Pin alloc] init];
-    PinDAO *pinDAO = [[PinDAO alloc] init];
-    pin = [pinDAO getPinById:@"4"];
-    //self.theLabel = pin.visitedDate;
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
-    self.theLabel.text = [NSString stringWithFormat:@"%@", [dateFormat stringFromDate:pin.visitedDate]];
-}
+//- (IBAction)showPinMessage:(id)sender {
+//    Pin *pin = [[Pin alloc] init];
+//    PinDAO *pinDAO = [[PinDAO alloc] init];
+//    pin = [pinDAO getPinById:@"4"];
+//    //self.theLabel = pin.visitedDate;
+//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//    [dateFormat setDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+//    self.theLabel.text = [NSString stringWithFormat:@"%@", [dateFormat stringFromDate:pin.visitedDate]];
+//}
 
 
 - (IBAction)listPinButtonAction:(id)sender {
 //    PinTableViewController *pinTableVC = [[PinTableViewController alloc] init];
 //    [self.navigationController pushViewController:pinTableVC animated:YES];
     
-    // 如果已經在storyboard，就不要再寫底下這一行，不然會翻2次頁
+    // 如果已經在storyboard拉segue，就不要再寫底下這一行，不然會翻2次頁
     //[self performSegueWithIdentifier:@"showPinListSegue" sender:nil];
     
     
@@ -355,7 +356,7 @@
         
         //
         UIImage *img = [[UIImage alloc] init];
-        img = [UIImage imageNamed:@"cat2.jpg"];
+        img = [UIImage imageNamed:@"noimage.png"];
         pinImage.imageData = UIImageJPEGRepresentation(img, 0.5);
         
     }
