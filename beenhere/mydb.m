@@ -82,7 +82,7 @@ mydb *sharedInstance;
    // NSString *query = [NSString stringWithFormat:@"%@", beemail];
     
     NSMutableArray *rows = [NSMutableArray new];
-    FMResultSet *result = [db executeQuery:@"select * from memeber where d=? ", beeid];
+    FMResultSet *result = [db executeQuery:@"select * from memeber where id=? ", beeid];
     
     while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
         [rows addObject:result.resultDictionary];

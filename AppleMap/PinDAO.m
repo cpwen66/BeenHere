@@ -67,7 +67,7 @@ FMDatabase *sqlDB;
         NSString *myString = [NSString stringWithFormat:@"%@",pin.memberId];
         
         if ([myString isEqualToString:userID]) {
-            memberInfoArray=[friendDB querymemberinfo:pin.memberId];
+            memberInfoArray=[friendDB querymemberinfo:myString];
             
              pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"name"]];
              
