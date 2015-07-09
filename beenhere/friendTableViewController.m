@@ -39,7 +39,7 @@
     
     self.navigationItem.rightBarButtonItem=doneButton;
     
- 
+         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddContentwith:) name:@"textcontentfriendwith" object:nil];
    
     [self showFriendList];
     

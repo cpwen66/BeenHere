@@ -9,5 +9,5 @@
 #import "ViewController.h"
 
 @interface talkviewcontroller : ViewController
-
+@property (assign,nonatomic)NSInteger flag;
 @end

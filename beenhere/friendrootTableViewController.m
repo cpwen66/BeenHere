@@ -15,6 +15,7 @@
 #import "MBProgressHUD.h"
 #import "AFNetworking.h"
 #import "replyViewController.h"
+#import "talkviewcontroller.h"
 @interface friendrootTableViewController (){
 NSMutableArray* Content;
 NSDictionary * contentkey;
@@ -129,6 +130,7 @@ NSUInteger indentation;
     
     [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
+
 - (NSArray *)fillChildrenForNode:(NSString *)content_no
 {
     
@@ -191,6 +193,59 @@ NSUInteger indentation;
     // Dispose of any resources that can be recreated.
 }
 
+-(void)AddContentwith:(NSNotification *)message{
+    
+    NSDictionary * dict=[[NSDictionary alloc]init];
+    
+    //    dict = [NSDictionary dictionaryWithObject:message.object forKey:@"text"];
+    dict=message.object;
+    
+    
+    NSLog(@"s:%@",dict);
+    // [self fillNodesArray:dict];
+    
+    
+    
+    NSString * text=dict[@"text"];
+    UIImage * image;
+    
+    if (dict[@"image"]!=[NSNull null]) {
+        image=dict[@"image"];
+    }else{
+        image=nil;
+    }
+    //輸入時間
+    
+    
+    
+    
+    //存到SQLite
+    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+    
+    NSDictionary *params=[[NSDictionary alloc]init ];
+    
+    //取出當前時間 及時區的轉換
+    NSDate * new = [NSDate date];
+    NSTimeInterval timeZoneOffset = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:new];
+    NSDate *localDate = [new dateByAddingTimeInterval:timeZoneOffset];
+    
+    
+    //    NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
+    NSData *imageData = UIImagePNGRepresentation(image);
+    
+    params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", _friendid, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"1",@"imageid",@"3",@"typetag",nil];
+    
+    NSLog(@"insert params:%@",params);
+    
+    
+    [[mydb sharedInstance]insertcontentremotewithimage:params ];
+    
+    
+    
+    // [self.tableView reloadData];
+    
+}
 #pragma mark - Table view data source
 - (friendTableViewCell *)prototypeCell
 {

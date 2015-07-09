@@ -29,5 +29,6 @@
 @property (nonatomic, assign) NSInteger *isImage;
 @property (nonatomic, assign) NSInteger *isLocation;
 @property (nonatomic, assign) NSInteger *isContent;
+@property (nonatomic, assign) NSInteger *isfriendContent;
 
 @end

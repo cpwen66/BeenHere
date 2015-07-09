@@ -68,7 +68,19 @@
 }
 -(void)donenewcust{
 
-  
+    if (_flag==1) {
+        talkcontent=_textfield.text;
+        _setimage=_moodimageview.image;
+        NSDictionary *params = [NSDictionary new];
+        params = @{
+                   @"text":talkcontent,
+                   @"image":_setimage
+                   };
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentfriendwith" object:params];
+
+        
+    }else{
       talkcontent=_textfield.text;
     _setimage=_moodimageview.image;
     NSDictionary *params = [NSDictionary new];
@@ -79,7 +91,7 @@
     
     [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentwith" object:params];
     
-    
+    }
  [self.navigationController popViewControllerAnimated:YES];
 
 }
