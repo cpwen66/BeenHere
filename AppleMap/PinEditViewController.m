@@ -13,12 +13,10 @@
 #import "PinImage.h"
 #import "PinImageDAO.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "CloudDAO.h"
-#import "MapDateStore.h"
 
 CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 
-@interface PinEditViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, MapDataProtocol>
+@interface PinEditViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     CGFloat titleTextViewHeight;
     int imageIndex;
@@ -34,14 +32,14 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     NSMutableArray *theSubViews;
     UITextView *titleTextView;
     UIImagePickerController *imagePicker;
-    CloudDAO *cloudDAO;
-    
 }
 
 @property (weak, nonatomic) IBOutlet UIScrollView *theScrollView;
 //@property (weak, nonatomic) IBOutlet UIView *toolContainerView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolViewBottomLayoutConstraint;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *doneBarBtnItem;
+@property (strong, nonatomic) MapDateStore *mapDateStore;
+@property (strong, nonatomic) CloudDAO *cloudDAO;
 
 @end
 
@@ -52,7 +50,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     // Do any additional setup after loading the view.
     //self.childViewControllers.
     
-    cloudDAO = [[CloudDAO alloc] init];
+    self.cloudDAO = [[CloudDAO alloc] init];
     
     imageIndex = 0;
     isFirstViewDidAppear = YES;
@@ -82,6 +80,10 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     // 下一行self.myScrollView改成self.view也可以
     [self.theScrollView addGestureRecognizer:tapGesture];
     
+    //self.mapDateStore = [[MapDateStore alloc] init];
+    
+    // 要用下下層的delegate要將下一層的變數拿到.h，讓這裡可以引用
+    self.cloudDAO.mapManager.delegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -174,7 +176,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 - (IBAction)donePostPinBtnAction:(id)sender {
 
 
-#if 0
+#if 1
     NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
     NSString *memberId = [preference stringForKey:@"bhereID"];
     self.currentPin.memberId = memberId;
@@ -184,7 +186,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     self.currentPin.visitedDate = [NSDate date];
 
     // 請求上傳動作
-    [cloudDAO uploadNewPin:self.currentPin];
+    [self.cloudDAO uploadNewPin:self.currentPin];
 
     [self dismissViewControllerAnimated:YES completion:nil];
 
@@ -289,7 +291,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
             newPinImage.pinId = pinid;
             
             // 上傳圖片到伺服器
-            [cloudDAO uploadImageOfPin:newPinImage];
+            [self.cloudDAO uploadImageOfPin:newPinImage];
         }
     }
     

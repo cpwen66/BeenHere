@@ -10,12 +10,14 @@
 #import <MapKit/MapKit.h>
 //#import <CoreLocation/CoreLocation.h>
 #import "Pin.h"
+#import "MapDateStore.h"
+#import "CloudDAO.h"
 
-@interface PinEditViewController : UIViewController
+
+@interface PinEditViewController : UIViewController<MapDataProtocol>
 
 @property (strong, nonatomic) Pin *currentPin;
 @property (assign, nonatomic) float currentPinlatitude;
-
 
 + (UIImage *)imageWithiamge:(UIImage *)image scaledToSize:(CGSize)newSize;
 
