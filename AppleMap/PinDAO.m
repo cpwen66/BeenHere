@@ -59,12 +59,34 @@ FMDatabase *sqlDB;
         
         // 如果資料庫裡沒資料會有"No such table ..." 的錯誤訊息
         NSMutableArray *memberInfoArray = [NSMutableArray new];
+        
+        NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+        
+        NSLog(@"id%@, pin_id%@",pin.memberId,userID);
+        
+        NSString *myString = [NSString stringWithFormat:@"%@",pin.memberId];
+        
+        if ([myString isEqualToString:userID]) {
+            memberInfoArray=[friendDB querymemberinfo:pin.memberId];
+            
+             pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"name"]];
+             
+            NSLog(@"array = %@", memberInfoArray);
+        }else{
         memberInfoArray = [friendDB SearchFriendList:pin.memberId];
+        pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
+        
+        }
+        
         //NSLog(@"pin.memberId = %@", pin.memberId);
         //NSLog(@"array = %@", memberInfoArray);
-        pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
+      
+        
+        
+        
+        
         //NSLog(@"pin.pinId = %@, subtitle= %@, title = %@", pin.pinId, pin.subtitle, pin.title);
-
+        
         // 自訂方法，把UTC時間字串轉本地時間NSData
         pin.postedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_posted_date"]];
     

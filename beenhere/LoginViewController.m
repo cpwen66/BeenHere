@@ -146,9 +146,9 @@
             
             NSString * beid=row[@"id"];
             NSString * bename=row[@"name"];
-            
-            
-            NSLog(@"id:%@,name:%@",beid,bename);
+//            
+//            
+//            NSLog(@"id:%@,name:%@",beid,bename);
             
              [self setField:EmailTextfield.text forKey:@"bhereEmail"];
              [self setField:PasswordTextfield.text forKey:@"bherePassword"];

@@ -76,6 +76,22 @@ mydb *sharedInstance;
     
 }
 
+-(id)querymemberinfo:(NSString *)beeid {
+    
+    
+   // NSString *query = [NSString stringWithFormat:@"%@", beemail];
+    
+    NSMutableArray *rows = [NSMutableArray new];
+    FMResultSet *result = [db executeQuery:@"select * from memeber where d=? ", beeid];
+    
+    while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
+        [rows addObject:result.resultDictionary];
+    }
+    
+    
+    return rows;
+    
+}
 //判斷EMAIL是否註冊過
 - (BOOL)andnewEmail:(NSString *)email{
     
@@ -203,6 +219,7 @@ mydb *sharedInstance;
     
     
 }
+
 //新增使用者圖片
 -(void)insertuserpicture:(NSDate*)picture addbeeid:(NSString*)beeid{
 

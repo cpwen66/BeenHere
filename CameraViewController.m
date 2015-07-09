@@ -192,6 +192,8 @@
         
         NSUserDefaults *defaultsImageC = [NSUserDefaults standardUserDefaults];
         BOOL isContent = [defaultsImageC boolForKey:@"isContent"];
+        NSUserDefaults *defaultsImageCf = [NSUserDefaults standardUserDefaults];
+        BOOL isContentfriend = [defaultsImageCf boolForKey:@"isContentfriend"];
 
         //存取圖片
         if (isPhoto == YES) {
@@ -224,6 +226,26 @@
                            };
                 
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentwith" object:params];
+            }];
+        } else if (isContentfriend == YES) {
+            [PhotoSingleton shareInstance].contentPhoto = self.previewView.image;
+            [self dismissViewControllerAnimated:YES completion:^{
+                NSDictionary *params = [NSDictionary new];
+                UIImage * contentimage=[PhotoSingleton shareInstance].contentPhoto;
+                UIGraphicsBeginImageContext(CGSizeMake(200, 200));
+                
+                //將原始影像重繪在此範圍中
+                [contentimage drawInRect:CGRectMake(0, 0, 200, 200)];
+                
+                //以目前的ImageContext來製作新的UIImage
+                UIImage *resizeImage =UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                params = @{
+                           @"text":@" ",
+                           @"image": resizeImage
+                           };
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"textcontentfriendwith" object:params];
             }];
         }
            [[NSNotificationCenter defaultCenter]postNotificationName:@"handleimage" object:nil];

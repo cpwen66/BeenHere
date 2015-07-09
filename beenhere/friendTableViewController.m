@@ -39,7 +39,7 @@
     
     self.navigationItem.rightBarButtonItem=doneButton;
     
-         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddContentwith:) name:@"textcontentfriendwith" object:nil];
+       
    
     [self showFriendList];
     
@@ -69,8 +69,7 @@
     frindRequestList=[StoreInfo shareInstance].FriendRequestList;
 
     
-    NSLog(@"fr:%@",frindRequestList);
-    
+        
     MyfriendList=[StoreInfo shareInstance].MyFriendtList;
     
     
@@ -85,6 +84,58 @@
    
 }
 
+-(void)AddContentwith:(NSNotification *)message{
+    
+    NSDictionary * dict=[[NSDictionary alloc]init];
+    
+    //    dict = [NSDictionary dictionaryWithObject:message.object forKey:@"text"];
+    dict=message.object;
+    
+    
+ 
+    // [self fillNodesArray:dict];
+    
+    
+    NSString * text=dict[@"text"];
+    UIImage * image;
+    
+    if (dict[@"image"]!=[NSNull null]) {
+        image=dict[@"image"];
+    }else{
+        image=nil;
+    }
+    //輸入時間
+    
+    
+    
+    
+    //存到SQLite
+    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+    
+    NSDictionary *params=[[NSDictionary alloc]init ];
+    
+    //取出當前時間 及時區的轉換
+    NSDate * new = [NSDate date];
+    NSTimeInterval timeZoneOffset = [[NSTimeZone systemTimeZone] secondsFromGMTForDate:new];
+    NSDate *localDate = [new dateByAddingTimeInterval:timeZoneOffset];
+    
+    
+    //    NSData *imageData = UIImageJPEGRepresentation([UIImage imageNamed:@"demo.jpg"],0.5);
+    NSData *imageData = UIImagePNGRepresentation(image);
+    
+    params = [NSDictionary dictionaryWithObjectsAndKeys:@"insertcontent",@"cmd", friendID, @"userID", text, @"text", localDate, @"date",@"0",@"level",imageData,@"image",@"1",@"imageid",@"3",@"typetag",nil];
+    
+    NSLog(@"insert params:%@",params);
+    
+    
+    [[mydb sharedInstance]insertcontentremotewithimage:params ];
+    
+    
+    
+    // [self.tableView reloadData];
+    
+}
 
 
 #pragma mark - Table view data source
@@ -253,6 +304,8 @@
                 
                 if (![data[@"userpicture"] isEqual:@""]) {
                     NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                    
+                    
                     
                     //修改到sqlite 圖像
                     [[mydb sharedInstance]updateuserpicture:imagedata addID:MyfriendList[indexPath.row][@"id"] ];
@@ -691,6 +744,8 @@
     [[userview layer] setBorderWidth:2.0];
     //邊框顏色
     [[userview layer] setBorderColor:[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9].CGColor];
+
+//       [[userview layer] setBorderColor:[UIColor colorWithRed:24.0 green:182.0 blue:246.0 alpha:0.9].CGColor];
     
     [[userview layer] setCornerRadius:10.0];
     
@@ -721,11 +776,11 @@
  
     
     UIButton *theButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    theButton.frame = CGRectMake(130, 100, 80,60);
+    theButton.frame = CGRectMake(135, 100, 80,60);
 
     [theButton setTitle:@"確認" forState:UIControlStateNormal];
     theButton.tintColor=[UIColor blackColor];
-    [theButton addTarget:self action:@selector(onSkillButton) forControlEvents:UIControlEventTouchUpInside];
+    [theButton addTarget:self action:@selector(onButton) forControlEvents:UIControlEventTouchUpInside];
    
     
     UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -747,7 +802,10 @@
     
     
 }
+-(void)onButton{
+  [self addFirendRequest:friendID andfrisetrequest:@"1"];
 
+}
 -(void)oncancel{
 
 

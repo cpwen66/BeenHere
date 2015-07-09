@@ -12,7 +12,7 @@
 #import "MapDateStore.h"
 
 @interface CloudDAO : NSObject<MapDataProtocol>
-
+@property (strong,nonatomic) MapDateStore *mapManager ;
 @property (weak, nonatomic)NSUserDefaults *preference;
 
 - (NSString *)uploadNewPin:(Pin *)pin;

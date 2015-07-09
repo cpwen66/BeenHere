@@ -18,6 +18,7 @@
 #import "talkviewcontroller.h"
 #import "MBProgressHUD.h"
 #import "PhotoSingleton.h"
+#import "MapDateStore.h"
 
 static NSString *const menuCellIdentifier = @"rotationCell";
 
@@ -27,7 +28,8 @@ UITableViewDelegate,
 UITableViewDataSource,
 YALContextMenuTableViewDelegate,
 UITextViewDelegate,
-UIActionSheetDelegate
+UIActionSheetDelegate,
+MapDataProtocol
 >
 {
 friendTableViewController * frinedview;
@@ -83,7 +85,9 @@ friendTableViewController * frinedview;
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
 
-    
+//    MapDateStore * mapManager = [[MapDateStore alloc] init];
+//        mapManager.delegate = self;
+//      [mapManager SearchPinContent];
 
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];

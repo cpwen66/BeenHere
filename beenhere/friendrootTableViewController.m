@@ -45,6 +45,10 @@ NSUInteger indentation;
     //relodata table
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loaddata) name:@"loaddata" object:nil];
    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddContentfriendwith:) name:@"textcontentfriendwith" object:nil];
+   
+    
+    
     [self fillDisplayArray];
     [self initdata];
     
@@ -193,8 +197,8 @@ NSUInteger indentation;
     // Dispose of any resources that can be recreated.
 }
 
--(void)AddContentwith:(NSNotification *)message{
-    
+-(void)AddContentfriendwith:(NSNotification *)message{
+  
     NSDictionary * dict=[[NSDictionary alloc]init];
     
     //    dict = [NSDictionary dictionaryWithObject:message.object forKey:@"text"];
@@ -206,7 +210,9 @@ NSUInteger indentation;
     
     
     
-    NSString * text=dict[@"text"];
+   // NSString * text=dict[@"text"];
+    NSString * text=@"感謝各位聽我們報告";
+    
     UIImage * image;
     
     if (dict[@"image"]!=[NSNull null]) {
@@ -220,7 +226,7 @@ NSUInteger indentation;
     
     
     //存到SQLite
-    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+
     
     
     NSDictionary *params=[[NSDictionary alloc]init ];

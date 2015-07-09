@@ -18,6 +18,7 @@
 #import "CameraViewController.h"
 #import "talkviewcontroller.h"
 #import "MBProgressHUD.h"
+
 @interface friendrootViewController ()
 
 
@@ -49,6 +50,25 @@
 
     
 }
+
+- (IBAction)tackpicture:(id)sender {
+    
+       NSUserDefaults *defaultsImageC = [NSUserDefaults standardUserDefaults];
+    UIViewController *cameraVC = [self.storyboard instantiateViewControllerWithIdentifier:@"cameraview"];
+    
+    [defaultsImageC setBool:NO forKey:@"isContent"];
+    [defaultsImageC synchronize];
+    [defaultsImageC setBool:NO forKey:@"isImage"];
+    [defaultsImageC synchronize];
+    [defaultsImageC setBool:NO forKey:@"isPhoto"];
+    [defaultsImageC synchronize];
+    [defaultsImageC setBool:YES forKey:@"isContentfriend"];
+    [defaultsImageC synchronize];
+    [self presentViewController:cameraVC animated:YES completion:nil];
+    
+    
+}
+
 -(void)home{
 
 
@@ -89,8 +109,7 @@
             
             _userpicture.image=image;
             
-            
-            
+
         }else {
             NSLog(@"image download no suceess");
             
@@ -102,6 +121,7 @@
         
         NSData * picture=[[NSData alloc]init ];
         picture= [[mydb sharedInstance]getuserpicture:_friendid];
+        
         
         
     }];

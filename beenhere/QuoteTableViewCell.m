@@ -143,10 +143,11 @@
 
 -(void)prepareForReuse
 {
-    self.iconimage.image =nil;
+    //self.iconimage.image =nil;
     self.simleView.hidden = YES;
    // self.userimage.image=nil;
 //    self.cellButton=nil;
+    self.cellButton.hidden=YES;
     self.cellimage.image=nil;
    // self.cellbackground=nil;
     

@@ -53,6 +53,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     //self.childViewControllers.
     
     cloudDAO = [[CloudDAO alloc] init];
+ 
     
     imageIndex = 0;
     isFirstViewDidAppear = YES;

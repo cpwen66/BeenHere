@@ -72,6 +72,8 @@
 
 -(void)insertpin:(NSDictionary *)params;
 
+//搜尋memberinfo
+-(id)querymemberinfo:(NSString *)beeid;
 //search friend
 -(id)SearchFriendList:(NSString *)beeid;
 @end

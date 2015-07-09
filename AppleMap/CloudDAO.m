@@ -15,7 +15,7 @@
 
 AFHTTPRequestOperationManager *manager;
 @interface CloudDAO()
-@property (strong,nonatomic) MapDateStore *mapManager ;
+
 @end
 @implementation CloudDAO
 

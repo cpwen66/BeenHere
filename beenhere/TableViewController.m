@@ -48,11 +48,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-
-    
-    NSLog(@"%ld",(long)indexPath.section);
-
-    
     UIViewController * account = [self.storyboard instantiateViewControllerWithIdentifier:@"account"];
     
     switch (indexPath.section) {
