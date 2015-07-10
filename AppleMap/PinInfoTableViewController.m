@@ -160,9 +160,29 @@
     //NSLog(@"visitedDate = %@", self.infoPin.visitedDate);
     
     NSMutableArray *memberInfoArray =[NSMutableArray new];
-    memberInfoArray = [friendDB SearchFriendList:self.infoPin.memberId];
+    
+    
+    //memberInfoArray = [friendDB SearchFriendList:self.infoPin.memberId];
 
-    NSString *memberName = memberInfoArray[0][@"friendname"];
+    
+    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
+    NSLog(@"id%@, pin_id%@",self.infoPin.memberId,userID);
+    
+    NSString *memberIdString = [NSString stringWithFormat:@"%@",self.infoPin.memberId];
+    
+    NSString *memberName;
+    if ([memberIdString isEqualToString:userID]) {
+        memberInfoArray = [friendDB querymemberinfo:memberIdString];
+        memberName = memberInfoArray[0][@"name"];
+
+        NSLog(@"array = %@", memberInfoArray);
+    }else{
+        memberInfoArray = [friendDB SearchFriendList:self.infoPin.memberId];
+        memberName = memberInfoArray[0][@"friendname"];
+
+    }
+    
     
     label.text = [NSString stringWithFormat:@"%@ 在想：\n  %@\n\n在%@", memberName, self.infoPin.title, [dateFormat stringFromDate:self.infoPin.postedDate]];
     

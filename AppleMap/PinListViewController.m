@@ -13,6 +13,7 @@
 #import "PinInfoTableViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "mydb.h"
+#import "Pin.h"
 
 @interface PinListViewController ()<UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 {
@@ -21,12 +22,13 @@
     CLLocationManager *locationManager;
     CGFloat screenWidth;
     CGFloat screenHeight;
-    UIPickerView *filterPickerView;
+    //UIPickerView *filterPickerView;
     NSArray *pickerArray;
     NSArray *sortedPinArray;
     UITapGestureRecognizer *tapGesture;
     UIPanGestureRecognizer *panGesture;
     mydb *friendDB;
+    NSIndexPath *listIndexPath;
     
 }
 
@@ -113,10 +115,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     // 因為在上一頁已經將navigationBar隱藏，所以這裡要再打開才會出現navigationBar
     self.navigationController.navigationBarHidden = NO;
-    
+
+    // 設定pickerView預設的位置
+    [self.sortingPickerView selectRow:2 inComponent:0 animated:YES];
+    [self.sortingPickerView reloadAllComponents];
 }
 
 
@@ -129,18 +133,18 @@
 }
 
 - (IBAction)sortingBarBtnItem:(id)sender {
+
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         
-        [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            
-            self.sortingPickerViewConstraint.constant = -170;
-        } completion:nil];
-        
-        tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
-        
-        // 下一行self.myScrollView改成self.view也可以
-        [self.view addGestureRecognizer:tapGesture];
-        panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
-        [self.view addGestureRecognizer:panGesture];
+        self.sortingPickerViewConstraint.constant = -170;
+    } completion:nil];
+    
+    tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
+    
+    // 下一行self.myScrollView改成self.view也可以
+    [self.view addGestureRecognizer:tapGesture];
+    panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(hidePickerView)];
+    [self.view addGestureRecognizer:panGesture];
 
 }
 
@@ -230,6 +234,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
+    self.title = [NSString stringWithFormat:@"Total pins: %d", [sortedPinArray count]];
     return [sortedPinArray count];
 }
 
@@ -253,11 +258,29 @@
     headShotImageView.image = [UIImage imageNamed:@"headphoto.jpg"];
     
     NSMutableArray *memberInfoArray = [NSMutableArray new];
-    memberInfoArray = [friendDB SearchFriendList:pin.memberId];
-    //pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
+//    memberInfoArray = [friendDB SearchFriendList:pin.memberId];
     
     
-    ownerLabel.text = [NSString stringWithFormat:@"%@ 在想：", memberInfoArray[0][@"friendname"]];
+    NSString *myMemberId = [[NSUserDefaults standardUserDefaults] stringForKey:@"bhereID"];
+    //NSLog(@"id%@, pin_id%@", pin.memberId,userID);
+  
+    NSString *memberIdString = [NSString stringWithFormat:@"%@",pin.memberId];
+    
+    NSString *memberName;
+    if ([memberIdString isEqualToString:myMemberId]) {
+        memberInfoArray = [friendDB querymemberinfo:memberIdString];
+        memberName = memberInfoArray[0][@"name"];
+        
+    }else{
+        memberInfoArray = [friendDB SearchFriendList:memberIdString];
+        memberName = memberInfoArray[0][@"friendname"];
+        
+    }
+    //NSLog(@"memberName = %@", memberName);
+
+    //NSLog(@"array = %@", memberInfoArray[0]);
+
+    ownerLabel.text = [NSString stringWithFormat:@"%@ 在想：", memberName];
     titleLabel.text = [NSString stringWithFormat:@"  %@",[sortedPinArray[indexPath.row] title]];
     
     if (self.distanceDict[[sortedPinArray[indexPath.row] pinId]] != nil) {
@@ -270,6 +293,32 @@
     
     return cell;
     
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    
+    NSString *myMemberId = [[NSUserDefaults standardUserDefaults] stringForKey:@"bhereID"];
+    
+
+    
+    [sortedPinArray count];
+    NSLog(@"sortedPinarray =%@", sortedPinArray);
+    //Pin *pin = [[Pin alloc] init];
+    NSInteger myPinCount = 0;
+    NSInteger friendsPinCount = 0;
+    for (Pin *pin in sortedPinArray) {
+        NSLog(@"%@, %@", pin.memberId, myMemberId);
+        NSString *pinOwnerId = [NSString stringWithFormat:@"%@", pin.memberId];
+        if ([pinOwnerId isEqualToString:myMemberId]) {
+            myPinCount++;
+        }
+        else {
+            friendsPinCount++;
+        }
+    }
+    NSString *headerTitle = [NSString stringWithFormat:@"MY %d / FRIEND's %d", myPinCount, friendsPinCount];
+    
+    return  headerTitle;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {

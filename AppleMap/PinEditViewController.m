@@ -190,7 +190,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     // 請求上傳動作
     [self.cloudDAO uploadNewPin:self.currentPin];
 
-    [self dismissViewControllerAnimated:YES completion:nil];
 
 #else
     // 這裡是直接存SQLite的程式, 沒有上傳
