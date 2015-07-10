@@ -31,6 +31,9 @@
     //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
+    
+    NSLog(@"data:%@",Tagdata);
+    
     //以POST的方式request並
     [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:Tagdata success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //request成功之後要做的事情
