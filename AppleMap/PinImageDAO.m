@@ -34,7 +34,10 @@ FMDatabase *sqlDB;
     
     while ([resultSet next]) {
         PinImage *pinImage = [[PinImage alloc] init];
-        pinImage.imageId = [resultSet.resultDictionary objectForKey:@"picture_id"];
+        
+        NSString *imageIdStr = [NSString stringWithFormat:@"%@", [resultSet.resultDictionary objectForKey:@"picture_id"]];
+        pinImage.imageId = imageIdStr;
+        
         pinImage.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
         
         //NSData *datas = [[NSData alloc] initWithBytes:(__bridge const void *)([resultSet.resultDictionary objectForKey:@"picture"]) length:[[resultSet.resultDictionary objectForKey:@"picture"] length]];
@@ -56,7 +59,8 @@ FMDatabase *sqlDB;
 
 //新增功能
 - (void) insertImageIntoSQLite: (PinImage *)pinImage {
-    
+    UIImage *image = [[UIImage alloc] initWithData:pinImage.imageData];
+    NSLog(@"%@", image);
     //如果新增記錄錯誤，就秀錯誤訊息
     if (![sqlDB executeUpdate:@"insert into pin_picture (pin_id, picture) values (?, ?)", pinImage.pinId, pinImage.imageData]) {
         

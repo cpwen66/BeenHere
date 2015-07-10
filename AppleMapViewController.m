@@ -63,6 +63,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
+    
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    [userDefaults setValue:@"3" forKey:@"bhereID"];
+    
     badgeNumber = 1;
     
     self.appleMapView.delegate = self;

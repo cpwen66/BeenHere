@@ -234,7 +234,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    self.title = [NSString stringWithFormat:@"Total pins: %d", [sortedPinArray count]];
+    //self.title = [NSString stringWithFormat:@"Total pins: %d", [sortedPinArray count]];
+    self.title = @"PIN LIST";
     return [sortedPinArray count];
 }
 

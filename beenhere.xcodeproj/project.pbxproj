@@ -39,7 +39,6 @@
 		6963FABE1B3B3CE9005BD414 /* PinDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6963FABD1B3B3CE9005BD414 /* PinDetailViewController.m */; };
 		6964811B1B3BAB9D003476B6 /* PinInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6964811A1B3BAB9C003476B6 /* PinInfoViewController.m */; };
 		69657B6D1B37F0E20060FB67 /* AppleMap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69657B6C1B37F0E20060FB67 /* AppleMap.storyboard */; };
-		696763511B3E721100B36B2A /* PinEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 696763501B3E721100B36B2A /* PinEditTableViewController.m */; };
 		6967635C1B3E731500B36B2A /* cat1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 696763521B3E731500B36B2A /* cat1.jpg */; };
 		6967635D1B3E731500B36B2A /* cat2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 696763531B3E731500B36B2A /* cat2.jpg */; };
 		6967635E1B3E731500B36B2A /* cat3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 696763541B3E731500B36B2A /* cat3.jpg */; };
@@ -255,8 +254,6 @@
 		696481191B3BAB9C003476B6 /* PinInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinInfoViewController.h; path = AppleMap/PinInfoViewController.h; sourceTree = "<group>"; };
 		6964811A1B3BAB9C003476B6 /* PinInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinInfoViewController.m; path = AppleMap/PinInfoViewController.m; sourceTree = "<group>"; };
 		69657B6C1B37F0E20060FB67 /* AppleMap.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AppleMap.storyboard; sourceTree = "<group>"; };
-		6967634F1B3E721100B36B2A /* PinEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinEditTableViewController.h; path = AppleMap/PinEditTableViewController.h; sourceTree = "<group>"; };
-		696763501B3E721100B36B2A /* PinEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinEditTableViewController.m; path = AppleMap/PinEditTableViewController.m; sourceTree = "<group>"; };
 		696763521B3E731500B36B2A /* cat1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat1.jpg; sourceTree = "<group>"; };
 		696763531B3E731500B36B2A /* cat2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat2.jpg; sourceTree = "<group>"; };
 		696763541B3E731500B36B2A /* cat3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat3.jpg; sourceTree = "<group>"; };
@@ -562,8 +559,6 @@
 				69657B6C1B37F0E20060FB67 /* AppleMap.storyboard */,
 				694683341B38061E00ADBAF8 /* AppleMapViewController.h */,
 				694683351B38061E00ADBAF8 /* AppleMapViewController.m */,
-				6967634F1B3E721100B36B2A /* PinEditTableViewController.h */,
-				696763501B3E721100B36B2A /* PinEditTableViewController.m */,
 				696763691B3E85C700B36B2A /* PinImageDetailViewController.h */,
 				6967636A1B3E85C700B36B2A /* PinImageDetailViewController.m */,
 				690D6C0A1B394EDD00DA83E6 /* DatabaseConnection.h */,
@@ -1264,7 +1259,6 @@
 				95B417541B01EB6A00EA9177 /* AppDelegate.m in Sources */,
 				690D6C0F1B394EFA00DA83E6 /* PinDAO.m in Sources */,
 				696CC20B1B3A6F01005EFCD7 /* PinEditViewController.m in Sources */,
-				696763511B3E721100B36B2A /* PinEditTableViewController.m in Sources */,
 				6933183D1B47B5DE00C140EE /* ReuseTableViewCell.m in Sources */,
 				95A259D01B1F4BC7007641B0 /* UIRefreshControl+AFNetworking.m in Sources */,
 				95E3C5E41B2CA0B000071387 /* StoreInfo.m in Sources */,
