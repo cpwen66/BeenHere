@@ -128,11 +128,14 @@
              NSTimeZone *tz = [NSTimeZone localTimeZone];
              // 取出時間，還要一些轉換
              NSString *postedTime = dict[@"pin_posted_date"];
-             NSDate *postUTCDate = [dateFormat dateFromString:postedTime];
+             NSString *visitedTime = dict[@"pin_visited_date"];
+             NSDate *visitUTCDate = [dateFormat dateFromString:visitedTime];
+            NSDate *postUTCDate = [dateFormat dateFromString:postedTime];
              NSTimeInterval seconds = [tz secondsFromGMTForDate:postUTCDate];
+                NSTimeInterval secondvisit = [tz secondsFromGMTForDate:visitUTCDate];
              //NSDate *dateInUTC = pin.postedDate;
              pin.postedDate = [postUTCDate dateByAddingTimeInterval:seconds];
-
+            pin.visitedDate =[postUTCDate dateByAddingTimeInterval:secondvisit];
              
              //存到sqlite
               PinDAO*pinDAO = [[PinDAO alloc] init];
@@ -197,24 +200,27 @@
             
                NSDictionary * pin=[apiResponse objectForKey:@"searchPinimageResult"];
             
-               for (NSDictionary *dict in pin) {
-         
             
-            
-            NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:dict[@"picture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+     
+                   
+                   
+                   
+            NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:pin[@"picture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
             // UIImage * image=[UIImage imageWithData:imagedata];
             
+                  
+                   
             PinImage * pinimage=[[PinImage alloc]init];
           
                 pinimage.imageData=imagedata;
                    
-                pinimage.pinId=dict[@"pin_id"];
+                pinimage.pinId=pin[@"pin_id"];
             
             PinImageDAO * pinimageDAO=[[PinImageDAO alloc] init];
             
             [pinimageDAO insertImageIntoSQLite:pinimage];
                    
-               }
+            
             NSLog(@"success");
         }else {
             

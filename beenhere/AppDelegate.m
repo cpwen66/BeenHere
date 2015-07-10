@@ -211,8 +211,8 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"didReceiveRemoteNotification");
     NSLog(@"userinfo%@",userInfo);
-//    NSDictionary * dict=userInfo[1];
-//    
+
+    
 //    NSLog(@"dict:%@",dict);
     
 }

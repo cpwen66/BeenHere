@@ -553,7 +553,7 @@ mydb *sharedInstance;
             for (NSDictionary *dict in data) {
            
                 
-                NSLog(@"DICT-content_no:%@",dict[@"content_no"]);
+                NSLog(@"DICT-content_no:%@",dict);
                 [self insertMysqlContent:dict];
                 
                 

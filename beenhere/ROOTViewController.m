@@ -28,7 +28,8 @@ UITableViewDelegate,
 UITableViewDataSource,
 YALContextMenuTableViewDelegate,
 UITextViewDelegate,
-UIActionSheetDelegate
+UIActionSheetDelegate,
+MapDataProtocol
 >
 {
 friendTableViewController * frinedview;
@@ -91,11 +92,7 @@ friendTableViewController * frinedview;
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     NSLog(@"been push%@", dict);
     
-
-    
-    
-    
-    
+  
 }
 
 
@@ -127,9 +124,9 @@ friendTableViewController * frinedview;
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
 
-//    MapDateStore * mapManager = [[MapDateStore alloc] init];
-//        mapManager.delegate = self;
-//      [mapManager SearchPinContent];
+    MapDateStore * mapManager = [[MapDateStore alloc] init];
+        mapManager.delegate = self;
+      [mapManager SearchPinContent];
 
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];
