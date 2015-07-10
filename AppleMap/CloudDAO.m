@@ -160,6 +160,8 @@ AFHTTPRequestOperationManager *manager;
                @"pin_image":pinImage.imageData
                };
     
+    
+    
     [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"operation success: %@", responseObject);

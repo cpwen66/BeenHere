@@ -50,7 +50,7 @@
     //有值代表已有帳號並登入
     NSLog(@"%@",AccountCookie);
     
-    if (![AccountCookie isEqualToString:@""]) {
+    if ([AccountCookie isEqualToString:@""]) {
         
         //直接登入主頁面
         UINavigationController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"root"];
