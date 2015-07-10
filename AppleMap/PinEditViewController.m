@@ -32,6 +32,8 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     NSMutableArray *theSubViews;
     UITextView *titleTextView;
     UIImagePickerController *imagePicker;
+
+    //NSInteger testPinId;//測試用
 }
 
 @property (weak, nonatomic) IBOutlet UIScrollView *theScrollView;
@@ -177,7 +179,6 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 
 - (IBAction)donePostPinBtnAction:(id)sender {
 
-
 #if 1
     NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
     NSString *memberId = [preference stringForKey:@"bhereID"];
@@ -190,102 +191,78 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     // 請求上傳動作
     [self.cloudDAO uploadNewPin:self.currentPin];
 
-
 #else
-    // 這裡是直接存SQLite的程式, 沒有上傳
-    // 先練習只存到SQLite, 之後要改先上傳到server，之後再下載pinId
-    // 先存Pin到SQLite
-    //    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
-    //    NSString *memberId = [preference stringForKey:@"bhereID"];
-    //    self.currentPin.memberId = memberId;
-    self.currentPin.memberId = @"1";// 真實情況要用上面三行取代這一行
+    // 測試用，不經過上傳到伺服器的程序
+    
+    [self returnPinID:@"1003"];
+    
+
+#endif
+
+}
+
+- (void)preparePinData:(NSString *)pinId {
+
+    self.currentPin.pinId = pinId;
+    
+    // 從NSUserDefaults取得使用者自己的memberId
+    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
+    NSString *memberId = [preference stringForKey:@"bhereID"];
+    self.currentPin.memberId = memberId;
+    
+    //NSLog(@"memberId= %@", memberId);
+    //self.currentPin.memberId = @"1";// 真實情況要用上面三行取代這一行
     self.currentPin.title = titleTextView.text;
     
+    // 將local時間換成UTC時間
     NSTimeZone *tz = [NSTimeZone localTimeZone];
     NSDate *localTime = [NSDate date];
     NSTimeInterval seconds = [tz secondsFromGMTForDate:localTime];
     NSDate *UTCTime = [localTime dateByAddingTimeInterval:-seconds];
     
-    NSDateFormatter *format = [NSDateFormatter new];
-    [format setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSString *localString = [format stringFromDate:[NSDate date]];
-    NSLog(@"Time= %@", localString);
-    NSString *UTCString = [format stringFromDate:UTCTime];
-    NSLog(@"UTCTime = %@", UTCString);
+    //NSDateFormatter *format = [NSDateFormatter new];
+    //[format setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    //NSString *localString = [format stringFromDate:[NSDate date]];
+    //NSLog(@"Time= %@", localString);
+    //NSString *UTCString = [format stringFromDate:UTCTime];
+    //NSLog(@"UTCTime = %@", UTCString);
     
     self.currentPin.visitedDate = UTCTime;
     self.currentPin.postedDate = UTCTime;
-    
-    pinDAO = [[PinDAO alloc] init];
-    [pinDAO insertPinIntoSQLite:self.currentPin];
-     
-    // 再把PinId取出來
-    NSLog(@"lastPinId = %@", [pinDAO getLastPinId]);
-     
-    // 將PinId給image，把圖片存到SQLite
-    NSMutableArray *ary = [NSMutableArray new];
-    NSLog(@"self.theScrollView.subviews = %@", self.theScrollView.subviews);
-     
-    // 把scrollView裡的圖片，取出來放到另一個陣列
-    for (UIView *view in self.theScrollView.subviews) {
-    //NSLog(@"self.theScrollView.subviews view = %@", view);
-     
-    if ([view isMemberOfClass:UIView.class]) {
-    UIImageView *imageView = view.subviews[0];
-    [ary addObject:imageView.image];
-    }
-    }
-    //NSLog(@"ary[0] = %@", ary[0]);
-    //NSLog(@"self.theScrollView.subviews = %@", self.theScrollView.subviews);
-     
-    // 有圖才可以做存圖的動作
-    if ([ary count] >= 1) {
-    PinImage *newPinImage = [[PinImage alloc] init];
-     
-    // 加迴圈，存全部的圖
-    for (UIImage *img in ary) {
-    newPinImage.imageData = UIImageJPEGRepresentation(img, 1);
-    newPinImage.pinId = [pinDAO getLastPinId];
-    [pinImageDAO insertImageIntoSQLite:newPinImage];
-    }
-    }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-     
-#endif
 
 }
+
 
 - (void)returnPinID:(NSString *)pinid {
     
     // 如果錯誤會pinId是-1
     if ([pinid integerValue] >= 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sync" message:@"Sync OK" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PinId下載" message:@"下載 OK" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sync" message:@"Sync Error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PinId下載" message:@"下載 Error" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         return;//不確定可以直接return，要測試
     }
-    
-    // 將PinId給image，把圖片存到SQLite
     
     NSMutableArray *ary = [NSMutableArray new];
     
     // 把scrollView裡的圖片，取出來放到另一個陣列
     for (UIView *view in self.theScrollView.subviews) {
-        //NSLog(@"self.theScrollView.subviews view = %@", view);
+        NSLog(@"self.theScrollView.subviews view = %@", view);
         
         if ([view isMemberOfClass:UIView.class]) {
             UIImageView *imageView = view.subviews[0];
             [ary addObject:imageView.image];
         }
     }
+  
     
     // 有圖才可以做上傳圖片的動作
     if ([ary count] >= 1) {
         PinImage *newPinImage = [[PinImage alloc] init];
         
+        // 將PinId給image
         // 加迴圈，存全部的圖
         for (UIImage *img in ary) {
             newPinImage.imageData = UIImageJPEGRepresentation(img, 1);
@@ -299,8 +276,10 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
     // ---------------------此線以上是上傳的工作，以下是存SQLite
     
     // 存Pin到SQLite
+    [self preparePinData:pinid];
     pinDAO = [[PinDAO alloc] init];
     [pinDAO insertPinIntoSQLite:self.currentPin];
+    
     
     // 有圖才可以做存圖的動作
     if ([ary count] >= 1) {
@@ -309,10 +288,18 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
         // 加迴圈，存全部的圖
         for (UIImage *img in ary) {
             newPinImage.imageData = UIImageJPEGRepresentation(img, 1);
+            
+            // 再從SQLite把PinId取出來
+            //newPinImage.pinId = [pinDAO getLastPinId];
+            
+            // 把pinId給圖片
             newPinImage.pinId = pinid;
+            
+            // 把圖片存到SQLite
             [pinImageDAO insertImageIntoSQLite:newPinImage];
         }
     }
+    
     
     // 離開目前畫面
     [self dismissViewControllerAnimated:YES completion:nil];

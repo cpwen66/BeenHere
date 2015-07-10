@@ -237,7 +237,7 @@ FMDatabase *sqlDB;
     NSString *visitedDate = [dateFormatter stringFromDate:pin.visitedDate];
 
     
-    if (![sqlDB executeUpdate:@"insert into pins (member_id, pin_title, pin_latitude, pin_longitude, pin_posted_date, pin_visited_date) values (?, ?, ?, ?, ?, ?)", pin.memberId, pin.title, pinLatitude, pinLongitude, postedDate, visitedDate]) {
+    if (![sqlDB executeUpdate:@"insert into pins (pin_id, member_id, pin_title, pin_latitude, pin_longitude, pin_posted_date, pin_visited_date) values (?, ?, ?, ?, ?, ?, ?)", pin.pinId, pin.memberId, pin.title, pinLatitude, pinLongitude, postedDate, visitedDate]) {
      
      //去executeUpdate看說明，裡面會提到lastErrorMessage
      NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
