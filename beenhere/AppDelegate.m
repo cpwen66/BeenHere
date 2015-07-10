@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegister.php";
 @interface AppDelegate ()
 
 @end
@@ -93,6 +93,21 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
+    
+    //註冊apns 推播
+    // For iOS 8
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
+    }
     // Override point for customization after application launch.
     [self copyDBtoDocumentifNeeded];
     
@@ -143,5 +158,57 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+#pragma mark - Push Notification
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    
+    NSString * newToken = [deviceToken description];
+    NSLog(@"Device token: %@", newToken);
+    newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    newToken = [newToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSLog(@"Device token: %@", newToken);
+    
+    //判斷手機上的Device Token是否存在。
+    //NSUserDefault也會儲存device token，如果app沒有上雲端，移除app，也會移除device token
+    
+    
+    //處理使用者帳號、名稱、密碼…的資訊
+    //將device token及其他資訊傳到後台(Provider)的PHP處理
+       NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+         NSString *username = [[NSUserDefaults standardUserDefaults]stringForKey:@"bherename"];
+    
+    NSString *memID = userID;
+    NSString *memName = username;
+    
+    //將Device Token與User資料傳到Provider Server
+    NSURL *url = [NSURL URLWithString:kJSON];
+    
+    //多兩個參數，cachea會自作聰明，會用舊的資料。要cache做reload，不要用舊的資料。操作逾時。
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
+    
+    [request setHTTPMethod:@"POST"];//request必須是NSMutableURLRequest才有HTTPMethod屬性
+    
+    NSString *postString = [NSString stringWithFormat:@"device_token=%@&memID=%@&memName=%@", newToken, memID, memName];
+    //如果要傳遞多個參數，就用下面的程式
+    //NSString *postString = [NSString stringWithFormat:@"qrcode=%@&param1=%@", self.textField.text, @"1"];
+    
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];//編碼成UTF-8，所以也可以傳中文
+    [request setHTTPBody:postData];//request必須是NSMutableURLRequest才有HTTPBody屬性
+    
+    //以下是用同步，實際產品會用非同步及block的方式
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSLog(@"%@", dict);
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    NSLog(@"Failed to get device token, error:%@", [error localizedDescription]);
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    NSLog(@"didReceiveRemoteNotification");
+}
 @end
