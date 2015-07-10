@@ -7,8 +7,9 @@
 //
 
 #import "AppDelegate.h"
+
 static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegister.php";
-@interface AppDelegate ()
+@interface AppDelegate ()<PushProtocol>
 
 @end
 
@@ -211,9 +212,24 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"didReceiveRemoteNotification");
     NSLog(@"userinfo%@",userInfo);
-
+   // Pushdelegate * PUSH=[[Pushdelegate alloc] init];
+    NSDictionary * server=userInfo[@"server"];
+    NSString * action=server[@"action"];
+     _pushdelegate=[[Pushdelegate alloc] init];
+//    _pushdelegate.delegate=self;
+     int ActionNumber = [action intValue];
+    if (ActionNumber == 1) {
+        [_pushdelegate Recivefriendrequestpush];
+    }
     
-//    NSLog(@"dict:%@",dict);
-    
+}
+-(instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.pushdelegate = [[Pushdelegate alloc] init];
+        //self.mapManager.delegate = self;
+    }
+    return self;
 }
 @end

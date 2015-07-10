@@ -32,6 +32,8 @@ static StoreInfo *shareInstance;
 //   _apiurl=@"http://localhost:8888/beenhere/api.php";
 //    _apiupdateurl=@"http://localhost:8888/beenhere/apiupdate.php";
 
+    
+    _apiurlpush=@"http://192.168.1.7:8888/beenhere/SimplePushbeenhere.php";
     _apiurl=@"http://192.168.1.7:8888/beenhere/api.php";
     _apiupdateurl=@"http://192.168.1.7:8888/beenhere/apiupdate.php";
 

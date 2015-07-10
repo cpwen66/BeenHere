@@ -19,6 +19,8 @@
 #import "MBProgressHUD.h"
 #import "PhotoSingleton.h"
 #import "MapDateStore.h"
+#import "AppDelegate.h"
+
 
 static NSString *const menuCellIdentifier = @"rotationCell";
 static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/SimplePushbeenhere.php";
@@ -29,7 +31,8 @@ UITableViewDataSource,
 YALContextMenuTableViewDelegate,
 UITextViewDelegate,
 UIActionSheetDelegate,
-MapDataProtocol
+MapDataProtocol,
+PushProtocol
 >
 {
 friendTableViewController * frinedview;
@@ -39,6 +42,7 @@ friendTableViewController * frinedview;
     UIView *theSubView;
     NSString * TextContent;
     __weak IBOutlet UIView *thview;
+    AppDelegate * appdelegate;
 }
 @property (weak, nonatomic) IBOutlet UIButton *FriendreRreustlist;
 
@@ -77,8 +81,8 @@ friendTableViewController * frinedview;
     [request setHTTPMethod:@"POST"];//request必須是NSMutableURLRequest才有HTTPMethod屬性
     
     NSString * msg=@"hihihi";
-    
-    NSString *postString = [NSString stringWithFormat:@"memID=%@&memName=%@&msg=%@", memID, memName,msg];
+    NSString * action=@"1";
+    NSString *postString = [NSString stringWithFormat:@"memID=%@&memName=%@&msg=%@&action=%@", memID, memName,msg,action];
     
     //如果要傳遞多個參數，就用下面的程式
     //NSString *postString = [NSString stringWithFormat:@"qrcode=%@&param1=%@", self.textField.text, @"1"];
@@ -116,17 +120,30 @@ friendTableViewController * frinedview;
     [self changeDemo];
     _Textview.hidden=YES;
 }
+-(void)Recivefriendrequest{
 
+    NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
+    
+    [self SearchRequest:BEID];
+
+
+
+
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
   
- 
+   
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
-
-    MapDateStore * mapManager = [[MapDateStore alloc] init];
-        mapManager.delegate = self;
-      [mapManager SearchPinContent];
+    
+    //appdelegate=[[AppDelegate alloc] init];
+    
+    appdelegate.pushdelegate.delegate=self;
+    
+//    MapDateStore * mapManager = [[MapDateStore alloc] init];
+//        mapManager.delegate = self;
+//      [mapManager SearchPinContent];
 
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];
