@@ -38,9 +38,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     
-//    MapDateStore * mapManager = [[MapDateStore alloc] init];
-//    mapManager.delegate = self;
-//    [mapManager SearchPinContent];
+
     
     
     
@@ -50,7 +48,7 @@
     //有值代表已有帳號並登入
     NSLog(@"%@",AccountCookie);
     
-    if ([AccountCookie isEqualToString:@""]) {
+    if (![AccountCookie isEqualToString:@""]) {
         
         //直接登入主頁面
         UINavigationController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"root"];
