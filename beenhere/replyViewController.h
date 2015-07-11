@@ -17,7 +17,7 @@
     NSString * replytext;
   
 }
-
+@property (assign,nonatomic)NSInteger flag;
 @property (strong,nonatomic)TreeViewNode * node;
 @property (assign,nonatomic)NSInteger * indexpath;
 

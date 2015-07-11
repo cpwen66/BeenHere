@@ -10,12 +10,13 @@
 #import "TreeViewNode.h"
 #import "detailreplyTableViewCell.h"
 #import "mydb.h"
+#import "Pushdelegate.h"
 
 #define SYSTEM_VERSION                              ([[UIDevice currentDevice] systemVersion])
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([SYSTEM_VERSION compare:v options:NSNumericSearch] != NSOrderedAscending)
 #define IS_IOS8_OR_ABOVE                            (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0"))
 
-@interface replyViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface replyViewController ()<UITableViewDataSource, UITableViewDelegate,PushProtocol>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 @property (nonatomic, strong) detailreplyTableViewCell *prototypeCell;
@@ -94,6 +95,15 @@ NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"
     //存到mysql
     [[mydb sharedInstance]insertcontentreplyremote:params ];
 
+    
+    
+    
+    Pushdelegate * push=[[Pushdelegate alloc] init];
+    //push 通知
+    if (_flag==1) {
+        [push FriendReplyPush:_node.beeid and:_node.content_no];
+        push.delegate=self;
+    }
     
     
 //    //存入sqlite

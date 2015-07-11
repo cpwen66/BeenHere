@@ -18,4 +18,5 @@
 @property (weak, nonatomic)id<PushProtocol> delegate;
 -(void)friendRequestPush:(NSString *)friend_id;
 -(void)Recivefriendrequestpush;
+-(void)FriendReplyPush:(NSString *)friend_id and:(NSString *)content_no ;
 @end

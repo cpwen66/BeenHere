@@ -20,6 +20,7 @@
 #import "PhotoSingleton.h"
 #import "MapDateStore.h"
 #import "Notehandle.h"
+#import "AppDelegate.h"
 
 
 static NSString *const menuCellIdentifier = @"rotationCell";
@@ -120,16 +121,7 @@ friendTableViewController * frinedview;
     [self changeDemo];
     _Textview.hidden=YES;
 }
--(void)Recivefriendrequest{
 
-    NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
-    
-    [self SearchRequest:BEID];
-
-
-
-
-}
 - (void)viewDidLoad {
     [super viewDidLoad];
   
@@ -137,13 +129,9 @@ friendTableViewController * frinedview;
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
     
-       Notehandle * notehandle=[[Notehandle alloc] init];
-//    
-       notehandle.pushdelegate.delegate=self;
-   
-//
-   Pushdelegate * push=[[Pushdelegate alloc] init];
-    push.delegate=self;
+    //appdelegate 傳回
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    appDelegate.myViewController = self;
     
 //    MapDateStore * mapManager = [[MapDateStore alloc] init];
 //        mapManager.delegate = self;
