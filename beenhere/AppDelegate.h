@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Pushdelegate.h"
+#import "ROOTViewController.h"
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property (weak, nonatomic) ROOTViewController *myViewController;
 
 @end
 

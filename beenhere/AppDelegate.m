@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "Notehandle.h"
+#import "mydb.h"
+
 
 static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegister.php";
 @interface AppDelegate ()<PushProtocol>
@@ -211,13 +212,26 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
-    NSLog(@"didReceiveRemoteNotification");
+    //NSLog(@"didReceiveRemoteNotification");
     NSLog(@"userinfo%@",userInfo);
    // Pushdelegate * PUSH=[[Pushdelegate alloc] init];
     NSDictionary * server=userInfo[@"server"];
     NSString * action=server[@"action"];
-    Notehandle * notehandle=[[Notehandle alloc] init];
-    [notehandle pushnotification:action];
+    
+    NSString * beeid=[[NSUserDefaults standardUserDefaults] stringForKey:@"bhereID"];
+    
+    int ActionNumber = [action intValue];
+    if (ActionNumber == 1) {
+        //收到好有請求通知上mysql查詢好友請求
+        [_myViewController SearchRequest:beeid];
+        
+    }else if (ActionNumber == 2){
+        NSString * content_no=server[@"contentno"];
+  
+        //收到通知上mysql查詢子回覆
+        [[mydb sharedInstance]Searchcontentno:content_no];
+       
+    }
     
        
 }

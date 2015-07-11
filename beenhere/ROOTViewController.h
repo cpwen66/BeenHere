@@ -10,6 +10,7 @@
 #import "UPStackMenu.h"
 #import "CameraViewController.h"
 
+
 @interface ROOTViewController : UIViewController<UPStackMenuDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
 
@@ -30,4 +31,7 @@
 @property BOOL isCoverPhotoPicked;
 @property BOOL isLocationPicked;
 
+
+//搜尋有沒有friendrequest
+-(void)SearchRequest:(NSString *)SearchfriendID;
 @end

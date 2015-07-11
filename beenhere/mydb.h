@@ -60,6 +60,7 @@
 -(void)SearchIDcontent:(NSString *)beid;
 //mysql 查詢主頁內容
 -(void)querymysqlindexcontent:(NSString *)beeid;
+-(void)Searchcontentno:(NSString *)content_no;
 //把圖存進去
 - (void)insertimage:(NSData*)imagedata addcontent_no:(NSString*)content_no;
 -(void)insertcontentremotewithimage:(NSDictionary *)params;

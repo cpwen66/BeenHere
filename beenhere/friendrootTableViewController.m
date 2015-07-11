@@ -550,7 +550,7 @@ NSUInteger indentation;
    replyViewController *tvc=segue.destinationViewController;
     
    tvc.node=node;
-    
+    tvc.flag=1;
     
 }
 /*
