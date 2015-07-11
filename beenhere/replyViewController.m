@@ -101,7 +101,8 @@ NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"
     Pushdelegate * push=[[Pushdelegate alloc] init];
     //push 通知
     if (_flag==1) {
-        [push FriendReplyPush:_node.beeid and:_node.content_no];
+        [push FriendReplyPush:_friend_id and:_node.content_no];
+        NSLog(@"node:%@",_node.beeid);
         push.delegate=self;
     }
     

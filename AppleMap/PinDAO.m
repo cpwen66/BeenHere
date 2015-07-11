@@ -38,12 +38,14 @@ FMDatabase *sqlDB;
     
     mydb *friendDB = [[mydb alloc] init];
 
-    
+      NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
     //如果這行發生找不到table的error，表示沒有拿到sqlite檔案
     //上次發生錯誤，是sqlite的fileName打錯
     FMResultSet *resultSet;
 //    FMResultSet *friendResutlSet;
-    resultSet = [sqlDB executeQuery:@"select * from pins"];
+   resultSet = [sqlDB executeQuery:@"select * from pins where member_id=?",userID];
+
+//        resultSet = [sqlDB executeQuery:@"select * from pins"];
     
     if ([sqlDB hadError]) {
         NSLog(@"DB Error %d: %@", [sqlDB lastErrorCode], [sqlDB lastErrorMessage]);
@@ -60,23 +62,21 @@ FMDatabase *sqlDB;
         // 如果資料庫裡沒資料會有"No such table ..." 的錯誤訊息
         NSMutableArray *memberInfoArray = [NSMutableArray new];
         
-        NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+      
         
         //NSLog(@"id%@, pin_id%@",pin.memberId,userID);
         
         NSString *memberIdString = [NSString stringWithFormat:@"%@",pin.memberId];
         
-        if ([memberIdString isEqualToString:userID]) {
+    
             memberInfoArray=[friendDB querymemberinfo:memberIdString];
             
              pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"name"]];
              
-            NSLog(@"array = %@", memberInfoArray);
-        }else{
-        memberInfoArray = [friendDB SearchFriendList:pin.memberId];
-        pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
-        
-        }
+     
+//        memberInfoArray = [friendDB SearchFriendList:pin.memberId];
+//        pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
+       
         
         //NSLog(@"pin.memberId = %@", pin.memberId);
         //NSLog(@"array = %@", memberInfoArray);
@@ -108,6 +108,69 @@ FMDatabase *sqlDB;
         [rows addObject:pin];
         
     }
+  
+    
+    
+      NSMutableArray *friendmemberInfoArray = [NSMutableArray new];
+      friendmemberInfoArray = [friendDB SearchFriendList:userID];
+    NSLog(@"friendarray%@ count%lu",friendmemberInfoArray,(unsigned long)friendmemberInfoArray.count);
+    for (int i = 0; i<=friendmemberInfoArray.count-1; i++) {
+        
+           resultSet = [sqlDB executeQuery:@"select * from pins where member_id=?",friendmemberInfoArray[i][@"friendID"]];
+        
+        while ([resultSet next]) {
+           
+            Pin *pin = [[Pin alloc] init];
+            pin.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
+            
+            pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
+            pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
+            
+            
+            pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", friendmemberInfoArray[i][@"friendname"]];
+            
+            
+        
+            
+            // 自訂方法，把UTC時間字串轉本地時間NSData
+            pin.postedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_posted_date"]];
+            
+  
+            
+            if (![[resultSet.resultDictionary objectForKey:@"pin_visited_date"] isEqual:[NSNull new]]) {
+                
+                pin.visitedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_visited_date"]];
+                
+            } else {
+           
+            }
+            
+            
+        
+            
+            CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
+            CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
+            CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
+            pin.coordinate = locationCoordinate;
+            
+            [rows addObject:pin];
+            
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //NSLog(@"rows = %@", rows);
     return rows;
 }

@@ -243,4 +243,13 @@
 
 }
 
+
+//查詢主頁內容數量
+-(void)searchcontentCount:(NSString*)BEID{
+
+     
+    
+    
+
+}
 @end

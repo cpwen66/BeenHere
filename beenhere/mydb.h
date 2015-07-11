@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDatabase.h"
+#import "Pushdelegate.h"
 
-@interface mydb : NSObject
+@interface mydb : NSObject<PushProtocol>
 {
     FMDatabase *db;
     BOOL havedEmail;
@@ -61,6 +62,8 @@
 //mysql 查詢主頁內容
 -(void)querymysqlindexcontent:(NSString *)beeid;
 -(void)Searchcontentno:(NSString *)content_no;
+//mysql 查詢主頁新增一筆內容
+-(void)querymysqlindexcontentone:(NSString *)beeid;
 //把圖存進去
 - (void)insertimage:(NSData*)imagedata addcontent_no:(NSString*)content_no;
 -(void)insertcontentremotewithimage:(NSDictionary *)params;

@@ -15,10 +15,11 @@
     NSMutableArray * replylist;
     NSMutableArray * replychildrn;
     NSString * replytext;
+ 
   
 }
 @property (assign,nonatomic)NSInteger flag;
 @property (strong,nonatomic)TreeViewNode * node;
 @property (assign,nonatomic)NSInteger * indexpath;
-
+@property (assign,nonatomic)NSString * friend_id;
 @end

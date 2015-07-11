@@ -19,4 +19,5 @@
 -(void)friendRequestPush:(NSString *)friend_id;
 -(void)Recivefriendrequestpush;
 -(void)FriendReplyPush:(NSString *)friend_id and:(NSString *)content_no ;
+-(void)FriendcontentPush:(NSString *)friend_id;
 @end

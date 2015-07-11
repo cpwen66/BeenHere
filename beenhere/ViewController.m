@@ -40,7 +40,7 @@
     
 
     
-    
+    [self.navigationController.navigationBar setHidden:NO];
     
 
     //判斷NSUserDefaults是否有值
