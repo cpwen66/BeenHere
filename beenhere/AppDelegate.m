@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "Notehandle.h"
 
 static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegister.php";
 @interface AppDelegate ()<PushProtocol>
@@ -215,21 +216,10 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
    // Pushdelegate * PUSH=[[Pushdelegate alloc] init];
     NSDictionary * server=userInfo[@"server"];
     NSString * action=server[@"action"];
-     _pushdelegate=[[Pushdelegate alloc] init];
-//    _pushdelegate.delegate=self;
-     int ActionNumber = [action intValue];
-    if (ActionNumber == 1) {
-        [_pushdelegate Recivefriendrequestpush];
-    }
+    Notehandle * notehandle=[[Notehandle alloc] init];
+    [notehandle pushnotification:action];
     
+       
 }
--(instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.pushdelegate = [[Pushdelegate alloc] init];
-        //self.mapManager.delegate = self;
-    }
-    return self;
-}
+
 @end

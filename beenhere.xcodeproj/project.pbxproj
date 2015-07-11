@@ -159,6 +159,7 @@
 		95A259D01B1F4BC7007641B0 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 95A259BE1B1F4BC7007641B0 /* UIRefreshControl+AFNetworking.m */; };
 		95A259D11B1F4BC7007641B0 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 95A259C01B1F4BC7007641B0 /* UIWebView+AFNetworking.m */; };
 		95A259D41B1F4DF9007641B0 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 95A259D31B1F4DF9007641B0 /* MBProgressHUD.m */; };
+		95AD8D281B50FEF8006443DD /* Notehandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 95AD8D271B50FEF8006443DD /* Notehandle.m */; };
 		95B417511B01EB6A00EA9177 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B417501B01EB6A00EA9177 /* main.m */; };
 		95B417541B01EB6A00EA9177 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B417531B01EB6A00EA9177 /* AppDelegate.m */; };
 		95B417571B01EB6A00EA9177 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B417561B01EB6A00EA9177 /* ViewController.m */; };
@@ -434,6 +435,8 @@
 		95A259C01B1F4BC7007641B0 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		95A259D21B1F4DF9007641B0 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		95A259D31B1F4DF9007641B0 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		95AD8D261B50FEF8006443DD /* Notehandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Notehandle.h; sourceTree = "<group>"; };
+		95AD8D271B50FEF8006443DD /* Notehandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Notehandle.m; sourceTree = "<group>"; };
 		95B4174B1B01EB6A00EA9177 /* beenhere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beenhere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95B4174F1B01EB6A00EA9177 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		95B417501B01EB6A00EA9177 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -913,6 +916,10 @@
 				95701EE11B10C9DD00A7CB93 /* camera.png */,
 				95B417521B01EB6A00EA9177 /* AppDelegate.h */,
 				95B417531B01EB6A00EA9177 /* AppDelegate.m */,
+				95AD8D261B50FEF8006443DD /* Notehandle.h */,
+				95AD8D271B50FEF8006443DD /* Notehandle.m */,
+				9525F5E41B504F3700F7D5B3 /* Pushdelegate.h */,
+				9525F5E51B504F3700F7D5B3 /* Pushdelegate.m */,
 				951DA41B1B1F04EB00C7577A /* LoginViewController.h */,
 				951DA41C1B1F04EB00C7577A /* LoginViewController.m */,
 				95016F971B25A50F00BD44C0 /* tool2.png */,
@@ -934,8 +941,6 @@
 				95B9A8C61B35C6D000307AEC /* replyViewController.m */,
 				95C6F53B1B21950B00D5DA05 /* friendTableViewController.h */,
 				95C6F53C1B21950B00D5DA05 /* friendTableViewController.m */,
-				9525F5E41B504F3700F7D5B3 /* Pushdelegate.h */,
-				9525F5E51B504F3700F7D5B3 /* Pushdelegate.m */,
 				95B417551B01EB6A00EA9177 /* ViewController.h */,
 				95B417561B01EB6A00EA9177 /* ViewController.m */,
 				95E42AFF1B1A06C8006DCE0D /* AccountTableViewController.h */,
@@ -1286,6 +1291,7 @@
 				957119551B0728CD00F35256 /* FMDatabase.m in Sources */,
 				9524980B1B342C7900513EE7 /* RATreeView+TableViewDataSource.m in Sources */,
 				95B5F6EB1B12CED600D7A342 /* ROOTViewController.m in Sources */,
+				95AD8D281B50FEF8006443DD /* Notehandle.m in Sources */,
 				9571195E1B073FCF00F35256 /* mydb.m in Sources */,
 				6963FABB1B3B3509005BD414 /* Pin.m in Sources */,
 				95A259C41B1F4BC7007641B0 /* AFNetworkReachabilityManager.m in Sources */,

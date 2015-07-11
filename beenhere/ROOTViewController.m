@@ -19,7 +19,7 @@
 #import "MBProgressHUD.h"
 #import "PhotoSingleton.h"
 #import "MapDateStore.h"
-#import "AppDelegate.h"
+#import "Notehandle.h"
 
 
 static NSString *const menuCellIdentifier = @"rotationCell";
@@ -42,7 +42,7 @@ friendTableViewController * frinedview;
     UIView *theSubView;
     NSString * TextContent;
     __weak IBOutlet UIView *thview;
-    AppDelegate * appdelegate;
+
 }
 @property (weak, nonatomic) IBOutlet UIButton *FriendreRreustlist;
 
@@ -137,9 +137,13 @@ friendTableViewController * frinedview;
     NSString * BEID=[[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID" ];
     
     
-    //appdelegate=[[AppDelegate alloc] init];
-    
-    appdelegate.pushdelegate.delegate=self;
+       Notehandle * notehandle=[[Notehandle alloc] init];
+//    
+       notehandle.pushdelegate.delegate=self;
+   
+//
+   Pushdelegate * push=[[Pushdelegate alloc] init];
+    push.delegate=self;
     
 //    MapDateStore * mapManager = [[MapDateStore alloc] init];
 //        mapManager.delegate = self;

@@ -10,10 +10,17 @@
 #import "StoreInfo.h"
 
 @implementation Pushdelegate
-
+-(instancetype)init
+{
+    self = [super init];
+    if (self) {
+        //        [self.delegate returnPinID:@"123"];
+    }
+    return self;
+}
 -(void)Recivefriendrequestpush{
 
-
+     //呼叫rootcontroller 執行serach
     [self.delegate Recivefriendrequest];
 
 
