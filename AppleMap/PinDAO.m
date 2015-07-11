@@ -62,7 +62,7 @@ FMDatabase *sqlDB;
         
         NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
         
-        NSLog(@"id%@, pin_id%@",pin.memberId,userID);
+        //NSLog(@"id%@, pin_id%@",pin.memberId,userID);
         
         NSString *memberIdString = [NSString stringWithFormat:@"%@",pin.memberId];
         
@@ -81,10 +81,6 @@ FMDatabase *sqlDB;
         //NSLog(@"pin.memberId = %@", pin.memberId);
         //NSLog(@"array = %@", memberInfoArray);
       
-        
-        
-        
-        
         //NSLog(@"pin.pinId = %@, subtitle= %@, title = %@", pin.pinId, pin.subtitle, pin.title);
         
         // 自訂方法，把UTC時間字串轉本地時間NSData
@@ -117,13 +113,19 @@ FMDatabase *sqlDB;
 }
 
 - (NSMutableArray*)getPinsByFilter:(NSString *)owner visited:(NSString *)visited {
+    
+    mydb *friendDB = [[mydb alloc] init];
+
+    FMResultSet *resultSet;
+
+    
     NSMutableArray *rows = [NSMutableArray new];
     
-//    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
-//    NSString *memberId = [preference stringForKey:@"bhereID"];
+    NSUserDefaults *preference = [NSUserDefaults standardUserDefaults];
+    NSString *memberId = [preference stringForKey:@"bhereID"];
    
     //假資料
-    NSString *memberId = @"1";
+    //NSString *memberId = @"1";
     NSString *queryString;
     if ([owner isEqualToString:@"0"]) {
         
@@ -134,28 +136,36 @@ FMDatabase *sqlDB;
         } else {//UNVISITED
             queryString = @"SELECT * FROM pins WHERE pin_visited_date IS NULL";
         }
-        
+        resultSet = [sqlDB executeQuery:queryString];
+
     } else if([owner isEqualToString:@"1"]){
         
-        queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id=%@", memberId];
-        
+        //queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id=%@", memberId];
+        queryString = @"SELECT * FROM pins WHERE member_id=?";
+        resultSet = [sqlDB executeQuery:queryString, memberId];
+
     } else {
         
         if ([visited isEqualToString:@"0"]) {
-            queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@", memberId];
             
+            //queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@", memberId];
+            queryString = @"SELECT * FROM pins WHERE member_id<>?";
+
         } else if ([visited isEqualToString:@"1"]){//Visited
-            queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@ AND pin_visited_date IS NOT NULL", memberId];
+            
+            queryString = @"SELECT * FROM pins WHERE member_id<>? AND pin_visited_date IS NOT NULL";
             
         } else {//UNVISITED
-            queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@ AND pin_visited_date IS NULL", memberId];
+            
+            queryString = @"SELECT * FROM pins WHERE member_id<>? AND pin_visited_date IS NULL";
+
         }
+        resultSet = [sqlDB executeQuery:queryString, memberId];
+
     }
     
-
     NSLog(@"queryString= %@", queryString);
-    FMResultSet *resultSet;
-    resultSet = [sqlDB executeQuery:queryString];
+    //resultSet = [sqlDB executeQuery:queryString];
     if ([sqlDB hadError]) {
         NSLog(@"DB Error %d: %@", [sqlDB lastErrorCode], [sqlDB lastErrorMessage]);
     }
@@ -165,11 +175,26 @@ FMDatabase *sqlDB;
         Pin *pin = [[Pin alloc] init];
         pin.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
         
-        // 這裡有奇怪的地方，就是pin.pinId出來是__NSCFNumber格式，所以要轉NSString
-        // 這裡只是暫時用pinId來當subtitle，之後會用好友的名字
-        pin.subtitle = [NSString stringWithFormat:@"%@到此一遊", pin.pinId];
+
+        
         pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
         pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
+        
+        NSMutableArray *memberInfoArray = [NSMutableArray new];
+        NSString *memberIdString = [NSString stringWithFormat:@"%@",pin.memberId];
+        
+        if ([memberIdString isEqualToString:memberId]) {
+            memberInfoArray=[friendDB querymemberinfo:memberIdString];
+            
+            pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"name"]];
+            
+            NSLog(@"array = %@", memberInfoArray);
+        }else{
+            memberInfoArray = [friendDB SearchFriendList:pin.memberId];
+            pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
+            
+        }
+        
 //        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
 //        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
 

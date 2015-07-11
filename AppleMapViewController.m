@@ -292,8 +292,6 @@
 //參數的annotation是畫面上有出現的大頭針，因為要出現在畫面，所有需要view，就會來這個方法取得view
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
     
-    NSLog(@"%@", mapView.userLocation);
-    
     // 表示不自訂藍點
     if (annotation == mapView.userLocation) {
         return nil;
@@ -306,45 +304,42 @@
     // 那就創建叫newPin的AnnotationView
     // 這個AnnotationView是要給annotation用的
     if (reuseAnnotationView == nil) {
+        
         reuseAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"newPin"];
+        
     } else{
+        
         // 如果AnnotationView不是nil，那就設定reuseAnnotationView的annotation是annotation
         // 這個方法是給annotation，然後回傳AnnotationView
-        
         reuseAnnotationView.annotation = annotation;
     }
-    //NSLog(@"reuseAnnotationView.subviews = %@", reuseAnnotationView.subviews);
 
-    
     reuseAnnotationView.draggable = false;
     reuseAnnotationView.image = [UIImage imageNamed:@"pointRed.png"];
     reuseAnnotationView.canShowCallout = true;
     
     // 如果不自訂按鈕的型式，那只要寫底下這行就可以了
-     //UIButton *rightCalloutButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+    // UIButton *rightCalloutButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
     CGRect rightButtonRect = CGRectMake(0, 0, 80, 100);
     rightCalloutButton = [[UIButton alloc] initWithFrame:rightButtonRect];
-    //UIImage *catImage = [UIImage imageNamed:@"cat1.jpg"];
     rightCalloutButton.backgroundColor = [UIColor lightGrayColor];
-
-    //[rightCalloutButton setImage:catImage forState:UIControlStateNormal];
 
     Pin *anno = (Pin *)annotation;
     
     // 取得大頭針經緯度
     CLLocation *annoLocation = [[CLLocation alloc] initWithLatitude:anno.coordinate.latitude longitude:anno.coordinate.longitude];
     
-    // 增加右邊按鈕，顯示大頭針與使用者距離，按下可導航
+    // 增加右邊按鈕，顯示大頭針與使用者距離
     rightCalloutButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     NSLog(@"[currentLocation distanceFromLocation:annoLocation]/1000.0] = %f", [currentLocation distanceFromLocation:annoLocation]/1000.0);
     [rightCalloutButton setTitle:[NSString stringWithFormat:@"%1.1f\nkM", [currentLocation distanceFromLocation:annoLocation]/1000.0] forState:UIControlStateNormal];
     reuseAnnotationView.rightCalloutAccessoryView = rightCalloutButton;
     
-    //當右邊的calloutButton被按下會去執行self的那個方法
+    // 當右邊的calloutButton被按下會去執行self的那個方法
     [rightCalloutButton addTarget:self action:@selector(showNavigationPath) forControlEvents:UIControlEventTouchUpInside];
     NSLog(@"annotation = %@", annotation);
 
-    //    在泡泡的左邊增加圖片，按下圖片，會前往下一頁看詳細的圖片
+    // 在泡泡的左邊增加圖片，按下圖片，會前往下一頁看詳細的圖片
     CGRect leftRect = CGRectMake(0, 0, 80, 100);
     
     //取出某個Pin的圖
@@ -357,12 +352,11 @@
     if ([imageArray count]>0) {
         pinImage = imageArray[0];
     } else {
-        
-        //
         UIImage *img = [[UIImage alloc] init];
         img = [UIImage imageNamed:@"noimage.png"];
-        pinImage.imageData = UIImageJPEGRepresentation(img, 0.5);
         
+        // 圖片壓縮和轉型
+        pinImage.imageData = UIImageJPEGRepresentation(img, 0.5);
     }
     
     UIImage *image = [UIImage imageWithData:pinImage.imageData];
@@ -579,9 +573,9 @@
         pickerViewComponent1 = [NSString stringWithFormat:@"%d",row];
     }
     
-    NSLog(@"pickerViewComponent0=%@, pickerViewComponent1=%@", pickerViewComponent0, pickerViewComponent1);
+    //NSLog(@"pickerViewComponent0=%@, pickerViewComponent1=%@", pickerViewComponent0, pickerViewComponent1);
 
-    NSLog(@"row=%d, component=%d", row, component);
+    //NSLog(@"row=%d, component=%d", row, component);
     allPinRows = [pinDAO getPinsByFilter:pickerViewComponent0 visited:pickerViewComponent1];
     
     //先移除所有大頭針
