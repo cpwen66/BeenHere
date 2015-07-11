@@ -7,8 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "Notehandle.h"
+
 static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegister.php";
-@interface AppDelegate ()
+@interface AppDelegate ()<PushProtocol>
 
 @end
 
@@ -210,5 +212,14 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"didReceiveRemoteNotification");
+    NSLog(@"userinfo%@",userInfo);
+   // Pushdelegate * PUSH=[[Pushdelegate alloc] init];
+    NSDictionary * server=userInfo[@"server"];
+    NSString * action=server[@"action"];
+    Notehandle * notehandle=[[Notehandle alloc] init];
+    [notehandle pushnotification:action];
+    
+       
 }
+
 @end

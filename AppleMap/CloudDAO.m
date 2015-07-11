@@ -157,10 +157,10 @@ AFHTTPRequestOperationManager *manager;
     NSDictionary *params = [NSDictionary new];
     params = @{@"cmd": @"uploadImageOfPin",
                @"pin_id": pinImage.pinId,
-               @"pin_image":pinImage.imageData
+               @"picture":pinImage.imageData
                };
     
-    NSData *imageData = params[@"pin_image"];
+    NSData *imageData = params[@"picture"];
     
     NSLog(@"image:%@",imageData);
     
@@ -168,7 +168,7 @@ AFHTTPRequestOperationManager *manager;
     
     [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         //do not put image inside parameters dictionary as I did, but append it!
-        [formData appendPartWithFileData:imageData name:@"pin_image" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+        [formData appendPartWithFileData:imageData name:@"picture" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
         
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         

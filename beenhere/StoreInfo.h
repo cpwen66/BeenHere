@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSString* Friendid;
 @property (nonatomic, strong) NSString* apiurl;
 @property (nonatomic, strong) NSString* apiupdateurl;
+@property (nonatomic, strong) NSString* apiurlpush;
 +(StoreInfo *)shareInstance;
 
 
