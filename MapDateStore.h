@@ -21,6 +21,7 @@
 -(void)SearchPinContent;
 -(void)searchcontentCount:(NSString*)BEID;
 //-(void)ShowfriendList:(NSString*)be_id;
+-(void)SearchPinContentone;
 //查詢主頁內容
 
 @end

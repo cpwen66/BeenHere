@@ -76,7 +76,7 @@ mydb *sharedInstance;
     while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
         [rows addObject:result.resultDictionary];
    }
-    
+    NSLog(@"ROW%@",rows);
 
     return rows;
     

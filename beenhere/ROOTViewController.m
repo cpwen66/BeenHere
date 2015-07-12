@@ -134,9 +134,11 @@ friendTableViewController * frinedview;
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     appDelegate.myViewController = self;
     
-//    MapDateStore * mapManager = [[MapDateStore alloc] init];
-//        mapManager.delegate = self;
-//      [mapManager SearchPinContent];
+    MapDateStore * mapManager = [[MapDateStore alloc] init];
+      mapManager.delegate = self;
+      [mapManager SearchPinContentone];
+
+    
 
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];
