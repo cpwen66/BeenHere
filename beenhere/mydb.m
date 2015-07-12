@@ -11,6 +11,7 @@
 #import "MBProgressHUD.h"
 #import "IndexTableViewController.h"
 #import "StoreInfo.h"
+#import "Pushdelegate.h"
 
 static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.php";
 
@@ -58,6 +59,10 @@ mydb *sharedInstance;
     }
     return rows;
 }
+
+
+
+
 
 -(id)queryemail:(NSString *)beemail {
     
@@ -509,7 +514,74 @@ mydb *sharedInstance;
 }
 
 #pragma mark-查詢主頁內容
-//查詢主頁內容數量
+//查詢主頁新增一筆內容數量
+-(void)querymysqlindexcontentone:(NSString *)beeid{
+
+
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"queryindexcontentone",@"cmd", beeid, @"userID", nil];
+    
+    
+    
+    
+    //產生hud物件，並設定其顯示文字
+    
+    
+    
+    
+    
+    //產生控制request的物件
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    //以POST的方式request並
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //request成功之後要做的事情
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        
+        NSString *result = [apiResponse objectForKey:@"queryindexcontentoneresult"];
+        
+        
+        
+        
+        //   判斷signUp的key值是否等於success
+        if ([result isEqualToString:@"success"]) {
+            
+            
+            NSDictionary *data = [apiResponse objectForKey:@"queryindexcontentone"];
+            
+        
+            
+         
+                
+                
+                NSLog(@"DICT-content_no:%@",data);
+                [self insertMysqlContent:data];
+                
+                
+                [self Searchcontentno:data[@"content_no"]];
+            
+            
+            
+            NSLog(@"success");
+        }else {
+            
+            NSLog(@"no suceess");
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+        
+        
+    }];
+    
+
+
+
+
+
+}
 //查詢主頁內容
 -(void)querymysqlindexcontent:(NSString *)beeid{
     
@@ -819,7 +891,17 @@ mydb *sharedInstance;
                   //存入mysql後執行搜尋content_no
                    [self SearchIDcontent:params[@"userID"] ];
                   
-                  NSLog(@"success");
+                 
+                  
+                  Pushdelegate * push=[[Pushdelegate alloc] init];
+                  //push 通知
+                 
+                  [push FriendcontentPush:params[@"userID"] ];
+                      NSLog(@"node:%@",params[@"userID"]);
+                      push.delegate=self;
+              
+                  
+                  
               }else {
                   
                   NSLog(@"no suceess");

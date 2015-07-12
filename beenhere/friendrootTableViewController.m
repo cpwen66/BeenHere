@@ -551,6 +551,7 @@ NSUInteger indentation;
     
    tvc.node=node;
     tvc.flag=1;
+    tvc.friend_id=_friendid;
     
 }
 /*

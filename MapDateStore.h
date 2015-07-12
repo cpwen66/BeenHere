@@ -17,6 +17,7 @@
 @property (weak, nonatomic)id<MapDataProtocol> delegate;
 -(void)StoreTagdata:(NSDictionary*)Tagdata;
 -(void)SearchPinContent;
+-(void)searchcontentCount:(NSString*)BEID;
 //-(void)ShowfriendList:(NSString*)be_id;
 
 @end

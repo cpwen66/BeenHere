@@ -231,6 +231,12 @@ static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.p
         //收到通知上mysql查詢子回覆
         [[mydb sharedInstance]Searchcontentno:content_no];
        
+    }else if(ActionNumber == 3){
+       // NSString * beeid=server[@"memID"];
+        
+        //收到通知上mysql查詢子回覆
+        [[mydb sharedInstance]querymysqlindexcontentone:beeid];
+        
     }
     
        
