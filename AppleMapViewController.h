@@ -19,4 +19,6 @@
 //@property (weak, nonatomic) id<updatePinDistanceDelegate> delegate;
 //- (void) updatePinDistance;
 
+- (void) reloadAllPins;
+
 @end

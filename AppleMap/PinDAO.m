@@ -73,10 +73,7 @@ FMDatabase *sqlDB;
             
              pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"name"]];
              
-     
-//        memberInfoArray = [friendDB SearchFriendList:pin.memberId];
-//        pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
-       
+
         
         //NSLog(@"pin.memberId = %@", pin.memberId);
         //NSLog(@"array = %@", memberInfoArray);

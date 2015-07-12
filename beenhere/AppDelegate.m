@@ -12,6 +12,7 @@
 
 
 static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.php";
+
 @interface AppDelegate ()<PushProtocol,MapDataProtocol>
 
 @end

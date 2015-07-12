@@ -258,7 +258,7 @@
     Pin * pin=[[Pin alloc]init ];
     pin = sortedPinArray[indexPath.row];
     
- 
+
     NSMutableArray *memberInfoArray = [NSMutableArray new];
 //    memberInfoArray = [friendDB SearchFriendList:pin.memberId];
 
@@ -272,6 +272,7 @@
     if ([memberIdString isEqualToString:myMemberId]) {
         memberInfoArray = [friendDB querymemberinfo:memberIdString];
         memberName = memberInfoArray[0][@"name"];
+
         if (memberInfoArray[0][@"userpicture"]!=[NSNull null]) {
             NSData * imageData=memberInfoArray[0][@"userpicture"];
             UIImage * image=[UIImage imageWithData:imageData];
