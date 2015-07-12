@@ -189,17 +189,7 @@
     PinDAO *pinDAO = [[PinDAO alloc] init];
     allPinRows = [pinDAO getAllPin];
 
-    //先移除所有大頭針
-    [self.appleMapView removeAnnotations:[self.appleMapView annotations]];
-    
-
-    Pin *pin = [[Pin alloc] init];;
-    
-    // 再從資料庫拿出資料，更新所有大頭針
-    for(pin in allPinRows) {
-        [self.appleMapView addAnnotation:pin];
-        NSLog(@"id = %@, latitude = %f, longitude = %f, title = %@", pin.pinId, pin.coordinate.latitude, pin.coordinate.longitude, pin.title);
-    }
+    [self reloadAllPins];
 
 }
 
@@ -461,8 +451,8 @@
         //[distanceDict setValue:[NSString stringWithFormat:@"%1.1f", distance/1000.0] forKey:pin.pinId];
         
         // 需滿足三個條件才會要iOS送出通知，
-        // 使用者離大頭針距離120公尺內、沒有到訪過此大頭針、尚未發送過通知
-        if (distance < 50 && pin.visitedDate == nil && [notifiedArray containsObject:pin]==false) {
+        // 使用者離大頭針距離50公尺內、沒有到訪過此大頭針、尚未發送過通知
+        if (distance < 50 && pin.visitedDate == nil && [notifiedArray containsObject:pin] == false) {
             UILocalNotification *localNoti = [[UILocalNotification alloc] init];
             localNoti.fireDate = nil;// nil表示馬上發出通知，不排程
             localNoti.timeZone = [NSTimeZone defaultTimeZone];
@@ -494,7 +484,6 @@
 //- (void) updatePinDistance {
 //    [self.delegate dealPinDistance:distanceDict];
 //}
-
 
 
 // 在AppDelegate放了一個postNotificationName:object:，當app進入前景，這個viewController會收到廣播後執執行這個方法
@@ -568,27 +557,30 @@
     
     if (component == 0) {
         [filterPickerView reloadComponent:1];
-        pickerViewComponent0 = [NSString stringWithFormat:@"%d",row];
+        pickerViewComponent0 = [NSString stringWithFormat:@"%ld",(long)row];
     } else if (component ==1) {
-        pickerViewComponent1 = [NSString stringWithFormat:@"%d",row];
+        pickerViewComponent1 = [NSString stringWithFormat:@"%ld",(long)row];
     }
     
-    //NSLog(@"pickerViewComponent0=%@, pickerViewComponent1=%@", pickerViewComponent0, pickerViewComponent1);
-
-    //NSLog(@"row=%d, component=%d", row, component);
+    // 把pickView的值丟到方法內，產生新的陣列
     allPinRows = [pinDAO getPinsByFilter:pickerViewComponent0 visited:pickerViewComponent1];
+    
+    [self reloadAllPins];
+    
+}
+
+- (void) reloadAllPins {
     
     //先移除所有大頭針
     [self.appleMapView removeAnnotations:[self.appleMapView annotations]];
     
-    
-    Pin *pin = [[Pin alloc] init];;
+    Pin *pin = [[Pin alloc] init];
     
     // 再從資料庫拿出資料，更新所有大頭針
     for(pin in allPinRows) {
         [self.appleMapView addAnnotation:pin];
-        NSLog(@"id = %@, latitude = %f, longitude = %f, title = %@", pin.pinId, pin.coordinate.latitude, pin.coordinate.longitude, pin.title);
-    }
+        //NSLog(@"id = %@, latitude = %f, longitude = %f, title = %@", pin.pinId, pin.coordinate.latitude, pin.coordinate.longitude, pin.title);
+    
 }
 
 
