@@ -256,7 +256,6 @@
     Pin * pin=[[Pin alloc]init ];
     pin = sortedPinArray[indexPath.row];
     
-    headShotImageView.image = [UIImage imageNamed:@"headphoto.jpg"];
     
     NSMutableArray *memberInfoArray = [NSMutableArray new];
 //    memberInfoArray = [friendDB SearchFriendList:pin.memberId];
@@ -271,6 +270,13 @@
     if ([memberIdString isEqualToString:myMemberId]) {
         memberInfoArray = [friendDB querymemberinfo:memberIdString];
         memberName = memberInfoArray[0][@"name"];
+        UIImage *image = [UIImage imageWithData:memberInfoArray[0][@"userpicture"]];
+        if (image == nil) {
+            headShotImageView.image = [UIImage imageNamed:@"headphoto.jpg"];
+        }else {
+            headShotImageView.image = image;
+        }
+        NSLog(@"memberInfoArray[0] = %@", memberInfoArray[0]);
         
     }else{
         memberInfoArray = [friendDB SearchFriendList:memberIdString];

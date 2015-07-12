@@ -10,7 +10,7 @@
 #import "mydb.h"
 
 
-static NSString * const kJSON = @"http://192.168.1.104:8888/beenhere/DeviceRegister.php";
+static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.php";
 @interface AppDelegate ()<PushProtocol>
 
 @end

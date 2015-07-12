@@ -332,7 +332,7 @@
     // 增加右邊按鈕，顯示大頭針與使用者距離
     rightCalloutButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     NSLog(@"[currentLocation distanceFromLocation:annoLocation]/1000.0] = %f", [currentLocation distanceFromLocation:annoLocation]/1000.0);
-    [rightCalloutButton setTitle:[NSString stringWithFormat:@"%1.1f\nkM", [currentLocation distanceFromLocation:annoLocation]/1000.0] forState:UIControlStateNormal];
+    [rightCalloutButton setTitle:[NSString stringWithFormat:@"%1.1f\nkm", [currentLocation distanceFromLocation:annoLocation]/1000.0] forState:UIControlStateNormal];
     reuseAnnotationView.rightCalloutAccessoryView = rightCalloutButton;
     
     // 當右邊的calloutButton被按下會去執行self的那個方法
