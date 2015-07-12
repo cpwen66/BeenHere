@@ -15,7 +15,8 @@
 #import "MBProgressHUD.h"
 #import "AFNetworking.h"
 #import "SERVERCLASS.h"
-@interface IndexTableViewController ()
+#import "MapDateStore.h"
+@interface IndexTableViewController ()<MapDataProtocol>
 {
 
     NSMutableArray* Content;
@@ -53,6 +54,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+     NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
@@ -78,23 +80,45 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(AddContentwith:) name:@"textcontentwith" object:nil];
     
-    [self initdata];
-}
-
--(void)initdata{
+   // [self initdata];
     
+    
+    //判斷主頁內容
+   MapDateStore * mapManager = [MapDateStore new];
+        [mapManager setDelegate:self];
+
+    [mapManager searchcontentCount:userID];
+}
+-(void)initindexcontent{
+
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [hud setLabelText:@"connecting"];
     
- NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
-   
+    NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+    
     [[mydb sharedInstance]querymysqlindexcontent:userID ];
-   
+    
     
     
     
     [self loaddata];
+
+
 }
+//-(void)initdata{
+//    
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [hud setLabelText:@"connecting"];
+//    
+// NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
+//   
+//    [[mydb sharedInstance]querymysqlindexcontent:userID ];
+//   
+//    
+//    
+//    
+//    [self loaddata];
+//}
 -(void)viewWillAppear:(BOOL)animated{
 
 [self loaddata];

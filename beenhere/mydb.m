@@ -12,6 +12,7 @@
 #import "IndexTableViewController.h"
 #import "StoreInfo.h"
 #import "Pushdelegate.h"
+#import "FMDatabaseAdditions.h"
 
 static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.php";
 
@@ -160,7 +161,19 @@ mydb *sharedInstance;
     //    }
     return [NSString stringWithFormat:@"%03d", maxno];
 }
+//取得sqlite主頁內容資料筆數
+-(int)countdsqlcontentnumber:(NSString *)beeid{
+   
+    
+   NSUInteger count = [db intForQuery:@"select count(content_no) from indexcontent where id=?",beeid];
+    int sqlcount = (int)count;
 
+//    FMResultSet *result = [db executeQuery:@"select count(content_no) from indexcontent"];
+  //  maxno = [result intForColumnIndex:0];
+  
+    return sqlcount;
+
+}
 //新增
 - (void)insertMemeberNo:(NSString *)memberId andMBName:(NSString *)Bename andEMAIL:(NSString *)BeEMAIL andPassword:(NSString *)BePassword  {
     
@@ -206,13 +219,48 @@ mydb *sharedInstance;
 }
 
 #pragma mark - friend 
+-(id)SearchFriendListuserpicture:(NSString *)beeid {
+    
+    
+    
+    
+    NSMutableArray *rows = [NSMutableArray new];
+    FMResultSet *result = [db executeQuery:@"select friendID,friendname from bh_friendlist where id=?  ", beeid];
+    
+    while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
+        [rows addObject:result.resultDictionary];
+    }
+    
+    
+    
+    return rows;
+    
+    
+}
+-(id)SearchFriendinfo:(NSString *)beeid{
+    
+    NSMutableArray *rows = [NSMutableArray new];
+    FMResultSet *result = [db executeQuery:@"select friend_userpicture,friendname from bh_friendlist where friendID=?  ", beeid];
+    
+    while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
+        [rows addObject:result.resultDictionary];
+    }
+    
+    
+    
+    return rows;
+
+
+
+
+}
 -(id)SearchFriendList:(NSString *)beeid {
     
     
     
     
     NSMutableArray *rows = [NSMutableArray new];
-    FMResultSet *result = [db executeQuery:@"select * from bh_friendlist where id=?  ", beeid];
+    FMResultSet *result = [db executeQuery:@"select friendID,friendname from bh_friendlist where id=?  ", beeid];
     
     while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
         [rows addObject:result.resultDictionary];

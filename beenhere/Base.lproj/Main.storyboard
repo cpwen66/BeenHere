@@ -374,7 +374,8 @@
                                 <action selector="friendNoteAction:" destination="mqp-ar-zfE" id="dzJ-sZ-Zu8"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="tool3.png" id="5Kg-0r-cQZ">
+                        <barButtonItem key="rightBarButtonItem" image="menu25" id="5Kg-0r-cQZ">
+                            <color key="tintColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="menuAction:" destination="mqp-ar-zfE" id="gkX-OH-wVu"/>
                             </connections>
@@ -1497,9 +1498,9 @@
                                     <segue destination="LIr-bS-QWt" kind="embed" id="ecU-ez-jx9"/>
                                 </connections>
                             </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c86-tz-cky">
-                                <rect key="frame" x="277" y="544" width="46" height="30"/>
-                                <state key="normal" title="Button">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c86-tz-cky">
+                                <rect key="frame" x="275" y="524" width="50" height="50"/>
+                                <state key="normal" image="BtnAdd">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1885,6 +1886,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="BtnAdd" width="50" height="50"/>
         <image name="Facebook.png" width="282" height="55"/>
         <image name="album.png" width="180" height="169"/>
         <image name="background.jpg" width="600" height="338"/>
@@ -1900,6 +1902,7 @@
         <image name="headphoto.jpg" width="180" height="192"/>
         <image name="heart.png" width="22" height="22"/>
         <image name="impish.png" width="34" height="34"/>
+        <image name="menu25" width="25" height="25"/>
         <image name="oho.png" width="34" height="34"/>
         <image name="pencil.png" width="92" height="92"/>
         <image name="sad.png" width="34" height="34"/>
@@ -1907,7 +1910,6 @@
         <image name="smile.png" width="34" height="34"/>
         <image name="system_user_picture.jpg" width="96" height="96"/>
         <image name="system_users" width="25" height="25"/>
-        <image name="tool3.png" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="HKA-1j-IDo"/>

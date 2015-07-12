@@ -69,6 +69,7 @@ friendTableViewController * frinedview;
     
     
     
+    
     NSURL *url = [NSURL URLWithString:kJSON];
     
     //多兩個參數，cachea會自作聰明，會用舊的資料。要cache做reload，不要用舊的資料。操作逾時。
@@ -256,7 +257,7 @@ friendTableViewController * frinedview;
     contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
 //    [contentView setBackgroundColor:[UIColor colorWithRed:112./255. green:47./255. blue:168./255. alpha:1.]];
      [contentView setBackgroundColor:[UIColor colorWithRed:24./255. green:182./255. blue:246./255. alpha:1.]];
-    [contentView.layer setCornerRadius:6.];
+    [contentView.layer setCornerRadius:20.0];
     UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cross"]];
     [icon setContentMode:UIViewContentModeScaleAspectFit];
     [icon setFrame:CGRectInset(contentView.frame, 10, 10)];
@@ -280,7 +281,7 @@ friendTableViewController * frinedview;
     UPStackMenuItem *crossItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"map40"] highlightedImage:nil title:@"地圖"];
     NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:squareItem, circleItem, triangleItem, crossItem, nil];
     [items enumerateObjectsUsingBlock:^(UPStackMenuItem *item, NSUInteger idx, BOOL *stop) {
-        [item setTitleColor:[UIColor orangeColor]];
+        [item setTitleColor:[UIColor colorWithRed:0.2f green:0.6f blue:0.9f alpha:1.0f]];
     }];
             [stack setAnimationType:UPStackMenuAnimationType_progressive];
             [stack setStackPosition:UPStackMenuStackPosition_up];
@@ -822,7 +823,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
     [takeImageButton setFrame:CGRectMake(15, 230, self.view.bounds.size.width-30, 30)];
     [takeImageButton setTitle:@"拍照" forState:UIControlStateNormal];
     [takeImageButton addTarget:self action:@selector(cameraView:) forControlEvents:UIControlEventTouchUpInside];
-    [takeImageButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [takeImageButton setTitleColor:[UIColor colorWithRed:0.2f green:0.6f blue:0.9f alpha:1.0f] forState:UIControlStateNormal];
     
     [self.view addSubview:takeImageButton];
     
@@ -840,7 +841,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
     [pickImageButton setFrame:CGRectMake(15, 265, self.view.bounds.size.width-30, 30)];
     [pickImageButton setTitle:@"從相簿選擇照片" forState:UIControlStateNormal];
     [pickImageButton addTarget:self action:@selector(pickImageAction:) forControlEvents:UIControlEventTouchUpInside];
-    [pickImageButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [pickImageButton setTitleColor:[UIColor colorWithRed:0.2f green:0.6f blue:0.9f alpha:1.0f] forState:UIControlStateNormal];
     
     [self.view addSubview:pickImageButton];
     
@@ -854,7 +855,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
     [cancelImageButton setFrame:CGRectMake(15, 300, self.view.bounds.size.width-30, 30)];
     [cancelImageButton setTitle:@"取消" forState:UIControlStateNormal];
     [cancelImageButton addTarget:self action:@selector(cancelImageClick:) forControlEvents:UIControlEventTouchUpInside];
-    [cancelImageButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [cancelImageButton setTitleColor:[UIColor colorWithRed:0.2f green:0.6f blue:0.9f alpha:1.0f] forState:UIControlStateNormal];
     
     [self.view addSubview:cancelImageButton];
     
@@ -931,7 +932,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
     [takePhotoButton setFrame:CGRectMake(15, 230, self.view.bounds.size.width-30, 30)];
     [takePhotoButton addTarget:self action:@selector(cameraView:) forControlEvents:UIControlEventTouchUpInside];
     [takePhotoButton setTitle:@"拍照" forState:UIControlStateNormal];
-    [takePhotoButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [takePhotoButton setTitleColor:[UIColor colorWithRed:0.2f green:0.6f blue:0.9f alpha:1.0f] forState:UIControlStateNormal];
     
     [self.view addSubview:takePhotoButton];
     
@@ -948,7 +949,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
     UIButton *pickPhotoButton=[UIButton buttonWithType:UIButtonTypeRoundedRect];
     [pickPhotoButton setFrame:CGRectMake(15, 265, self.view.bounds.size.width-30, 30)];
     [pickPhotoButton setTitle:@"從相簿選擇照片" forState:UIControlStateNormal];
-    [pickPhotoButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [pickPhotoButton setTitleColor:[UIColor colorWithRed:0.2f green:0.6f blue:0.9f alpha:1.0f] forState:UIControlStateNormal];
     [pickPhotoButton addTarget:self action:@selector(pickPhotoPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:pickPhotoButton];
@@ -960,7 +961,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
     // 取消按鈕
     UIButton *cancelPhotoButton=[UIButton buttonWithType:UIButtonTypeRoundedRect];
     [cancelPhotoButton setFrame:CGRectMake(15, 300, self.view.bounds.size.width-30, 30)];
-    [cancelPhotoButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [cancelPhotoButton setTitleColor:[UIColor colorWithRed:0.2f green:0.6f blue:0.9f alpha:1.0f] forState:UIControlStateNormal];
     [cancelPhotoButton setTitle:@"取消" forState:UIControlStateNormal];
     [cancelPhotoButton addTarget:self action:@selector(cancelPhotoClick:) forControlEvents:UIControlEventTouchUpInside];
     

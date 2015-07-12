@@ -13,10 +13,11 @@
 #import "PinImage.h"
 #import "PinImageDAO.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "Pushdelegate.h"
 
 CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 
-@interface PinEditViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface PinEditViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate,PushProtocol>
 {
     CGFloat titleTextViewHeight;
     int imageIndex;
@@ -190,6 +191,9 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 
     // 請求上傳動作
     [self.cloudDAO uploadNewPin:self.currentPin];
+    
+    
+    
 
 #else
     // 測試用，不經過上傳到伺服器的程序
@@ -271,6 +275,18 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
             // 上傳圖片到伺服器
             [self.cloudDAO uploadImageOfPin:newPinImage];
         }
+    }else{
+    
+    
+        Pushdelegate * push=[[Pushdelegate alloc] init];
+        
+        
+        //push 通知
+        [push SendPinUpdate];
+        push.delegate=self;
+       
+    
+    
     }
     
     // ---------------------此線以上是上傳的工作，以下是存SQLite

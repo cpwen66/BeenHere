@@ -62,6 +62,8 @@
     sortedPinArray = (NSMutableArray *) pinArray;
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLocationChanged:) name:@"DISTANCE_CHANGED" object:nil];
     
+    NSLog(@"storted:%@",sortedPinArray);
+    
     // 使用Slide menu (第三方套件)
     SWRevealViewController *revealViewController = self.revealViewController;
     if (revealViewController) {
@@ -256,11 +258,10 @@
     Pin * pin=[[Pin alloc]init ];
     pin = sortedPinArray[indexPath.row];
     
-    headShotImageView.image = [UIImage imageNamed:@"headphoto.jpg"];
-    
+ 
     NSMutableArray *memberInfoArray = [NSMutableArray new];
 //    memberInfoArray = [friendDB SearchFriendList:pin.memberId];
-    
+
     
     NSString *myMemberId = [[NSUserDefaults standardUserDefaults] stringForKey:@"bhereID"];
     //NSLog(@"id%@, pin_id%@", pin.memberId,userID);
@@ -271,11 +272,25 @@
     if ([memberIdString isEqualToString:myMemberId]) {
         memberInfoArray = [friendDB querymemberinfo:memberIdString];
         memberName = memberInfoArray[0][@"name"];
+        if (memberInfoArray[0][@"userpicture"]!=[NSNull null]) {
+            NSData * imageData=memberInfoArray[0][@"userpicture"];
+            UIImage * image=[UIImage imageWithData:imageData];
+            headShotImageView.image = image;
+        }else {
+            headShotImageView.image = [UIImage imageNamed:@"headphoto.jpg"];
         
+        }
     }else{
-        memberInfoArray = [friendDB SearchFriendList:memberIdString];
+        memberInfoArray = [friendDB SearchFriendinfo:memberIdString];
         memberName = memberInfoArray[0][@"friendname"];
         
+        if (memberInfoArray[0][@"friend_userpicture"]!=[NSNull null]) {
+            NSData * imageData=memberInfoArray[0][@"friend_userpicture"];
+            UIImage * image=[UIImage imageWithData:imageData];
+            headShotImageView.image = image;
+        }else{
+             headShotImageView.image = [UIImage imageNamed:@"headphoto.jpg"];
+        }
     }
     //NSLog(@"memberName = %@", memberName);
 

@@ -462,7 +462,7 @@
         
         // 需滿足三個條件才會要iOS送出通知，
         // 使用者離大頭針距離120公尺內、沒有到訪過此大頭針、尚未發送過通知
-        if (distance < 120 && pin.visitedDate == nil && [notifiedArray containsObject:pin]==false) {
+        if (distance < 50 && pin.visitedDate == nil && [notifiedArray containsObject:pin]==false) {
             UILocalNotification *localNoti = [[UILocalNotification alloc] init];
             localNoti.fireDate = nil;// nil表示馬上發出通知，不排程
             localNoti.timeZone = [NSTimeZone defaultTimeZone];

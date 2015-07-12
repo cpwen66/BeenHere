@@ -8,10 +8,11 @@
 
 #import "AppDelegate.h"
 #import "mydb.h"
+#import "MapDateStore.h"
 
 
 static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.php";
-@interface AppDelegate ()<PushProtocol>
+@interface AppDelegate ()<PushProtocol,MapDataProtocol>
 
 @end
 
@@ -237,6 +238,13 @@ static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.p
         //收到通知上mysql查詢子回覆
         [[mydb sharedInstance]querymysqlindexcontentone:beeid];
         
+    }else if (ActionNumber == 4){
+    
+        MapDateStore * mapManager = [[MapDateStore alloc] init];
+                mapManager.delegate = self;
+              [mapManager SearchPinContent];
+        NSLog(@"dd");
+    
     }
     
        

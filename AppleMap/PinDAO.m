@@ -112,70 +112,16 @@ FMDatabase *sqlDB;
     
     
       NSMutableArray *friendmemberInfoArray = [NSMutableArray new];
-      friendmemberInfoArray = [friendDB SearchFriendList:userID];
-    NSLog(@"friendarray%@ count%lu",friendmemberInfoArray,(unsigned long)friendmemberInfoArray.count);
-    if (friendmemberInfoArray==NULL) {
-        
+    
+    friendmemberInfoArray=[self friendpin:userID addquerystring:nil];
     
     
-    for (int i = 0; i<=friendmemberInfoArray.count-1; i++) {
-        
-           resultSet = [sqlDB executeQuery:@"select * from pins where member_id=?",friendmemberInfoArray[i][@"friendID"]];
-        
-        while ([resultSet next]) {
-           
-            Pin *pin = [[Pin alloc] init];
-            pin.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
-            
-            pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
-            pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
-            
-            
-            pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", friendmemberInfoArray[i][@"friendname"]];
-            
-            
-        
-            
-            // 自訂方法，把UTC時間字串轉本地時間NSData
-            pin.postedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_posted_date"]];
-            
-  
-            
-            if (![[resultSet.resultDictionary objectForKey:@"pin_visited_date"] isEqual:[NSNull new]]) {
-                
-                pin.visitedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_visited_date"]];
-                
-            } else {
-           
-            }
-            
-            
-        
-            
-            CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
-            CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
-            CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
-            pin.coordinate = locationCoordinate;
-            
-            [rows addObject:pin];
-            
-        }
-
-    }
-    
-    
-    }
+    [rows addObjectsFromArray:friendmemberInfoArray];
     
     
     
     
-    
-    
-    
-    
-    
-    
-    //NSLog(@"rows = %@", rows);
+    NSLog(@"rows = %@", rows);
     return rows;
 }
 
@@ -194,41 +140,50 @@ FMDatabase *sqlDB;
     //假資料
     //NSString *memberId = @"1";
     NSString *queryString;
+    NSString *queryFriendString;
     if ([owner isEqualToString:@"0"]) {
         
         if ([visited isEqualToString:@"0"]) {
-            queryString = @"SELECT * FROM pins";
+            queryString = @"SELECT * FROM pins WHERE member_id=?";
+            queryFriendString = @"SELECT * FROM pins WHERE member_id=?";
         } else if ([visited isEqualToString:@"1"]){//Visited
-            queryString = @"SELECT * FROM pins WHERE pin_visited_date IS NOT NULL";
+            queryString = @"SELECT * FROM pins WHERE pin_visited_date IS NOT NULL AND member_id=?";
+            queryFriendString = @"SELECT * FROM pins WHERE pin_visited_date IS NOT NULL AND member_id=?";
+            
         } else {//UNVISITED
-            queryString = @"SELECT * FROM pins WHERE pin_visited_date IS NULL";
+            queryString = @"SELECT * FROM pins WHERE pin_visited_date IS NULL AND member_id=?";
+            queryFriendString=@"SELECT * FROM pins WHERE pin_visited_date IS NULL AND member_id=?";
         }
-        resultSet = [sqlDB executeQuery:queryString];
+        resultSet = [sqlDB executeQuery:queryString,memberId];
+        
+        
+       
 
     } else if([owner isEqualToString:@"1"]){
         
         //queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id=%@", memberId];
         queryString = @"SELECT * FROM pins WHERE member_id=?";
         resultSet = [sqlDB executeQuery:queryString, memberId];
+        queryFriendString=nil;
 
     } else {
         
         if ([visited isEqualToString:@"0"]) {
             
             //queryString = [NSString stringWithFormat:@"SELECT * FROM pins WHERE member_id<>%@", memberId];
-            queryString = @"SELECT * FROM pins WHERE member_id<>?";
+             queryFriendString = @"SELECT * FROM pins WHERE member_id=?";
 
         } else if ([visited isEqualToString:@"1"]){//Visited
             
-            queryString = @"SELECT * FROM pins WHERE member_id<>? AND pin_visited_date IS NOT NULL";
+             queryFriendString = @"SELECT * FROM pins WHERE member_id=? AND pin_visited_date IS NOT NULL";
             
         } else {//UNVISITED
             
-            queryString = @"SELECT * FROM pins WHERE member_id<>? AND pin_visited_date IS NULL";
+            queryFriendString = @"SELECT * FROM pins WHERE member_id=? AND pin_visited_date IS NULL";
 
         }
-        resultSet = [sqlDB executeQuery:queryString, memberId];
-
+       // resultSet = [sqlDB executeQuery:queryString, memberId];
+        
     }
     
     NSLog(@"queryString= %@", queryString);
@@ -250,17 +205,10 @@ FMDatabase *sqlDB;
         NSMutableArray *memberInfoArray = [NSMutableArray new];
         NSString *memberIdString = [NSString stringWithFormat:@"%@",pin.memberId];
         
-        if ([memberIdString isEqualToString:memberId]) {
-            memberInfoArray=[friendDB querymemberinfo:memberIdString];
-            
-            pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"name"]];
-            
-            NSLog(@"array = %@", memberInfoArray);
-        }else{
-            memberInfoArray = [friendDB SearchFriendList:pin.memberId];
-            pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"friendname"]];
-            
-        }
+        
+        memberInfoArray=[friendDB querymemberinfo:memberIdString];
+        
+        pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", memberInfoArray[0][@"name"]];
         
 //        pin.postedDate = [resultSet dateForColumn:@"pin_posted_date"];
 //        pin.visitedDate = [resultSet dateForColumn:@"pin_visited_date"];
@@ -284,9 +232,102 @@ FMDatabase *sqlDB;
         [rows addObject:pin];
         
     }
-    //NSLog(@"rows = %@", rows);
+    //NSLog(@"rows = %@", rows)
+    
+    NSMutableArray *friendmemberInfoArray = [NSMutableArray new];
+    
+    friendmemberInfoArray=[self friendpin:memberId addquerystring:queryFriendString];
+    
+    if (queryFriendString!=nil) {
+         [rows addObjectsFromArray:friendmemberInfoArray];
+    }
+  
+    
+    
+    
     return rows;
     
+}
+
+
+-(NSMutableArray *)friendpin:(NSString*)memeber_id addquerystring:(NSString*)query{
+
+    NSMutableArray *rows = [NSMutableArray new];
+    
+    mydb *friendDB = [[mydb alloc] init];
+    
+    FMResultSet *resultSet;
+    
+    NSMutableArray *friendmemberInfoArray = [NSMutableArray new];
+    friendmemberInfoArray = [friendDB SearchFriendList:memeber_id];
+    NSLog(@"friendarray%@ count%lu",friendmemberInfoArray,(unsigned long)friendmemberInfoArray.count);
+    if (friendmemberInfoArray.count!=0) {
+        
+
+        for (int i = 0; i<=friendmemberInfoArray.count-1; i++) {
+            
+            if (query==nil) {
+                 resultSet = [sqlDB executeQuery:@"select * from pins where member_id=?",friendmemberInfoArray[i][@"friendID"]];
+            }else{
+            
+             resultSet = [sqlDB executeQuery:query, friendmemberInfoArray[i][@"friendID"]];
+            
+            }
+            
+       
+            
+            NSLog(@"ssd:%@",friendmemberInfoArray);
+            
+            while ([resultSet next]) {
+                
+                Pin *pin = [[Pin alloc] init];
+                pin.pinId = [resultSet.resultDictionary objectForKey:@"pin_id"];
+                
+                pin.title = [resultSet.resultDictionary objectForKey:@"pin_title"];
+                pin.memberId = [resultSet.resultDictionary objectForKey:@"member_id"];
+                
+                
+                pin.subtitle = [NSString stringWithFormat:@"%@ 到此一遊", friendmemberInfoArray[i][@"friendname"]];
+                
+                
+                
+                
+                // 自訂方法，把UTC時間字串轉本地時間NSData
+                pin.postedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_posted_date"]];
+                
+                
+                
+                if (![[resultSet.resultDictionary objectForKey:@"pin_visited_date"] isEqual:[NSNull new]]) {
+                    
+                    pin.visitedDate =[self transfromUTCTimeToLocalTime:[resultSet.resultDictionary objectForKey:@"pin_visited_date"]];
+                    
+                } else {
+                    
+                }
+                
+                
+                
+                
+                CLLocationDegrees latitude = [[resultSet.resultDictionary objectForKey:@"pin_latitude"] doubleValue];
+                CLLocationDegrees longitude = [[resultSet.resultDictionary objectForKey:@"pin_longitude"] doubleValue];
+                CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
+                pin.coordinate = locationCoordinate;
+                
+                [rows addObject:pin];
+                
+            }
+            
+        }
+        
+        
+    }
+
+
+
+
+
+    
+    return rows;
 }
 
 - (Pin *)getPinById:(NSString *)pinId {
@@ -370,6 +411,7 @@ FMDatabase *sqlDB;
     }
     
 }
+
 
 
 - (NSString *)getLastPinId {

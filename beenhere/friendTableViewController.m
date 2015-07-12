@@ -812,6 +812,7 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
     
 }
 -(void)onButton{
+    
   [self addFirendRequest:friendID andfrisetrequest:@"1"];
     
     
