@@ -335,7 +335,7 @@ mydb *sharedInstance;
      member_email   cust_email
      */
     
-    
+    NSLog(@"custdict:%@",custDict);
        NSData * imagedata = [[NSData alloc]initWithBase64EncodedString: custDict[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
     FMResultSet *rs=[db executeQuery:@"select count(*) from memeber where bhere_no=?",custDict[@"bhere_no"]];
     

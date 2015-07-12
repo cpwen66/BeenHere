@@ -114,6 +114,10 @@ FMDatabase *sqlDB;
       NSMutableArray *friendmemberInfoArray = [NSMutableArray new];
       friendmemberInfoArray = [friendDB SearchFriendList:userID];
     NSLog(@"friendarray%@ count%lu",friendmemberInfoArray,(unsigned long)friendmemberInfoArray.count);
+    if (friendmemberInfoArray==NULL) {
+        
+    
+    
     for (int i = 0; i<=friendmemberInfoArray.count-1; i++) {
         
            resultSet = [sqlDB executeQuery:@"select * from pins where member_id=?",friendmemberInfoArray[i][@"friendID"]];
@@ -160,7 +164,7 @@ FMDatabase *sqlDB;
     }
     
     
-    
+    }
     
     
     
