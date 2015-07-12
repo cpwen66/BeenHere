@@ -11,6 +11,8 @@
 //@protocol MapDataProtocol <NSObject>
 @protocol MapDataProtocol
 -(void)returnPinID:(NSString*)pinid;
+@optional
+-(void)initindexcontent;
 @end
 
 @interface MapDateStore : NSObject
@@ -19,5 +21,6 @@
 -(void)SearchPinContent;
 -(void)searchcontentCount:(NSString*)BEID;
 //-(void)ShowfriendList:(NSString*)be_id;
+//查詢主頁內容
 
 @end

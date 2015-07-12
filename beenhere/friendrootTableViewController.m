@@ -16,7 +16,8 @@
 #import "AFNetworking.h"
 #import "replyViewController.h"
 #import "talkviewcontroller.h"
-@interface friendrootTableViewController (){
+#import "MapDateStore.h"
+@interface friendrootTableViewController ()<MapDataProtocol>{
 NSMutableArray* Content;
 NSDictionary * contentkey;
 
@@ -48,23 +49,43 @@ NSUInteger indentation;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AddContentfriendwith:) name:@"textcontentfriendwith" object:nil];
    
     
+    MapDateStore * mapManager = [MapDateStore new];
+    [mapManager setDelegate:self];
+    
+    [mapManager searchcontentCount:_friendid];
     
     [self fillDisplayArray];
-    [self initdata];
+    //[self initdata];
+
+     [self loaddata];
     
 }
--(void)initdata{
+-(void)initindexcontent{
     
-//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//    [hud setLabelText:@"connecting"];
-    
-    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [hud setLabelText:@"connecting"];
+
     [[mydb sharedInstance]querymysqlindexcontent:_friendid ];
     
     
     
     [self loaddata];
+
+
+
 }
+//-(void)initdata{
+//    
+////    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+////    [hud setLabelText:@"connecting"];
+//    
+//    
+//    [[mydb sharedInstance]querymysqlindexcontent:_friendid ];
+//    
+//    
+//    
+//    [self loaddata];
+//}
 //從sqlite取內容資料
 -(void)loaddata{
     

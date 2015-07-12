@@ -11,10 +11,11 @@
 #import "PinImage.h"
 #import "AFNetworking.h"
 #import "StoreInfo.h"
+#import "Pushdelegate.h"
 //#import "AFHTTPRequestOperationManager.h"
 
 AFHTTPRequestOperationManager *manager;
-@interface CloudDAO()
+@interface CloudDAO()<PushProtocol>
 
 @end
 @implementation CloudDAO
@@ -173,6 +174,14 @@ AFHTTPRequestOperationManager *manager;
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"operation success: %@", responseObject);
+        
+        
+        Pushdelegate * push=[[Pushdelegate alloc] init];
+        
+        
+        //push 通知
+        [push SendPinUpdate];
+        push.delegate=self;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         

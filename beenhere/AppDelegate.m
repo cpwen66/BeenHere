@@ -8,10 +8,12 @@
 
 #import "AppDelegate.h"
 #import "mydb.h"
+#import "MapDateStore.h"
 
 
 static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.php";
-@interface AppDelegate ()<PushProtocol>
+
+@interface AppDelegate ()<PushProtocol,MapDataProtocol>
 
 @end
 
@@ -172,12 +174,12 @@ static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.p
     
     NSLog(@"Device token: %@", newToken);
     
-    //判斷手機上的Device Token是否存在。
-    //NSUserDefault也會儲存device token，如果app沒有上雲端，移除app，也會移除device token
-    
-    
-    //處理使用者帳號、名稱、密碼…的資訊
-    //將device token及其他資訊傳到後台(Provider)的PHP處理
+//    判斷手機上的Device Token是否存在。
+//    NSUserDefault也會儲存device token，如果app沒有上雲端，移除app，也會移除device token
+//    
+//    
+//    處理使用者帳號、名稱、密碼…的資訊
+//    將device token及其他資訊傳到後台(Provider)的PHP處理
        NSString *userID = [[NSUserDefaults standardUserDefaults]stringForKey:@"bhereID"];
          NSString *username = [[NSUserDefaults standardUserDefaults]stringForKey:@"bherename"];
     
@@ -237,6 +239,13 @@ static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.p
         //收到通知上mysql查詢子回覆
         [[mydb sharedInstance]querymysqlindexcontentone:beeid];
         
+    }else if (ActionNumber == 4){
+    
+        MapDateStore * mapManager = [[MapDateStore alloc] init];
+                mapManager.delegate = self;
+              [mapManager SearchPinContent];
+        NSLog(@"dd");
+    
     }
     
        

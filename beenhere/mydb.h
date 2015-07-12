@@ -62,6 +62,8 @@
 //mysql 查詢主頁內容
 -(void)querymysqlindexcontent:(NSString *)beeid;
 -(void)Searchcontentno:(NSString *)content_no;
+//sqlite 查詢主頁數量
+-(int)countdsqlcontentnumber:(NSString *)beeid;
 //mysql 查詢主頁新增一筆內容
 -(void)querymysqlindexcontentone:(NSString *)beeid;
 //把圖存進去
@@ -80,4 +82,6 @@
 -(id)querymemberinfo:(NSString *)beeid;
 //search friend
 -(id)SearchFriendList:(NSString *)beeid;
+-(id)SearchFriendListuserpicture:(NSString *)beeid;
+-(id)SearchFriendinfo:(NSString *)beeid;
 @end

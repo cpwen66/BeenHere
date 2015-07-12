@@ -13,6 +13,7 @@
 #import "PinDAO.h"
 #import "PinImageDAO.h"
 #import "PinImage.h"
+#import "mydb.h"
 
 @implementation MapDateStore
 
@@ -70,7 +71,101 @@
 
 
 }
+//搜尋有沒有PIN一筆
+-(void)SearchPinContentone{
 
+    NSUserDefaults * userdefaults = [NSUserDefaults standardUserDefaults];
+    NSString *memberId = [userdefaults stringForKey:@"bhereID"];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"searchPinone",@"cmd", memberId, @"userID", nil];
+    
+    
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    //以POST的方式request並
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //request成功之後要做的事情
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        NSLog(@"apiResponse:%@",apiResponse);
+        // 取的signIn的key值，並輸出
+        NSString *result = [apiResponse objectForKey:@"searchPinone"];
+        NSLog(@"result:%@",result);
+        
+        //   判斷signUp的key值是否等於success
+        if ([result isEqualToString:@"success"]) {
+            
+            
+            NSDictionary *pin = [apiResponse objectForKey:@"searchPinoneResult"];
+            
+            // [self recievePinID:pin_id];
+            // [self.delegate returnPinID:pin_id];
+            for (NSDictionary *dict in pin) {
+                NSLog(@"id:%@",dict[@"pin_id"]);
+                [self SearchPinContentimage:dict[@"pin_id"]];
+                //存ＰＩＮ
+                
+                Pin * pin=[[Pin alloc]init];
+                pin.pinId=dict[@"pin_id"];
+                pin.memberId=dict[@"member_id"];
+                pin.title=dict[@"pin_title"];
+                CGFloat latitude=  (CGFloat)[dict[@"pin_latitude"] floatValue];
+                CGFloat longitude=  (CGFloat)[dict[@"pin_longitude"] floatValue];
+                CLLocationCoordinate2D pinCoordinate;
+                pinCoordinate.latitude =latitude;
+                pinCoordinate.longitude = longitude;
+                pin.coordinate = pinCoordinate;
+                
+                
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                [dateFormat setTimeZone:[NSTimeZone systemTimeZone]];
+                // 此格式必須完全符合SQLite裡時間欄位的格式，不然回傳會是nil
+                // 24小時制，要用大寫的H
+                [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                
+                NSTimeZone *tz = [NSTimeZone localTimeZone];
+                // 取出時間，還要一些轉換
+                NSString *postedTime = dict[@"pin_posted_date"];
+                NSString *visitedTime = dict[@"pin_visited_date"];
+                NSDate *visitUTCDate = [dateFormat dateFromString:visitedTime];
+                NSDate *postUTCDate = [dateFormat dateFromString:postedTime];
+                NSTimeInterval seconds = [tz secondsFromGMTForDate:postUTCDate];
+                NSTimeInterval secondvisit = [tz secondsFromGMTForDate:visitUTCDate];
+                //NSDate *dateInUTC = pin.postedDate;
+                pin.postedDate = [postUTCDate dateByAddingTimeInterval:seconds];
+                pin.visitedDate =[postUTCDate dateByAddingTimeInterval:secondvisit];
+                
+                //存到sqlite
+                PinDAO*pinDAO = [[PinDAO alloc] init];
+                [pinDAO insertPinIntoSQLite:pin];
+                
+                
+                
+                //去從mysql取pin的圖
+                [self SearchPinContentimage:dict[@"pin_id"]];
+                
+            }
+        }else {
+            
+            NSLog(@"no suceess");
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+        
+        
+        
+        
+        
+        
+    }];
+
+
+
+
+}
 //搜尋有沒有pin內容
 -(void)SearchPinContent{
 
@@ -141,7 +236,8 @@
               PinDAO*pinDAO = [[PinDAO alloc] init];
              [pinDAO insertPinIntoSQLite:pin];
             
-    
+             
+            
              //去從mysql取pin的圖
              [self SearchPinContentimage:dict[@"pin_id"]];
              
@@ -246,8 +342,69 @@
 
 //查詢主頁內容數量
 -(void)searchcontentCount:(NSString*)BEID{
+    
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"queryindexcontentcount",@"cmd", BEID, @"userID", nil];
+    
+    
+    
+    
+    //產生hud物件，並設定其顯示文字
+    
+    
+    
+    
+    
+    //產生控制request的物件
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //   manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    //以POST的方式request並
+    [manager POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //request成功之後要做的事情
+        
+        NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+        
+        NSString *result = [apiResponse objectForKey:@"queryindexcontentcountresult"];
+        
+        
+        
+        
+        //   判斷signUp的key值是否等於success
+        if ([result isEqualToString:@"success"]) {
+            
+            
+//            NSMutableArray *data = [apiResponse objectForKey:@"queryindexcontentcount"];
+            
+           // NSLog(@"index content:%@",data);
+            int count= [[apiResponse objectForKey:@"queryindexcontentcount"] intValue];
+           
+            
+           int sqlcount=[[mydb sharedInstance]countdsqlcontentnumber:BEID ];
+           
+            NSLog(@"count:%d sqlcount:%d",count,sqlcount);
+            
+            if (count!=sqlcount) {
+            
+                
+                [self.delegate initindexcontent];
+                
+            }
+            
+          
+        }else {
+            
+            NSLog(@"no suceess");
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"request error:%@",error);
+        
+        
+    }];
+    
 
-     
+      
     
     
 
