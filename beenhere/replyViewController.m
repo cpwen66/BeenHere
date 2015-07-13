@@ -16,7 +16,7 @@
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([SYSTEM_VERSION compare:v options:NSNumericSearch] != NSOrderedAscending)
 #define IS_IOS8_OR_ABOVE                            (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0"))
 
-@interface replyViewController ()<UITableViewDataSource, UITableViewDelegate,PushProtocol>
+@interface replyViewController ()<UITableViewDataSource, UITableViewDelegate,PushProtocol,UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 @property (nonatomic, strong) detailreplyTableViewCell *prototypeCell;
@@ -25,10 +25,12 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *SendBtn;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textFieldConstraint;
+
 @end
 
 @implementation replyViewController
-
+@synthesize replytextfield;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -43,8 +45,16 @@
      [replylist addObject:_node];
     
    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     
+    
+    // 替scrollView加上手勢
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
+//
+//    // 下一行self.myScrollView改成self.view也可以
+    [self.tableview addGestureRecognizer:tapGesture];
     [self fillNodeWithChildrenArray:_node.nodeChildren];
  
  
@@ -53,9 +63,42 @@
     self.tableview.delegate = self;
     
      self.SendBtn.layer.cornerRadius=5.0;
+    replytextfield.delegate=self;
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+  
+    if (![replytextfield isExclusiveTouch]) {
+        [replytextfield resignFirstResponder];
+    }
+    
     
 }
 
+
+// Called when the UIKeyboardDidShowNotification is sent.
+// keyboard跳出來之後會進到這個方法
+- (void)keyboardWillShow: (NSNotification *) aNotification {
+    NSValue *value = [[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGSize keyboardSize = value.CGRectValue.size;
+    self.textFieldConstraint.constant = keyboardSize.height;
+}
+
+- (void)keyboardWillHide: (NSNotification *) aNotification {
+    self.textFieldConstraint.constant = 0;
+    
+}
+-(void)dismissKeyboard
+{
+    [replytextfield resignFirstResponder]; //textNotes 請自行更換成所用之變數
+}
+- (IBAction)dissmissuitextfield:(id)sender {
+    [replytextfield resignFirstResponder];
+}
+-(void)hideKeyboard {
+    
+    //撤self.view下的keyboard
+    [self.view endEditing:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -65,12 +108,12 @@
 #pragma mark - 將輸入內容存到nsstring
 - (IBAction)replyAction:(id)sender {
     
-    replytext=_replytextfield.text;
+    replytext=replytextfield.text;
     if (replytext!=NULL) {
          [self insertreplycontentToSQLite];
     }
     
-   
+    
     
 
      [self dismissViewControllerAnimated:YES completion:nil];

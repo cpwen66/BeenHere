@@ -15,6 +15,7 @@
 #import "PinImage.h"
 #import "mydb.h"
 
+
 @implementation MapDateStore
 
 -(instancetype)init
@@ -72,11 +73,11 @@
 
 }
 //搜尋有沒有PIN一筆
--(void)SearchPinContentone{
+-(void)SearchPinContentone:(NSString*)memeber_id{
 
-    NSUserDefaults * userdefaults = [NSUserDefaults standardUserDefaults];
-    NSString *memberId = [userdefaults stringForKey:@"bhereID"];
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"searchPinone",@"cmd", memberId, @"userID", nil];
+//    NSUserDefaults * userdefaults = [NSUserDefaults standardUserDefaults];
+//    //NSString *memberId = [userdefaults stringForKey:@"bhereID"];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"searchPinone",@"cmd", memeber_id, @"userID", nil];
     
     
     
@@ -171,7 +172,10 @@
 
     NSUserDefaults * userdefaults = [NSUserDefaults standardUserDefaults];
     NSString *memberId = [userdefaults stringForKey:@"bhereID"];
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"searchPin",@"cmd", memberId, @"userID", nil];
+    NSLog(@"memeberID",memberId);
+    
+    NSDictionary *params = [NSDictionary
+                            dictionaryWithObjectsAndKeys:@"searchPin",@"cmd", memberId, @"userID", nil];
     
     
     

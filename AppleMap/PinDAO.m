@@ -9,6 +9,7 @@
 #import "PinDAO.h"
 #import "Pin.h"
 #import "mydb.h"
+#import "AppleMapViewController.h"
 
 FMDatabase *sqlDB;
 
@@ -372,7 +373,11 @@ FMDatabase *sqlDB;
      //去executeUpdate看說明，裡面會提到lastErrorMessage
      NSLog(@"Could not insert record: %@", [sqlDB lastErrorMessage]);
     };
-
+   
+    AppleMapViewController * applemapviewcontroller=[[AppleMapViewController alloc]init ];
+    [applemapviewcontroller reloadAllPinsNotif  ];
+    
+    
 }
  
 

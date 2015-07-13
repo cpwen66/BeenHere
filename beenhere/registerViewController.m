@@ -62,9 +62,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
 -(void)registeraction{
 
     //測試
-    NSString *myString = [[NSUserDefaults standardUserDefaults] stringForKey:bhereEmail];
-    
-    NSString *myString1 = [[NSUserDefaults standardUserDefaults] stringForKey:bherePassword];
+
     
     
    
@@ -101,7 +99,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
         UIFont *yourNewSameStyleFont = [textField.font fontWithSize:yourSelectedFontSize];
         textField.font = yourNewSameStyleFont ;
         
-        textField.text=[[NSUserDefaults standardUserDefaults] stringForKey:bherePassword];
+//        textField.text=[[NSUserDefaults standardUserDefaults] stringForKey:bherePassword];
         
        
     }];
@@ -324,7 +322,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
     
     NSLog(@"userid:%@",IDresult);
     if ([IDresult isEqualToString:@"success"]) {
-        [self newmenber];
+        //[self newmenber];
         [self SinupMYsql];
     }else{
     
@@ -393,7 +391,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
 
 #pragma php update
 //新增將資料存到sqllite的method
--(void)newmenber{
+-(void)newmenber:(NSString*)be_no{
 
     NSString *beemail = [[NSUserDefaults standardUserDefaults] stringForKey:@"bhereEmail"];
     
@@ -406,7 +404,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
  
     
     
-    [[mydb sharedInstance]insertMemeberNo:beid andMBName:bname andEMAIL:beemail andPassword:bpassword ];
+    [[mydb sharedInstance]insertMemeberNo:beid andMBName:bname andEMAIL:beemail andPassword:bpassword addbeno:be_no];
     
     NSLog(@"%@ %@ %@ ",beemail ,beemail,bpassword);
 
@@ -460,7 +458,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
             
             if ([cmd isEqualToString:@"updateID"]) {
                 NSLog(@"success");
-                [self newmenber];
+               
                 [self SinupMYsql];
             }else{
             
@@ -537,7 +535,7 @@ static NSString *const kurlson_upload=@"http://localhost:8888/beenhere/usersUP.p
         if ([result isEqualToString:@"success"]) {
             
             
-            
+            [self newmenber: [apiResponse objectForKey:@"signUpresult"]];
             
             NSLog(@"insert success");
         }else {

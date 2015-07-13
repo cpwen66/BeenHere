@@ -140,7 +140,7 @@
     
    Content=[[mydb sharedInstance]queryindexcontent:userID ];
 
-    NSLog(@"con%@",Content);
+    //NSLog(@"con%@",Content);
    
     
     if (!Content.count==0) {
@@ -513,8 +513,10 @@
     picture= [[mydb sharedInstance]getuserpicture:cell.treeNode.beeid];
     
     NSString * bid=node.beeid;
+    NSLog(@"picture:%@",picture);
     if (picture ==NULL) {
         
+       
         NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",bid , @"userID", nil];
         
         NSLog(@"parm:%@",params);
@@ -956,6 +958,7 @@
             [self fillNodeWithChildrenArray:node.nodeChildren];
         }
     }
+       [self.tableView reloadData];
 }
 
 //This function is used to add the children of the expanded node to the display array

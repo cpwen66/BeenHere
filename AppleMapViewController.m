@@ -39,9 +39,11 @@
     UIPickerView *filterPickerView;
     CGFloat screenWidth;
     CGFloat screenHeight;
-    NSString *pickerViewComponent0;
-    NSString *pickerViewComponent1;
+//    NSString *pickerViewComponent0;
+//    NSString *pickerViewComponent1;
     NSDictionary *pickerDict;
+    //NSString *pickerViewComponent2;
+
     
     //必須先#import <CoreLocation/CoreLocation.h>才能使用CLLocationManager類別
     CLLocationManager *locationManager;
@@ -53,7 +55,8 @@
 //@property (weak, nonatomic) IBOutlet UIButton *showSlideMenuButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *showSlideMenuBarBtnItem;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *filterBarBtnItem;
-
+@property (strong, nonatomic)NSString *pickerViewComponent0;
+@property (strong, nonatomic)NSString *pickerViewComponent1;
 
 @end
 
@@ -86,7 +89,7 @@
     }
     
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    locationManager.distanceFilter = 20;
+  //  locationManager.distanceFilter = 20;
     //使用者活動的種類
     locationManager.activityType = CLActivityTypeAutomotiveNavigation;
     
@@ -103,7 +106,7 @@
     //下面這行是Kent沒有用的，
     //在其他程式中，如果沒有加這行，就不會出現代表使用者現在位置的藍點
     // 也可以加屬性列加入設定
-    self.appleMapView.ShowsUserLocation = YES;
+    self.appleMapView.showsUserLocation = YES;
     
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePinVisitedDate) name:@"UPDATE_PIN_VISITED_DATE" object:nil];
     
@@ -148,9 +151,9 @@
     // 下一行self.myScrollView改成self.view也可以
     [self.appleMapView addGestureRecognizer:tapGesture];
     
-    pickerViewComponent0=@"0";
-    pickerViewComponent1=@"0";
-
+    self.pickerViewComponent0=@"0";
+    self.pickerViewComponent1=@"0";
+    
 }
 
 - (void)hidePickerView {
@@ -452,7 +455,7 @@
         
         // 需滿足三個條件才會要iOS送出通知，
         // 使用者離大頭針距離50公尺內、沒有到訪過此大頭針、尚未發送過通知
-        if (distance < 50 && pin.visitedDate == nil && [notifiedArray containsObject:pin] == false) {
+        if (distance < 20 && [notifiedArray containsObject:pin] == false) {
             UILocalNotification *localNoti = [[UILocalNotification alloc] init];
             localNoti.fireDate = nil;// nil表示馬上發出通知，不排程
             localNoti.timeZone = [NSTimeZone defaultTimeZone];
@@ -557,31 +560,56 @@
     
     if (component == 0) {
         [filterPickerView reloadComponent:1];
-        pickerViewComponent0 = [NSString stringWithFormat:@"%ld",(long)row];
+        self.pickerViewComponent0 = [NSString stringWithFormat:@"%ld",(long)row];
     } else if (component ==1) {
-        pickerViewComponent1 = [NSString stringWithFormat:@"%ld",(long)row];
+        self.pickerViewComponent1 = [NSString stringWithFormat:@"%ld",(long)row];
     }
     
     // 把pickView的值丟到方法內，產生新的陣列
-    allPinRows = [pinDAO getPinsByFilter:pickerViewComponent0 visited:pickerViewComponent1];
+    allPinRows = [pinDAO getPinsByFilter:self.pickerViewComponent0 visited:self.pickerViewComponent1];
     
     [self reloadAllPins];
     
 }
 
 - (void) reloadAllPins {
+      PinDAO *pinDAO = [[PinDAO alloc] init];
+      //allPinRows = [pinDAO getPinsByFilter:self.pickerViewComponent0 visited:self.pickerViewComponent1];
+    allPinRows = [pinDAO getPinsByFilter:self.pickerViewComponent0 visited:self.pickerViewComponent1];
+
+    //先移除所有大頭針
+    [self.appleMapView removeAnnotations:[self.appleMapView annotations]];
+    
+    Pin *pin = [[Pin alloc] init];
+    NSLog(@"aiipin:%@",allPinRows);
+    // 再從資料庫拿出資料，更新所有大頭針
+    for(pin in allPinRows) {
+
+        [self.appleMapView addAnnotation:pin];
+        //NSLog(@"id = %@, latitude = %f, longitude = %f, title = %@", pin.pinId, pin.coordinate.latitude, pin.coordinate.longitude, pin.title);
+    
+    }
+}
+
+-(void)reloadAllPinsNotif {
+    PinDAO *pinDAO = [[PinDAO alloc] init];
+    //allPinRows = [pinDAO getPinsByFilter:self.pickerViewComponent0 visited:self.pickerViewComponent1];
+    allPinRows = [pinDAO getPinsByFilter:@"0" visited:@"0"];
     
     //先移除所有大頭針
     [self.appleMapView removeAnnotations:[self.appleMapView annotations]];
     
     Pin *pin = [[Pin alloc] init];
-    
+    NSLog(@"aiipin:%@",allPinRows);
     // 再從資料庫拿出資料，更新所有大頭針
     for(pin in allPinRows) {
+        
         [self.appleMapView addAnnotation:pin];
         //NSLog(@"id = %@, latitude = %f, longitude = %f, title = %@", pin.pinId, pin.coordinate.latitude, pin.coordinate.longitude, pin.title);
-    
+        
+    }
 }
+
 
 
 #pragma mark - Navigation

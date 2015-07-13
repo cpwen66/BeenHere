@@ -134,12 +134,12 @@ friendTableViewController * frinedview;
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     appDelegate.myViewController = self;
     
-    MapDateStore * mapManager = [[MapDateStore alloc] init];
-      mapManager.delegate = self;
-      [mapManager SearchPinContentone];
-
-    
-
+  
+//    MapDateStore * mapManager = [[MapDateStore alloc] init];
+//    mapManager.delegate = self;
+//    [mapManager SearchPinContent];
+//
+  
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleimage) name:@"handleimage" object:nil];
 
@@ -196,6 +196,8 @@ friendTableViewController * frinedview;
     
     NSData * picture=[[NSData alloc]init ];
      picture= [[mydb sharedInstance]getuserpicture:BEID];
+    
+    NSLog(@"picture:%@",picture);
     if (picture ==NULL) {
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",BEID , @"userID", nil];
     
@@ -216,7 +218,7 @@ friendTableViewController * frinedview;
             
             NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
             
-     
+            
             
             if ([data[@"userpicture"]   isEqual:@""]) {
                 

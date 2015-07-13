@@ -178,7 +178,7 @@
 
         NSLog(@"array = %@", memberInfoArray);
     }else{
-        memberInfoArray = [friendDB SearchFriendList:self.infoPin.memberId];
+        memberInfoArray = [friendDB SearchFriendinfo:self.infoPin.memberId];
         memberName = memberInfoArray[0][@"friendname"];
 
     }

@@ -35,7 +35,8 @@
 - (NSString *)newCustNo;
 
 //新增(以欄位)
-- (void)insertMemeberNo:(NSString *)memberId andMBName:(NSString *)Bename andEMAIL:(NSString *)BeEMAIL andPassword:(NSString *)BePassword ;
+
+- (void)insertMemeberNo:(NSString *)memberId andMBName:(NSString *)Bename andEMAIL:(NSString *)BeEMAIL andPassword:(NSString *)BePassword  addbeno:(NSString*)be_no;
 //修改
 - (void)updateBeName:(NSString *)bename andBeTel:(NSString *)betel andBeemail:(NSString *)Beemail andBebirthday:(NSDate *)Bebthday andBeid:(NSString *)Beid andBelocation:(NSString *)Belocation andBepassword:(NSString *)bpw andBesex:(NSString *)bsex andbhereno:(NSString *)bhereno;
 //- (void)updateBeName:(NSString *)bename andBeTel:(NSInteger *)betel andBeemail:(NSString *)Beemail andBebirthday:(NSDate *)Bebthday andBeid:(NSString *)Beid andBelocation:(NSString *)Belocation andBepassword:(NSString *)bpw andBesex:(NSString *)bsex andbhereno:(NSString *)bhereno;

@@ -20,5 +20,6 @@
 //- (void) updatePinDistance;
 
 - (void) reloadAllPins;
+-(void)reloadAllPinsNotif ;
 
 @end

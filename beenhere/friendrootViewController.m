@@ -44,7 +44,7 @@
     self.userpicture.layer.cornerRadius = 25.0f;
     _userpicture.clipsToBounds = YES;
     
-
+  
 //
 //
 

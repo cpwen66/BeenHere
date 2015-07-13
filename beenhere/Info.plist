@@ -26,7 +26,7 @@
 	<string>The App will get your location in the map.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>Allow the App to send notification, when user enter into a region.</string>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

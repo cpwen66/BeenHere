@@ -358,7 +358,7 @@ CGFloat const TEXT_MARGIN_IN_CELL = 20.0;
 }
 
 // 自訂方法，當使用者按下背景就進到這裡
-- (void) hideKeyboard {
+-(void)hideKeyboard {
     
     //撤self.view下的keyboard
     [self.view endEditing:YES];

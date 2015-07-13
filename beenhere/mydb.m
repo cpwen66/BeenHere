@@ -175,9 +175,9 @@ mydb *sharedInstance;
 
 }
 //新增
-- (void)insertMemeberNo:(NSString *)memberId andMBName:(NSString *)Bename andEMAIL:(NSString *)BeEMAIL andPassword:(NSString *)BePassword  {
+- (void)insertMemeberNo:(NSString *)memberId andMBName:(NSString *)Bename andEMAIL:(NSString *)BeEMAIL andPassword:(NSString *)BePassword  addbeno:(NSString*)be_no{
     
-    if (![db executeUpdate:@"insert into memeber (name,email,password,id) values (?,?,?,?)",Bename,BeEMAIL,BePassword,memberId]) {
+    if (![db executeUpdate:@"insert into memeber (name,email,password,id,bhere_no) values (?,?,?,?)",Bename,BeEMAIL,BePassword,memberId,be_no]) {
         NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
     };
     NSLog(@"BEEMAIL:%@",BeEMAIL);
@@ -225,7 +225,7 @@ mydb *sharedInstance;
     
     
     NSMutableArray *rows = [NSMutableArray new];
-    FMResultSet *result = [db executeQuery:@"select friendID,friendname from bh_friendlist where id=?  ", beeid];
+    FMResultSet *result = [db executeQuery:@"select friend_userpicture,friendname from bh_friendlist where id=?  ", beeid];
     
     while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
         [rows addObject:result.resultDictionary];
@@ -240,7 +240,7 @@ mydb *sharedInstance;
 -(id)SearchFriendinfo:(NSString *)beeid{
     
     NSMutableArray *rows = [NSMutableArray new];
-    FMResultSet *result = [db executeQuery:@"select friend_userpicture,friendname from bh_friendlist where friendID=?  ", beeid];
+    FMResultSet *result = [db executeQuery:@"select friendID,friendname from bh_friendlist where friendID=?  ", beeid];
     
     while ([result next]) {     //BOF 1 2 3 4 5 ... EOF
         [rows addObject:result.resultDictionary];
@@ -384,16 +384,15 @@ mydb *sharedInstance;
      */
     
     NSLog(@"custdict:%@",custDict);
-       NSData * imagedata = [[NSData alloc]initWithBase64EncodedString: custDict[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+//       NSData * imagedata = [[NSData alloc]initWithBase64EncodedString: custDict[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
     FMResultSet *rs=[db executeQuery:@"select count(*) from memeber where bhere_no=?",custDict[@"bhere_no"]];
     
     while ([rs next]) {
         if ([rs intForColumnIndex:0]==0) {
             //可以新增
-            if (![db executeUpdate:@"insert into memeber (bhere_no,birthday,cover,email,id,location,mapdgree,name,password,sex,telephone,userpicture) values (?,?,?,?,?,?,?,?,?,?,?,?)",
+            if (![db executeUpdate:@"insert into memeber (bhere_no,birthday,email,id,location,mapdgree,name,password,sex,telephone) values (?,?,?,?,?,?,?,?,?,?)",
                   custDict[@"bhere_no"],
                   custDict[@"birthday"],
-                  custDict[@"cover"],
                   custDict[@"email"],
                   custDict[@"id"],
                   custDict[@"location"],
@@ -401,8 +400,8 @@ mydb *sharedInstance;
                   custDict[@"name"],
                   custDict[@"password"],
                   custDict[@"sex"],
-                  custDict[@"telephone"],
-                  imagedata
+                  custDict[@"telephone"]
+                
                   ]) {
                 NSLog(@"Could not insert data:\n%@",[db lastErrorMessage]);
             

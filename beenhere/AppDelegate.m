@@ -166,7 +166,7 @@ static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.p
 #pragma mark - Push Notification
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
-    
+ /*
     NSString * newToken = [deviceToken description];
     NSLog(@"Device token: %@", newToken);
     newToken = [newToken stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
@@ -205,7 +205,8 @@ static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.p
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    NSLog(@"%@", dict);
+    NSLog(@"%@", dict);*/
+    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
@@ -241,9 +242,14 @@ static NSString * const kJSON = @"http://10.0.1.6:8888/beenhere/DeviceRegister.p
         
     }else if (ActionNumber == 4){
     
+//        MapDateStore * mapManager = [[MapDateStore alloc] init];
+//                mapManager.delegate = self;
+//              [mapManager SearchPinContent];
+         NSString * pushid=server[@"pushid"];
         MapDateStore * mapManager = [[MapDateStore alloc] init];
-                mapManager.delegate = self;
-              [mapManager SearchPinContent];
+        mapManager.delegate = self;
+        [mapManager SearchPinContentone:pushid];
+        
         NSLog(@"dd");
     
     }

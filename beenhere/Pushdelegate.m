@@ -173,8 +173,8 @@
         NSString * msg=[NSString stringWithFormat:@"%@有一筆新Pin",memName];
         // NSString * msg=@"您有一筆新留言";
         NSString * action=@"4";
-        NSString *postString = [NSString stringWithFormat:@"memID=%@&memName=%@&msg=%@&action=%@", friendlist[i][@"friendID"], friendlist[i][@"friendname"],msg,action];
-        
+        NSString *postString = [NSString stringWithFormat:@"memID=%@&memName=%@&msg=%@&action=%@&id=%@", friendlist[i][@"friendID"], friendlist[i][@"friendname"],msg,action,memID];
+                                      
         //如果要傳遞多個參數，就用下面的程式
         //NSString *postString = [NSString stringWithFormat:@"qrcode=%@&param1=%@", self.textField.text, @"1"];
         

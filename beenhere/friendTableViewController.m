@@ -241,7 +241,7 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
         
         NSLog(@"name:%@",frindRequestList[indexPath.row][@"name"]);
         UIButton *addFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        addFriendButton.frame = CGRectMake(300.0f, 5.0f, 75.0f, 30.0f);
+        addFriendButton.frame = CGRectMake(250.0f, 5.0f, 75.0f, 30.0f);
         [addFriendButton setTitle:@"Add" forState:UIControlStateNormal];
         [cell addSubview:addFriendButton];
         [addFriendButton addTarget:self
@@ -252,7 +252,7 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
         
         
         UIButton *chcanelFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        chcanelFriendButton.frame = CGRectMake(250.0f, 5.0f, 75.0f, 30.0f);
+        chcanelFriendButton.frame = CGRectMake(200.0f, 5.0f, 75.0f, 30.0f);
         [chcanelFriendButton setTitle:@"No" forState:UIControlStateNormal];
         [cell addSubview:chcanelFriendButton];
         [chcanelFriendButton addTarget:self
@@ -260,6 +260,114 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
                   forControlEvents:UIControlEventTouchUpInside];
 
         chcanelFriendButton.tag=indexPath.row;
+        
+        
+        NSData * picture=[[NSData alloc]init ];
+        
+        picture= [[mydb sharedInstance]getuserpicture:frindRequestList[indexPath.row][@"id"]];
+        
+        
+        if (picture ==NULL) {
+            
+            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"downloaduserimage",@"cmd",frindRequestList[indexPath.row][@"id"] , @"userID", nil];
+            
+            
+            NSLog(@"params%@",params);
+            
+            AFHTTPRequestOperationManager *managere = [AFHTTPRequestOperationManager manager];
+            managere.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+            [managere POST:[StoreInfo shareInstance].apiupdateurl parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                
+                NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
+                
+                
+                NSString *result;
+                //bug 待修
+                if ((responseObject[@"api"]!=[NSNull null])) {
+                    result = [apiResponse objectForKey:@"downloaduserimageresult"];
+                };
+                
+                
+                if ([result isEqualToString:@"success"]) {
+                    
+                    
+                    NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
+                    
+                    if (![data[@"userpicture"] isEqual:@""]) {
+                        NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                        
+                        
+                        
+                        //修改到sqlite 圖像
+                        [[mydb sharedInstance]updateuserpicture:imagedata addID:MyfriendList[indexPath.row][@"id"] ];
+                        
+                        UIImage * image=[UIImage imageWithData:imagedata];
+                        
+                        cell.imageView.image=image;
+                        
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                        
+                        
+                        //imageView.contentScaleFactor = [[UIScreen mainScreen] scale];
+                        
+                        
+                        cell.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+                        
+                        cell.imageView.clipsToBounds = YES;
+//                        float sw=40/cell.imageView.image.size.width;
+//                        float sh=40/cell.imageView.image.size.height;
+//                        cell.imageView.transform=CGAffineTransformMakeScale(sw,sh);
+                    }else{
+                        UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
+                        
+                        cell.imageView.image=image;
+                        //                    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                        
+                        
+                        //imageView.contentScaleFactor = [[UIScreen mainScreen] scale];
+                        
+                        
+                        cell.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+                        
+                        cell.imageView.clipsToBounds = YES;
+//                        float sw=40/cell.imageView.image.size.width;
+//                        float sh=40/cell.imageView.image.size.height;
+//                        cell.imageView.transform=CGAffineTransformMakeScale(sw,sh);
+                    }
+                    
+                    
+                    
+                    
+                }else {
+                    NSLog(@"image download no suceess");
+                    
+                }
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"request error:%@",error);
+                
+                
+            }];
+            
+        } else{  UIImage * image=[UIImage imageWithData:picture];
+            
+            cell.imageView.image=image;
+            cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            
+            //imageView.contentScaleFactor = [[UIScreen mainScreen] scale];
+            
+            
+            cell.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+            
+            cell.imageView.clipsToBounds = YES;
+//            float sw=40/cell.imageView.image.size.width;
+//            float sh=40/cell.imageView.image.size.height;
+//            cell.imageView.transform=CGAffineTransformMakeScale(sw,sh);
+        }
+        
+
+
         
     }
 
@@ -298,10 +406,10 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
             result = [apiResponse objectForKey:@"downloaduserimageresult"];
             };
             
-            
+    
             if ([result isEqualToString:@"success"]) {
                 
-             
+                
                 NSDictionary * data=[apiResponse objectForKey:@"downloaduserimage"];
                 
                 if (![data[@"userpicture"] isEqual:@""]) {
@@ -315,12 +423,36 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
                     UIImage * image=[UIImage imageWithData:imagedata];
                     
                     cell.imageView.image=image;
+                    
+                    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                    
+                    
+                    //imageView.contentScaleFactor = [[UIScreen mainScreen] scale];
+                    
+                    
+                    cell.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+                    
+                    cell.imageView.clipsToBounds = YES;
+//                    float sw=50/cell.imageView.image.size.width;
+//                    float sh=50/cell.imageView.image.size.height;
+//                    cell.imageView.transform=CGAffineTransformMakeScale(sw,sh);
                 }else{
                     UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
                     
                     cell.imageView.image=image;
 //                    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                       cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+                  
+                 
+                    //imageView.contentScaleFactor = [[UIScreen mainScreen] scale];
                     
+
+                    cell.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+                   
+                    cell.imageView.clipsToBounds = YES;
+//                    float sw=50/cell.imageView.image.size.width;
+//                    float sh=50/cell.imageView.image.size.height;
+//                    cell.imageView.transform=CGAffineTransformMakeScale(sw,sh);
                 }
                 
                 
@@ -339,8 +471,18 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
     } else{  UIImage * image=[UIImage imageWithData:picture];
         
         cell.imageView.image=image;
-
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         
+        
+        //imageView.contentScaleFactor = [[UIScreen mainScreen] scale];
+        
+        
+        cell.imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        
+        cell.imageView.clipsToBounds = YES;
+//        float sw=50/cell.imageView.image.size.width;
+//        float sh=50/cell.imageView.image.size.height;
+//        cell.imageView.transform=CGAffineTransformMakeScale(sw,sh);
     }
 
 }
@@ -764,28 +906,44 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
     NSData * imagedata = [[NSData alloc]initWithBase64EncodedString:data[@"userpicture"] options:NSDataBase64DecodingIgnoreUnknownCharacters];
     
     UIImage * userpicture=[UIImage imageWithData:imagedata];
+   
     
-    UIImageView *userimage = [[UIImageView alloc]initWithImage:userpicture];
+    UIImageView *userimage = [[UIImageView alloc]init];
     
-    userimage.frame = CGRectMake(userview.frame.size.width/2-27, userview.frame.size.height/2-40, 54 , 54);
- 
-     userimage.layer.borderWidth = 2.0f;
-     userimage.layer.borderColor = [UIColor whiteColor].CGColor;
-     userimage.layer.cornerRadius = 25.0f;
-     userimage.clipsToBounds = YES;
+    if (userpicture!=nil) {
+       userimage = [[UIImageView alloc]initWithImage:userpicture];
+        
+        userimage.frame = CGRectMake(userview.frame.size.width/2-27, userview.frame.size.height/2-40, 54 , 54);
+        userimage.layer.borderWidth = 2.0f;
+        userimage.layer.borderColor = [UIColor whiteColor].CGColor;
+        userimage.layer.cornerRadius = 25.0f;
+        userimage.clipsToBounds = YES;
+        
+    }else{
+    
+    UIImage * image=[UIImage imageNamed:@"headphoto.jpg"];
+     userimage = [[UIImageView alloc]initWithImage:image];
+        
+        userimage.frame = CGRectMake(userview.frame.size.width/2-27, userview.frame.size.height/2-40, 54 , 54);
+        userimage.layer.borderWidth = 2.0f;
+        userimage.layer.borderColor = [UIColor whiteColor].CGColor;
+        userimage.layer.cornerRadius = 25.0f;
+        userimage.clipsToBounds = YES;
+    }
 
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(userview.frame.size.width/2-15, userview.frame.size.height/2+5, 75, 40)];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(userview.frame.size.width/2-10, userview.frame.size.height/2+8, 75, 40)];
     label.text=data[@"name"];
     
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(userview.frame.size.width/2-45, 0, 90, 40)];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(userview.frame.size.width/2-43, 0, 90, 40)];
     title.text=@"是否加好友";
     
     
  
     
     UIButton *theButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    theButton.frame = CGRectMake(135, 100, 80,60);
+    theButton.frame = CGRectMake(145, 100, 80,60);
 
     [theButton setTitle:@"確認" forState:UIControlStateNormal];
     theButton.tintColor=[UIColor blackColor];
@@ -815,7 +973,7 @@ static NSString * const kJSON = @"http://192.168.1.7:8888/beenhere/DeviceRegiste
     
   [self addFirendRequest:friendID andfrisetrequest:@"1"];
     
-    
+  [userview removeFromSuperview];
 }
 -(void)oncancel{
 

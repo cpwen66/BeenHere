@@ -89,6 +89,7 @@
         //將查詢資料存到NSDictionary
         NSDictionary *apiResponse = [responseObject objectForKey:@"api"];
       
+            NSLog(@"%@",apiResponse);
         //取的signIn的key值，並輸出
         NSString *result = [apiResponse objectForKey:@"signIn"];
                [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -110,7 +111,7 @@
             }else{
                 
                 NSLog(@"沒有email");
-                [[mydb sharedInstance]insertCustDict:apiResponse];
+                [[mydb sharedInstance]insertCustDict:apiResponse[@"signInresult"]];
     
             }
 
